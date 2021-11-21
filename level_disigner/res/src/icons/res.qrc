@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>delete-svgrepo-com.svg</file>
+    <file>icons8-cursor.svg</file>
+    <file>Сгруппировать 5.svg</file>
+    <file>Сгруппировать 15.svg</file>
+  </qresource>
+</RCC>

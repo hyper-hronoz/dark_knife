@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="33.416" height="32" viewBox="0 0 33.416 32">
+  <g id="Сгруппировать_5" data-name="Сгруппировать 5" transform="translate(0 -0.491)">
+    <rect id="Прямоугольник_10" data-name="Прямоугольник 10" width="2.278" height="28.1" transform="translate(15.569 2.278)"/>
+    <rect id="Прямоугольник_11" data-name="Прямоугольник 11" width="2.278" height="28.1" transform="translate(30.758 15.189) rotate(90)"/>
+    <path id="Многоугольник_1" data-name="Многоугольник 1" d="M2.5,0,5,3H0Z" transform="translate(14.14 0.491)"/>
+    <path id="Многоугольник_2" data-name="Многоугольник 2" d="M2.278,0,4.557,3.038H0Z" transform="translate(33.416 14.05) rotate(90)"/>
+    <path id="Многоугольник_3" data-name="Многоугольник 3" d="M2.278,0,4.557,3.038H0Z" transform="translate(0 18.606) rotate(-90)"/>
+    <path id="Многоугольник_4" data-name="Многоугольник 4" d="M2.5,0,5,3H0Z" transform="translate(19.14 32.491) rotate(180)"/>
+  </g>
+</svg>
