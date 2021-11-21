@@ -1,0 +1,1 @@
+from .dist.templates import Painter, Ui_MainWindow
