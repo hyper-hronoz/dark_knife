@@ -1,2 +1,2 @@
 from .painter import Painter
-from .mainWindow import Ui_MainWindow
+from .designer import Ui_MainWindow

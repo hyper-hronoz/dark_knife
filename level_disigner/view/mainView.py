@@ -16,7 +16,7 @@ class MainView(QMainWindow):
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._chartilo)
-        self.template.canvas_frame.setLayout(layout)
+        self.template.grid_frame.setLayout(layout)
 
     def updateCanvas(self):
         self._chartilo.updateCanvas()
