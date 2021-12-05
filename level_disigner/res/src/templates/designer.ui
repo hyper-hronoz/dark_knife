@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>798</width>
-    <height>599</height>
+    <height>757</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,7 +63,7 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <item>
+       <item alignment="Qt::AlignTop">
         <widget class="QFrame" name="sidebar_frame">
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
@@ -239,7 +239,7 @@ background-color: #07CAF2;</string>
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignTop">
            <widget class="QFrame" name="textures_frame">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -272,6 +272,17 @@ background-color: #07CAF2;</string>
              <property name="bottomMargin">
               <number>0</number>
              </property>
+             <item>
+              <widget class="QFrame" name="frame_3">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_8"/>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>

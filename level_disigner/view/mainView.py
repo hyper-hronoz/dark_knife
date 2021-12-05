@@ -1,7 +1,12 @@
-from PyQt5.QtWidgets import QApplication, QBoxLayout, QMainWindow, QVBoxLayout, QWidget
+from PyQt5 import QtCore, QtGui
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QApplication, QBoxLayout, QFrame, QHBoxLayout, QLabel, QMainWindow, QVBoxLayout, QWidget
 from res import Ui_MainWindow as Template
 from .painter import Painter
 from utility import MetaObserver, FinalMeta
+
+import base64
+from time import sleep
 
 class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
 
@@ -34,4 +39,28 @@ class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
         self._chartilo.setStates(states)
 
     def change(self):
-        print(self._model)
+        _model = self._model.textures
+
+        for i in reversed(range(self.template.textures_frame.layout().count())): 
+            self.template.textures_frame.layout().itemAt(i).widget().setParent(None)
+
+        for id in _model:
+
+            frame = QFrame()
+            frame.setObjectName(str(id))
+            layout = QHBoxLayout()
+            widget = QWidget()
+            image = QLabel(widget)
+            pixmap = QtGui.QPixmap()
+            pixmap.loadFromData(base64.b64decode(_model[id].texture))
+            image.setPixmap(pixmap.scaled(50, 50))
+            image.setBaseSize
+            layout.addWidget(image)
+            layout.addWidget(QLabel(_model[id].name))
+            frame.setLayout(layout)
+
+            widget.show()
+
+
+            self.template.textures_frame.layout().addWidget(frame)
+

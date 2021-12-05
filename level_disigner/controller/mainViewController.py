@@ -20,6 +20,7 @@ class MainViewController():
 		head, tail = os.path.split(fname)
 		with open(fname, "rb") as image2string:
 			converted_string = base64.b64encode(image2string.read())
+			print(converted_string)
 
 			texture = TextureModel(converted_string, tail)
 
