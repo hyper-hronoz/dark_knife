@@ -1,1 +1,1 @@
-from .dist.templates import Painter, Ui_MainWindow
+from .dist.templates import Ui_MainWindow

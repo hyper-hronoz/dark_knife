@@ -1,15 +1,13 @@
 class TextureModel:
-	def __init__(self, texture) -> None:
+	def __init__(self, texture, name=None, description=None) -> None:
 		self.texture = texture
+		self.name = name
+		self.description = description
 
-	@property
-	def texture(self):
-		return self.texture
-
-	@texture.setter
 	def setTexture(self, texture):
 		self.texture = texture
 
-	@texture.deleter
-	def deleteTexture(self):
-		del self.texture
+	def getTexture(self):
+		return self.texture
+
+

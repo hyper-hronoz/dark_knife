@@ -1,47 +1,16 @@
+from level_disigner.model.texturesModel import TexturesModel
+
+
 class PainterModel:
-	def __init__(self, textures={}, textures_map=[]) -> None:
-		self.textures = textures
+	def __init__(self, textures_map=[]) -> None:
 		self.texturesMap = textures_map
 
 		self.observers = []
 
 
-
 	# textures
-	@property
-	def textures(self):
-		return self.textures
-
-	@textures.setter
-	def setTextures(self, textures):
-		self.textures = textures
-
-	@textures.deleter
-	def deleteTextures(self):
-		del self.textures
-
-	def appendTexture(self, key, texture) -> None:
-		self.textures[key] = texture
-
-
-
-
-	# map of textures
-	@property
-	def texturesMap(self):
-		return self.texturesMap
-
-	@texturesMap.setter
-	def setTexturesMap(self, texturesMap):
-		self.texturesMap = texturesMap
-
-	@texturesMap.deleter
-	def deleteTexturesMap(self):
-		del self.texturesMap
-
 	def changeTexture(self, x, y, texture):
 		self.texturesMap[x][y] = texture
-
 
 	# observers
 	def addObserver(self, observer) -> None:
