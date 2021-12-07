@@ -1,10 +1,11 @@
 import pygame, sys
+from test_textures import test_level
 
 
 WINDOW_WIDTH = 800 
 WINDOW_HEIGHT = 640 
 DISPLAY = (WINDOW_WIDTH, WINDOW_HEIGHT)
-BACKGROUND_COLOR = "#00FFFF"
+BACKGROUND_COLOR = "#FFFFFF"
 
 def main():
     pygame.init()
@@ -14,6 +15,8 @@ def main():
     backgroung = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
 
     backgroung.fill(pygame.Color(BACKGROUND_COLOR))
+    level = test_level.Level()
+    level.draw_textures(screen)
 
     while True:
         for event in pygame.event.get():
@@ -21,10 +24,8 @@ def main():
                 pygame.quit()
                 sys.exit()
 
-        screen.fill(BACKGROUND_COLOR)
+        screen.blit(backgroung, (0,0))
         pygame.display.update()
-        clock.tick(60)
         
-
 if __name__ == "__main__":
     main()
