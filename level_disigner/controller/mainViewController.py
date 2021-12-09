@@ -17,6 +17,8 @@ class MainViewController():
 
 	def addNewTexture(self):
 		fname = QFileDialog.getOpenFileName(self.mView, 'Выбрать картинку ', '', "(*.jpg *.png *.jpeg, *.JPEG *.JPG, *.PNG)")[0]
+		if not fname:
+			return
 		head, tail = os.path.split(fname)
 		with open(fname, "rb") as image2string:
 			converted_string = base64.b64encode(image2string.read())
