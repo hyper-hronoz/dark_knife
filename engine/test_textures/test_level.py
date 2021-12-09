@@ -3,8 +3,8 @@ import pygame, sys
 
 class Level:
     def __init__(self):
-        self.PLATFORM_WIDTH = 10
-        self.PLATFORM_HEIGHT = 10
+        self.PLATFORM_WIDTH = 32
+        self.PLATFORM_HEIGHT = 32
         self.PLATFORM_GEOMETRY = (self.PLATFORM_WIDTH, self.PLATFORM_HEIGHT)
         self.PLATFORM_COLOR = "#000000"
 
@@ -22,7 +22,7 @@ class Level:
             "-                       -",
             "-      ---              -",
             "-                       -",
-            "-   -----------        -",
+            "-   -----------        --",
             "-                       -",
             "-                -      -",
             "-                   --  -",

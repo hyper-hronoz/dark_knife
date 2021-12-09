@@ -16,7 +16,7 @@ def main():
 
     backgroung.fill(pygame.Color(BACKGROUND_COLOR))
     level = test_level.Level()
-    level.draw_textures(screen)
+    
 
     while True:
         for event in pygame.event.get():
@@ -25,6 +25,7 @@ def main():
                 sys.exit()
 
         screen.blit(backgroung, (0,0))
+        level.draw_textures(screen)
         pygame.display.update()
         
 if __name__ == "__main__":
