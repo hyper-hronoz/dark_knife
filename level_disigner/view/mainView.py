@@ -10,57 +10,81 @@ from time import sleep
 
 class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
 
-    def __init__(self, controller, model):
-        super(MainView, self).__init__()
-        self.template = Template()
-        self.template.setupUi(self)
-        self.showMaximized()
-        self.createCanvas()
+	def __init__(self, controller, model):
+		super(MainView, self).__init__()
+		self.template = Template()
+		self.template.setupUi(self)
+		self.showMaximized()
+		self.createCanvas()
 
-        self._model = model
-        self._model.addObserver(self)
+		self._model = model
+		self._model.addObserver(self)
 
-        self.template.header_add_button.clicked.connect(controller.addNewTexture)
+		self.template.header_add_button.setFocusPolicy(QtCore.Qt.NoFocus)
 
-    def createCanvas(self):
-        self._chartilo = Painter()
-        layout = QVBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(self._chartilo)
-        self.template.grid_frame.setLayout(layout)
+		self.template.header_add_button.clicked.connect(controller.addNewTexture)
 
-    def updateCanvas(self):
-        self._chartilo.updateCanvas()
+	def onTextureClicked(self, event):
+		print(self.sender())
+		# print(event)
 
-    def setCanvasData(self, data):
-        self._chartilo.setData(data)
+	def keyPressEvent(self, event):
+		if event.isAutoRepeat():
+			return
+		if event.key()==QtCore.Qt.Key_Space:
+			self._chartilo.setIsSpacePressed(True)
 
-    def setCanvasStates(self, states):
-        self._chartilo.setStates(states)
+	def keyReleaseEvent(self, event: QtGui.QKeyEvent) -> None:
+		if event.isAutoRepeat():
+			return
+		if event.key()==QtCore.Qt.Key_Space:
+			self._chartilo.setIsSpacePressed(False)
 
-    def change(self):
-        _model = self._model.textures
+	def createCanvas(self):
+		self._chartilo = Painter()
+		layout = QVBoxLayout()
+		layout.setContentsMargins(0, 0, 0, 0)
+		layout.addWidget(self._chartilo)
+		self.template.grid_frame.setLayout(layout)
 
-        for i in reversed(range(self.template.textures_frame.layout().count())): 
-            self.template.textures_frame.layout().itemAt(i).widget().setParent(None)
+	def updateCanvas(self):
+		self._chartilo.updateCanvas()
 
-        for id in _model:
+	def setCanvasData(self, data):
+		self._chartilo.setData(data)
 
-            frame = QFrame()
-            frame.setObjectName(str(id))
-            layout = QHBoxLayout()
-            widget = QWidget()
-            image = QLabel(widget)
-            pixmap = QtGui.QPixmap()
-            pixmap.loadFromData(base64.b64decode(_model[id].texture))
-            image.setPixmap(pixmap.scaled(50, 50))
-            image.setBaseSize
-            layout.addWidget(image)
-            layout.addWidget(QLabel(_model[id].name))
-            frame.setLayout(layout)
+	def setCanvasStates(self, states):
+		self._chartilo.setStates(states)
+	
+	def eventFilter(self, obj, event):
+		print(obj, event)
+		pass
 
-            widget.show()
+	def change(self):
+		_model = self._model.textures
+
+		for i in reversed(range(self.template.textures_append_here.layout().count())): 
+			self.template.textures_append_here.layout().itemAt(i).widget().setParent(None)
+
+		for id in _model:
+
+			frame = QFrame()
+			frame.setObjectName(str(id))
+			frame.mousePressEvent = self.onTextureClicked
+			layout = QHBoxLayout()
+			widget = QWidget()
+			image = QLabel(widget)
+			pixmap = QtGui.QPixmap()
+			pixmap.loadFromData(base64.b64decode(_model[id].texture))
+			image.setPixmap(pixmap.scaled(50, 50))
+			layout.addWidget(image)
+			label = QLabel(_model[id].name)
+			label.setStyleSheet("color: #fff;")
+			layout.addWidget(label)
+			frame.setLayout(layout)
+
+			widget.show()
 
 
-            self.template.textures_frame.layout().addWidget(frame)
+			self.template.textures_append_here.layout().addWidget(frame)
 

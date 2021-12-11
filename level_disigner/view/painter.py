@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
-from PyQt5.QtCore import QEvent, Qt
-from PyQt5.QtGui import QPainter
+from PyQt5 import QtGui
+from PyQt5.QtCore import QEvent, QObject, QRect, Qt
+from PyQt5.QtGui import QBrush, QPainter, QPen, QPixmap
 from PyQt5.QtWidgets import QLineEdit, QWidget
 from model import Cell
 
@@ -8,57 +9,75 @@ from model import Cell
 class Painter(QWidget):
 	XOffset = 0
 	YOffset = 0
+	isSpacePressed = False
+	isLeftMouseButtonPressed = False
+	isRightMouseButtonPressed = False
 
 	def __init__(self) -> None:
+		self._grid = []
 		super(Painter, self).__init__()
 
 	def paintEvent(self, event):
+		# print("updating")
 		self.painter = QPainter()
 		self.painter.begin(self)
 
-		width = self.painter.device().width()
-		height = self.painter.device().height()
+		if (len(self._grid) == 0):
 
-		height_amount = height // Cell.side + 1
-		width_amount = width // Cell.side + 1
+			width = self.painter.device().width()
+			height = self.painter.device().height()
 
-		_grid = []
+			height_amount = height // Cell.side + 1
+			width_amount = width // Cell.side + 1
+			for y in range(height_amount):
+				for x in range(width_amount):
+					self._grid.append(
+						{"x": x * Cell.side, "y": y * Cell.side, "fill": ""})
 
-		for y in range(height_amount):
-			for x in range(width_amount):
-				_grid.append({"x": x * Cell.side, "y": y * Cell.side})
-
-		self.drawGrid(_grid)
+		self.drawGrid(self._grid)
 
 		self.painter.end()
 
+	def setIsSpacePressed(self, value):
+		Painter.isSpacePressed = value
+
 	def drawGrid(self, grid):
 		for cell in grid:
-			self.painter.drawRect(cell['x'], cell['y'], Cell.side, Cell.side)
+			if (cell["fill"] != ""):
+				self.painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
+				self.painter.setBrush(QBrush(Qt.green, Qt.DiagCrossPattern))
+				self.painter.drawRect(
+					cell['x'], cell['y'], Cell.side, Cell.side)
+			else:
+				self.painter.setPen(QPen())
+				self.painter.setBrush(QBrush())
+				self.painter.drawRect(
+					cell['x'], cell['y'], Cell.side, Cell.side)
 
 	def getCurrentPosition(self, event) -> dict:
 		return {"x": event.x(), "y": event.y()}
 
-	# def event(self, event: QtCore.QEvent) -> bool:
-	# 	print(event)
-	# 	if (event.type()==QEvent.KeyPress) and (event.key()==Qt.Key_Space):
-	# 		print("space")
-	# 		return True
-	# 	return super().event(event)
-	# def keyPressEvent(self, event) -> None:
-	# 	print(event)
-
 	def mousePressEvent(self, event) -> None:
-		print(event.x(), event.y())
 		self.mouseStartPosition = self.getCurrentPosition(event)
 		self.previousMousePosition = self.mouseStartPosition
 
-	def mouseMoveEvent(self, event) -> None:
+		if event.button() == QtCore.Qt.LeftButton:
+			Painter.isLeftMouseButtonPressed = True
+
+		if event.button() == QtCore.Qt.RightButton:
+			Painter.isRightMouseButtonPressed = True
+
+		self.drawTextures(event)
+		self.deleteTextures(event)
+
+	def movement(self, event):
+		if (not Painter.isSpacePressed):
+			return
 		mouseCurrentPosition = self.getCurrentPosition(event)
 
 		velocity = 1
 
-		if abs(self.mouseStartPosition["x"] - mouseCurrentPosition["x"]) % Cell.side == 0 :
+		if abs(self.mouseStartPosition["x"] - mouseCurrentPosition["x"]) % Cell.side == 0:
 			# mouse right drag
 			if self.mouseStartPosition["x"] < mouseCurrentPosition["x"] and not Painter.XOffset <= 0:
 				Painter.XOffset -= velocity
@@ -84,3 +103,33 @@ class Painter(QWidget):
 
 		print(Painter.XOffset, Painter.YOffset)
 
+	def deleteTextures(self, event):
+		if (self.isSpacePressed or (not Painter.isRightMouseButtonPressed)):
+			return
+		currentPosition = self.getCurrentPosition(event)
+		for i, cell in enumerate(self._grid):
+			if (currentPosition["x"] // Cell.side) * Cell.side == cell["x"] and (currentPosition["y"] // Cell.side) * Cell.side == cell["y"] and self._grid[i]["fill"] == 1:
+				self._grid[i]["fill"] = "" 
+				break
+		self.update()
+
+	def drawTextures(self, event):
+		if (self.isSpacePressed or (not Painter.isLeftMouseButtonPressed)):
+			return
+		currentPosition = self.getCurrentPosition(event)
+		for i, cell in enumerate(self._grid):
+			if (currentPosition["x"] // Cell.side) * Cell.side == cell["x"] and (currentPosition["y"] // Cell.side) * Cell.side == cell["y"] and self._grid[i]["fill"] != 1:
+				self._grid[i]["fill"] = 1
+				break
+		self.update()
+
+	def mouseMoveEvent(self, event) -> None:
+		self.movement(event)
+		self.drawTextures(event)
+		self.deleteTextures(event)
+
+	def mouseReleaseEvent(self, event: QtGui.QMouseEvent) -> None:
+		if event.button() == QtCore.Qt.LeftButton:
+			Painter.isLeftMouseButtonPressed = False
+		if event.button() == QtCore.Qt.RightButton:
+			Painter.isRightMouseButtonPressed = False
