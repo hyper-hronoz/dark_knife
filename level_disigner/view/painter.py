@@ -17,6 +17,8 @@ class Painter(QWidget):
 	isLeftMouseButtonPressed = False
 	isRightMouseButtonPressed = False
 
+	decodedPictures = {}
+
 	def __init__(self, model) -> None:
 		self._model: TexturesModel = model
 		self._grid = []
@@ -47,15 +49,14 @@ class Painter(QWidget):
 		Painter.isSpacePressed = value
 
 	def drawGrid(self, grid): 
-		if Painter.textureBrash != None:
-			pixmap = QtGui.QPixmap()
-			print(self._model.textures, Painter.textureBrash)
 		for cell in grid:
 			if (cell["fill"] != "" and Painter.textureBrash != None):
-				print(Painter.textureBrash)
-				pixmap.loadFromData(base64.b64decode(self._model.textures[cell["fill"]].texture))
-				self.painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
-				self.painter.setBrush(QBrush(Qt.green, Qt.DiagCrossPattern))
+				if (cell["fill"] not in Painter.decodedPictures):
+					pixmap = QtGui.QPixmap()
+					pixmap.loadFromData(base64.b64decode(self._model.textures[cell["fill"]].texture))
+					Painter.decodedPictures[cell["fill"]] = pixmap
+				else:
+					pixmap = Painter.decodedPictures[cell["fill"]]
 				rect = QRect(cell['x'], cell['y'], Cell.side, Cell.side)
 				self.painter.drawPixmap(rect, pixmap)
 			else:
