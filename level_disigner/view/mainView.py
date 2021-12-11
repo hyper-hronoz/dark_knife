@@ -16,10 +16,11 @@ class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
 		self.template = Template()
 		self.template.setupUi(self)
 		self.showMaximized()
-		self.createCanvas()
 
 		self._model = model
 		self._model.addObserver(self)
+
+		self.createCanvas()
 
 		self.template.header_add_button.setFocusPolicy(QtCore.Qt.NoFocus)
 
@@ -38,7 +39,7 @@ class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
 			self._chartilo.setIsSpacePressed(False)
 
 	def createCanvas(self):
-		self._chartilo = Painter()
+		self._chartilo = Painter(self._model)
 		layout = QVBoxLayout()
 		layout.setContentsMargins(0, 0, 0, 0)
 		layout.addWidget(self._chartilo)
@@ -46,7 +47,7 @@ class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
 
 	def setPainterBrash(self, obj, event):
 		if isinstance(obj, QFrame) and event.type() == QtCore.QEvent.MouseButtonPress:
-			Painter.textureBrash = self._model.textures[obj.objectName()]
+			Painter.textureBrash = obj.objectName()
 
 	def eventFilter(self, obj, event):
 		self.setPainterBrash(obj, event)
