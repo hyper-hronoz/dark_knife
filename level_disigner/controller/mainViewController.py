@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QFileDialog, QFrame
 from view import MainView
 from model import TextureModel, TexturesModel
 
@@ -12,8 +13,11 @@ class MainViewController():
 
 		self.mView = MainView(self, self.texturesModel)
 
-
 		self.mView.show()
+
+	def selectTexture(self, obj, event):
+		if isinstance(obj, QFrame) and event.type() == QtCore.QEvent.MouseButtonPress:
+			_model = self._model.textures
 
 	def addNewTexture(self):
 		fname = QFileDialog.getOpenFileName(self.mView, 'Выбрать картинку ', '', "(*.jpg *.png *.jpeg, *.JPEG *.JPG, *.PNG)")[0]

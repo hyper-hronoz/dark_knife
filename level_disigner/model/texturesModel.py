@@ -8,7 +8,7 @@ class TexturesModel:
 		self.observers = []
 
 	def addTexture(self, texture) -> None:
-		self.textures[uuid.uuid4()] = texture
+		self.textures[str(uuid.uuid4())] = texture
 		self.notifyChanges()
 
 	def removeTexture(self, id, texture) -> None:

@@ -11,6 +11,7 @@ from time import sleep
 class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
 
 	def __init__(self, controller, model):
+		self._controller = controller
 		super(MainView, self).__init__()
 		self.template = Template()
 		self.template.setupUi(self)
@@ -22,11 +23,7 @@ class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
 
 		self.template.header_add_button.setFocusPolicy(QtCore.Qt.NoFocus)
 
-		self.template.header_add_button.clicked.connect(controller.addNewTexture)
-
-	def onTextureClicked(self, event):
-		print(self.sender())
-		# print(event)
+		self.template.header_add_button.clicked.connect(self._controller.addNewTexture)
 
 	def keyPressEvent(self, event):
 		if event.isAutoRepeat():
@@ -47,18 +44,13 @@ class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
 		layout.addWidget(self._chartilo)
 		self.template.grid_frame.setLayout(layout)
 
-	def updateCanvas(self):
-		self._chartilo.updateCanvas()
+	def setPainterBrash(self, obj, event):
+		if isinstance(obj, QFrame) and event.type() == QtCore.QEvent.MouseButtonPress:
+			Painter.textureBrash = self._model.textures[obj.objectName()]
 
-	def setCanvasData(self, data):
-		self._chartilo.setData(data)
-
-	def setCanvasStates(self, states):
-		self._chartilo.setStates(states)
-	
 	def eventFilter(self, obj, event):
-		print(obj, event)
-		pass
+		self.setPainterBrash(obj, event)
+		return QWidget.eventFilter(self, obj, event)
 
 	def change(self):
 		_model = self._model.textures
@@ -70,7 +62,7 @@ class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
 
 			frame = QFrame()
 			frame.setObjectName(str(id))
-			frame.mousePressEvent = self.onTextureClicked
+			frame.installEventFilter(self)
 			layout = QHBoxLayout()
 			widget = QWidget()
 			image = QLabel(widget)
@@ -82,9 +74,6 @@ class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
 			label.setStyleSheet("color: #fff;")
 			layout.addWidget(label)
 			frame.setLayout(layout)
-
-			widget.show()
-
 
 			self.template.textures_append_here.layout().addWidget(frame)
 

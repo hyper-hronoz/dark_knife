@@ -1,12 +1,16 @@
+import base64
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5.QtCore import QEvent, QObject, QRect, Qt
 from PyQt5.QtGui import QBrush, QPainter, QPen, QPixmap
-from PyQt5.QtWidgets import QLineEdit, QWidget
+from PyQt5.QtWidgets import QLabel, QLineEdit, QWidget
+from model import TextureModel
 from model import Cell
 
 
 class Painter(QWidget):
+	textureBrash: TextureModel = None 
+
 	XOffset = 0
 	YOffset = 0
 	isSpacePressed = False
@@ -41,13 +45,17 @@ class Painter(QWidget):
 	def setIsSpacePressed(self, value):
 		Painter.isSpacePressed = value
 
-	def drawGrid(self, grid):
+	def drawGrid(self, grid): 
+		if Painter.textureBrash != None:
+			pixmap = QtGui.QPixmap()
+			pixmap.loadFromData(base64.b64decode(Painter.textureBrash.texture))
 		for cell in grid:
-			if (cell["fill"] != ""):
-				self.painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
-				self.painter.setBrush(QBrush(Qt.green, Qt.DiagCrossPattern))
-				self.painter.drawRect(
-					cell['x'], cell['y'], Cell.side, Cell.side)
+			if (cell["fill"] != "" and Painter.textureBrash != None):
+				print(Painter.textureBrash)
+				# self.painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
+				# self.painter.setBrush(QBrush(Qt.green, Qt.DiagCrossPattern))
+				rect = QRect(cell['x'], cell['y'], Cell.side, Cell.side)
+				self.painter.drawPixmap(rect, pixmap)
 			else:
 				self.painter.setPen(QPen())
 				self.painter.setBrush(QBrush())
@@ -118,7 +126,7 @@ class Painter(QWidget):
 			return
 		currentPosition = self.getCurrentPosition(event)
 		for i, cell in enumerate(self._grid):
-			if (currentPosition["x"] // Cell.side) * Cell.side == cell["x"] and (currentPosition["y"] // Cell.side) * Cell.side == cell["y"] and self._grid[i]["fill"] != 1:
+			if (currentPosition["x"] // Cell.side) * Cell.side == cell["x"] and (currentPosition["y"] // Cell.side) * Cell.side == cell["y"] and self._grid[i]["fill"] != 1 and Painter.textureBrash != None:
 				self._grid[i]["fill"] = 1
 				break
 		self.update()
