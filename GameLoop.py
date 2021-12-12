@@ -18,5 +18,3 @@ while True:
 	pygame.display.update()
 	clock.tick(60)
 
-# venv\Scripts\activate.bat 
-# python engine\TestGameLoop.py
