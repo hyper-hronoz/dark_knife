@@ -8,6 +8,7 @@ class PainterModel:
 		self.observers = []
 
 
+
 	# textures
 	def changeTexture(self, x, y, texture):
 		self.texturesMap[x][y] = texture
