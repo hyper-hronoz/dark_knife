@@ -19,7 +19,6 @@ class TexturesModel:
 		self.textures[id] = texture
 		self.notifyChanges()
 
-	# observers
 	def addObserver(self, observer) -> None:
 		self.observers.append(observer)
 

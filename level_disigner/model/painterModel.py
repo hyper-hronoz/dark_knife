@@ -1,17 +1,17 @@
-from level_disigner.model.texturesModel import TexturesModel
-
-
 class PainterModel:
 	def __init__(self, textures_map=[]) -> None:
 		self.texturesMap = textures_map
 
 		self.observers = []
 
-
+	def setTexturesMap(self, map):
+		self.texturesMap = map
+		self.notifyChanges()
 
 	# textures
 	def changeTexture(self, x, y, texture):
 		self.texturesMap[x][y] = texture
+		self.notifyChanges()
 
 	# observers
 	def addObserver(self, observer) -> None:

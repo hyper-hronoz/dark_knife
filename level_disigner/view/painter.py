@@ -4,11 +4,12 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import QEvent, QObject, QRect, Qt
 from PyQt5.QtGui import QBrush, QPainter, QPen, QPixmap
 from PyQt5.QtWidgets import QLabel, QLineEdit, QWidget
-from model import TextureModel, TexturesModel
+from model import TextureModel, TexturesModel, PainterModel
 from model import Cell
+from utility import MetaObserver, FinalMetaQWidget
 
 
-class Painter(QWidget):
+class Painter(QWidget, MetaObserver, metaclass=FinalMetaQWidget):
 	textureBrash: TextureModel = None 
 
 	XOffset = 0
@@ -19,9 +20,10 @@ class Painter(QWidget):
 
 	decodedPictures = {}
 
-	def __init__(self, model) -> None:
-		self._model: TexturesModel = model
-		self._grid = []
+	def __init__(self, texturesModel, mapModel) -> None:
+		self._texturesModel: TexturesModel = texturesModel
+		self._mapModel: PainterModel = mapModel
+		self._mapModel.addObserver(self)
 		super(Painter, self).__init__()
 
 	def paintEvent(self, event):
@@ -29,7 +31,7 @@ class Painter(QWidget):
 		self.painter = QPainter()
 		self.painter.begin(self)
 
-		if (len(self._grid) == 0):
+		if (len(self._mapModel.texturesMap) == 0):
 
 			width = self.painter.device().width()
 			height = self.painter.device().height()
@@ -38,26 +40,22 @@ class Painter(QWidget):
 			width_amount = width // Cell.side + 1
 			for y in range(height_amount):
 				for x in range(width_amount):
-					self._grid.append(
+					self._mapModel.texturesMap.append(
 						{"x": x * Cell.side, "y": y * Cell.side, "fill": ""})
 
-		self.drawGrid(self._grid)
+		self.drawGrid(self._mapModel.texturesMap)
 
 		self.painter.end()
 
 	def setIsSpacePressed(self, value):
 		Painter.isSpacePressed = value
 
-	def keyPressEvent(self, a0: QtGui.QKeyEvent) -> None:
-		print(a0, "works")
-		return super().keyPressEvent(a0)
-
 	def drawGrid(self, grid): 
 		for cell in grid:
 			if (cell["fill"] != "" and Painter.textureBrash != None):
 				if (cell["fill"] not in Painter.decodedPictures):
 					pixmap = QtGui.QPixmap()
-					pixmap.loadFromData(base64.b64decode(self._model.textures[cell["fill"]].texture))
+					pixmap.loadFromData(base64.b64decode(self._texturesModel.textures[cell["fill"]].texture))
 					Painter.decodedPictures[cell["fill"]] = pixmap
 				else:
 					pixmap = Painter.decodedPictures[cell["fill"]]
@@ -122,21 +120,21 @@ class Painter(QWidget):
 		if (self.isSpacePressed or (not Painter.isRightMouseButtonPressed)):
 			return
 		currentPosition = self.getCurrentPosition(event)
-		for i, cell in enumerate(self._grid):
-			if (currentPosition["x"] // Cell.side) * Cell.side == cell["x"] and (currentPosition["y"] // Cell.side) * Cell.side == cell["y"] and self._grid[i]["fill"] == 1:
-				self._grid[i]["fill"] = "" 
+		for i, cell in enumerate(self._mapModel.texturesMap):
+			if (currentPosition["x"] // Cell.side) * Cell.side == cell["x"] and (currentPosition["y"] // Cell.side) * Cell.side == cell["y"] and self._mapModel.texturesMap[i]["fill"] == 1:
+				self._mapModel.texturesMap[i]["fill"] = "" 
 				break
-		self.update()
+		self._mapModel.notifyChanges()
 
 	def drawTextures(self, event):
 		if (self.isSpacePressed or (not Painter.isLeftMouseButtonPressed)):
 			return
 		currentPosition = self.getCurrentPosition(event)
-		for i, cell in enumerate(self._grid):
-			if (currentPosition["x"] // Cell.side) * Cell.side == cell["x"] and (currentPosition["y"] // Cell.side) * Cell.side == cell["y"] and self._grid[i]["fill"] != 1 and Painter.textureBrash != None:
-				self._grid[i]["fill"] = Painter.textureBrash 
+		for i, cell in enumerate(self._mapModel.texturesMap):
+			if (currentPosition["x"] // Cell.side) * Cell.side == cell["x"] and (currentPosition["y"] // Cell.side) * Cell.side == cell["y"] and self._mapModel.texturesMap[i]["fill"] != 1 and Painter.textureBrash != None:
+				self._mapModel.texturesMap[i]["fill"] = Painter.textureBrash 
 				break
-		self.update()
+		self._mapModel.notifyChanges()
 
 	def mouseMoveEvent(self, event) -> None:
 		self.movement(event)
@@ -148,3 +146,6 @@ class Painter(QWidget):
 			Painter.isLeftMouseButtonPressed = False
 		if event.button() == QtCore.Qt.RightButton:
 			Painter.isRightMouseButtonPressed = False
+
+	def change(self):
+		self.update()

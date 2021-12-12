@@ -1,2 +1,3 @@
 from .MetaObserver import MetaObserver
-from .FinalMeta import FinalMeta
+from .finalMetaMainWindow import FinalMetaMainWindow
+from .finalMetaQWidget import FinalMetaQWidget

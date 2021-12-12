@@ -2,13 +2,13 @@ from PyQt5 import QtCore, QtGui
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QBoxLayout, QFrame, QHBoxLayout, QLabel, QMainWindow, QVBoxLayout, QWidget
 from res import Ui_MainWindow as Template
-from utility import MetaObserver, FinalMeta
+from utility import MetaObserver, FinalMetaMainWindow
 
 import base64
 from time import sleep
 
 
-class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
+class MainView(QMainWindow, MetaObserver, metaclass=FinalMetaMainWindow):
 
 	def __init__(self, controller, model):
 		self._controller = controller
@@ -22,6 +22,7 @@ class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
 
 		self._template.header_add_button.setFocusPolicy(QtCore.Qt.NoFocus)
 
+		self._template.actionsave_as.triggered.connect(self._controller.saveFileAs)
 		self._template.header_add_button.clicked.connect(
 			self._controller.addNewTexture)
 
@@ -58,11 +59,11 @@ class MainView(QMainWindow, MetaObserver, metaclass=FinalMeta):
 
 	# ! global event listeners do not change
 	def keyPressEvent(self, event):
-		self._controller.keyPressEvent(event)
+		self._controller.onSpacePressed(event)
 		return super().keyPressEvent(event)
 
 	def keyReleaseEvent(self, event: QtGui.QKeyEvent) -> None:
-		self._controller.keyReleaseEvent(event)
+		self._controller.onSpaceReleased(event)
 		return super().keyReleaseEvent(event)
 
 	def eventFilter(self, obj, event):

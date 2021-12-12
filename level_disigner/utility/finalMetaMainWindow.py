@@ -4,5 +4,5 @@ from PyQt5.QtWidgets import QMainWindow
 from utility import MetaObserver
 
 
-class FinalMeta(type(QMainWindow), type(MetaObserver)):
+class FinalMetaMainWindow(type(QMainWindow), type(MetaObserver)):
     pass
