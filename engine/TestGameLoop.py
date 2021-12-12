@@ -30,3 +30,6 @@ def main():
         
 if __name__ == "__main__":
     main()
+
+# venv\Scripts\activate.bat 
+# python engine\TestGameLoop.py
