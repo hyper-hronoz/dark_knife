@@ -1,10 +1,14 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QFileDialog, QFrame
-from view import MainView
+from view import MainView, Painter
 from model import TextureModel, TexturesModel
 
 import os
 import base64
+
+class PainterController():
+	def __init__(self) -> None:
+		pass
 
 
 class MainViewController():
@@ -13,11 +17,36 @@ class MainViewController():
 
 		self.mView = MainView(self, self.texturesModel)
 
+		self._createCanvas()
+
 		self.mView.show()
 
-	def selectTexture(self, obj, event):
+		self.eventObservers = []
+
+	def _createCanvas(self):
+		self._chartilo = Painter(self.texturesModel)
+		self.mView.pasteCanvas(self._chartilo)
+
+	def setPainterBrash(self, obj, event):
 		if isinstance(obj, QFrame) and event.type() == QtCore.QEvent.MouseButtonPress:
-			_model = self._model.textures
+			Painter.textureBrash = obj.objectName()
+
+	def keyPressEvent(self, event):
+
+	def keyReleaseEvent(self, event):
+
+
+	def onSpacePressed(self, event):
+		if event.isAutoRepeat():
+			return
+		if event.key()==QtCore.Qt.Key_Space:
+			self._chartilo.setIsSpacePressed(True)
+
+	def onSpaceReleased(self, event):
+		if event.isAutoRepeat():
+			return
+		if event.key()==QtCore.Qt.Key_Space:
+			self._chartilo.setIsSpacePressed(False)
 
 	def addNewTexture(self):
 		fname = QFileDialog.getOpenFileName(self.mView, 'Выбрать картинку ', '', "(*.jpg *.png *.jpeg, *.JPEG *.JPG, *.PNG)")[0]

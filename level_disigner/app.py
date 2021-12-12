@@ -6,7 +6,7 @@ from controller import MainViewController
 def main():
 	app = QApplication(sys.argv)
 
-	controller = MainViewController()
+	MainViewController()
 
 	app.exec()
 

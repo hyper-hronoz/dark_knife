@@ -48,6 +48,10 @@ class Painter(QWidget):
 	def setIsSpacePressed(self, value):
 		Painter.isSpacePressed = value
 
+	def keyPressEvent(self, a0: QtGui.QKeyEvent) -> None:
+		print(a0, "works")
+		return super().keyPressEvent(a0)
+
 	def drawGrid(self, grid): 
 		for cell in grid:
 			if (cell["fill"] != "" and Painter.textureBrash != None):
