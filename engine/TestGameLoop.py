@@ -16,7 +16,6 @@ def main():
 
     backgroung.fill(pygame.Color(BACKGROUND_COLOR))
     level = test_level.Level()
-    
 
     while True:
         for event in pygame.event.get():
