@@ -5,7 +5,7 @@ from test_textures import test_level
 WINDOW_WIDTH = 800 
 WINDOW_HEIGHT = 640 
 DISPLAY = (WINDOW_WIDTH, WINDOW_HEIGHT)
-BACKGROUND_COLOR = "#FFFFFF"
+BACKGROUND_COLOR = "#223759"
 
 def main():
     pygame.init()
