@@ -1,5 +1,5 @@
 import pygame, sys
-from test_textures import test_level
+from textures import test_level
 
 
 WINDOW_WIDTH = 800 
