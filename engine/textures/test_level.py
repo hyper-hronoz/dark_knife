@@ -13,7 +13,7 @@ class Level:
 
         self.usedTextures = {}
 
-        with open(r"C:\Users\jegor\PycharmProject\dark_knife\engine\textures\data\hyi.hyi", "r") as file:
+        with open(r"./levels/1.hyi", "r") as file:
             content = file.read()
             self.level = ast.literal_eval(content)
 
