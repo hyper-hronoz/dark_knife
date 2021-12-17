@@ -20,28 +20,45 @@ class Painter(QWidget, MetaObserver, metaclass=FinalMetaQWidget):
 
 	decodedPictures = {}
 
-	def __init__(self, texturesModel, mapModel) -> None:
+	def __init__(self, texturesModel, mapModel, size) -> None:
 		self._texturesModel: TexturesModel = texturesModel
 		self._mapModel: PainterModel = mapModel
 		self._mapModel.addObserver(self)
+		self._size = size
 		super(Painter, self).__init__()
 
 	def paintEvent(self, event):
-		# print("updating")
 		self.painter = QPainter()
 		self.painter.begin(self)
 
+		width = self.painter.device().width()
+		height = self.painter.device().height()
+
+		height_amount = height // Cell.side 
+		width_amount = width // Cell.side 
+
+		if not self._size["height"]:
+			self._size["height"] = height_amount
+		if not self._size["width"]:
+			self._size["width"] = width_amount
+
+		self.margin_horizontal = int((width - (Cell.side * self._size["width"])) / 2)
+		self.marging_vertical = int((height - (Cell.side * self._size["height"])) / 2)
+
+		counter = 0
+		for y in range(self._size["height"]):
+			for x in range(self._size["width"]):
+				if (counter >= len(self._mapModel.texturesMap)):
+					break
+				self._mapModel.texturesMap[counter]["x"] = x * Cell.side + self.margin_horizontal 
+				self._mapModel.texturesMap[counter]["y"] = y * Cell.side + self.marging_vertical 
+				counter += 1
+
 		if (len(self._mapModel.texturesMap) == 0):
-
-			width = self.painter.device().width()
-			height = self.painter.device().height()
-
-			height_amount = height // Cell.side + 1
-			width_amount = width // Cell.side + 1
-			for y in range(height_amount):
-				for x in range(width_amount):
+			for y in range(self._size["height"]):
+				for x in range(self._size["width"]):
 					self._mapModel.texturesMap.append(
-						{"x": x * Cell.side, "y": y * Cell.side, "fill": ""})
+						{"x": x * Cell.side + self.margin_horizontal, "y": y * Cell.side + self.marging_vertical, "fill": ""})
 
 		self.drawGrid(self._mapModel.texturesMap)
 
@@ -114,14 +131,13 @@ class Painter(QWidget, MetaObserver, metaclass=FinalMetaQWidget):
 
 		self.previousMousePosition = mouseCurrentPosition
 
-		print(Painter.XOffset, Painter.YOffset)
-
 	def deleteTextures(self, event):
-		if (self.isSpacePressed or (not Painter.isRightMouseButtonPressed)):
+		if (self.isSpacePressed or (not Painter.isRightMouseButtonPressed)) and Painter.textureBrash != None:
 			return
+
 		currentPosition = self.getCurrentPosition(event)
 		for i, cell in enumerate(self._mapModel.texturesMap):
-			if (currentPosition["x"] // Cell.side) * Cell.side == cell["x"] and (currentPosition["y"] // Cell.side) * Cell.side == cell["y"] and self._mapModel.texturesMap[i]["fill"] == 1:
+			if cell["x"] <= currentPosition["x"] <= cell["x"] + Cell.side and cell["y"] <= currentPosition["y"] <= cell["y"] + Cell.side:
 				self._mapModel.texturesMap[i]["fill"] = "" 
 				break
 		self._mapModel.notifyChanges()
@@ -130,8 +146,9 @@ class Painter(QWidget, MetaObserver, metaclass=FinalMetaQWidget):
 		if (self.isSpacePressed or (not Painter.isLeftMouseButtonPressed)):
 			return
 		currentPosition = self.getCurrentPosition(event)
+
 		for i, cell in enumerate(self._mapModel.texturesMap):
-			if (currentPosition["x"] // Cell.side) * Cell.side == cell["x"] and (currentPosition["y"] // Cell.side) * Cell.side == cell["y"] and self._mapModel.texturesMap[i]["fill"] != 1 and Painter.textureBrash != None:
+			if cell["x"] <= currentPosition["x"] <= cell["x"] + Cell.side and cell["y"] <= currentPosition["y"] <= cell["y"] + Cell.side:
 				self._mapModel.texturesMap[i]["fill"] = Painter.textureBrash 
 				break
 		self._mapModel.notifyChanges()

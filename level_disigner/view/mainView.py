@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui
 from PyQt5 import QtWidgets
+from PyQt5 import sip
 from PyQt5.QtWidgets import QApplication, QBoxLayout, QFrame, QHBoxLayout, QLabel, QMainWindow, QVBoxLayout, QWidget
 from res import Ui_MainWindow as Template
 from utility import MetaObserver, FinalMetaMainWindow
@@ -23,10 +24,19 @@ class MainView(QMainWindow, MetaObserver, metaclass=FinalMetaMainWindow):
 		self._template.header_add_button.setFocusPolicy(QtCore.Qt.NoFocus)
 
 		self._template.actionsave_as.triggered.connect(self._controller.saveFileAs)
-		self._template.header_add_button.clicked.connect(
-			self._controller.addNewTexture)
+		self._template.header_add_button.clicked.connect(self._controller.addNewTexture)
+		self._template.line_edit__width.textChanged.connect(self._onWidthChanged)
+		self._template.line_edit_height.textChanged.connect(self._onHeightChanged)
+
+	def _onWidthChanged(self, text: str):
+		self._controller.onWidthChanged(text)
+			
+	def _onHeightChanged(self, text):
+		self._controller.onHeightChanged(text)
 
 	def pasteCanvas(self, canvas):
+		for child in self._template.grid_frame.children():
+			sip.delete(child)
 		layout = QVBoxLayout()
 		layout.setContentsMargins(0, 0, 0, 0)
 		layout.addWidget(canvas)

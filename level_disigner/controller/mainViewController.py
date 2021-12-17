@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QFileDialog, QFrame
 from view import MainView, Painter
-from model import TextureModel, TexturesModel, PainterModel
+from model import TextureModel, TexturesModel, PainterModel, LevelModel, Cell
 import json
 
 import os
@@ -11,29 +11,48 @@ import base64
 class MainViewController():
 	def __init__(self):
 		self.texturesModel = TexturesModel()
-		self.painterModel = PainterModel()
 
 		self.mView = MainView(self, self.texturesModel)
 
+		self._canvasSize = {"height": None, "width": None}
 		self._createCanvas()
 
 		self.mView.show()
+
+	def onWidthChanged(self, text: str):
+		if text.isdigit() and int(text) >= 0:
+			self._canvasSize["width"] = int(text)
+			self._createCanvas()
+
+	def onHeightChanged(self, text: str):
+		if text.isdigit() and int(text) >= 0:
+			self._canvasSize["height"] = int(text)
+			self._createCanvas()
 	
 	def _createCanvas(self):
-		self._chartilo = Painter(self.texturesModel, self.painterModel)
+		self.painterModel = PainterModel([])
+		self._chartilo = Painter(self.texturesModel, self.painterModel, self._canvasSize)
 		self.mView.pasteCanvas(self._chartilo)
 		
 	def saveFileAs(self):
-		content = {"textures": []}
+		textures = []
 		for texture in self.texturesModel.__dict__["textures"]:
-			content["textures"].append({texture : self.texturesModel.__dict__["textures"][texture].__dict__["texture"]})
-		content["texturesMap"] = self.painterModel.__dict__["texturesMap"]
+			textures.append({texture : self.texturesModel.__dict__["textures"][texture].__dict__["texture"]})
+
+		texturesMap = []
+		for texture in	self.painterModel.texturesMap:
+			texture["y"] = (texture["y"] // Cell.side) * Cell.side
+			texture["x"] = (texture["x"] // Cell.side) * Cell.side
+			texturesMap.append(texture)
+
+		print(texturesMap)
+		content = LevelModel(Cell.side, textures, texturesMap)
 
 		options = QFileDialog.Options()
 		fileName, _ = QFileDialog.getSaveFileName(self.mView,"QFileDialog.getSaveFileName()","hyi","All Files (*);;Text Files (*.hyi)", options=options)
 		if fileName:
 			file = open(fileName,'w')
-			file.write(str(content))
+			file.write(str(content.__dict__))
 			file.close()
 	
 	def setPainterBrash(self, obj, event):
