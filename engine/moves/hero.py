@@ -12,9 +12,9 @@ class Player(sprite.Sprite):
         self.xvel = 0   #скорость перемещения. 0 - стоять на месте
         self.startX = x # Начальная позиция Х, пригодится когда будем переигрывать уровень
         self.startY = y
-        self.image = Surface((WIDTH,HEIGHT))
+        self.image = pygame.Surface((WIDTH,HEIGHT))
         self.image.fill(Color(COLOR))
-        self.rect = Rect(x, y, WIDTH, HEIGHT) # прямоугольный объект
+        self.rect = pygame.Rect(x, y, WIDTH, HEIGHT) # прямоугольный объект
 
     def update(self,  left, right):
         if left:
