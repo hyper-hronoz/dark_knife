@@ -4,29 +4,46 @@ MOVE_SPEED = 7
 WIDTH = 22
 HEIGHT = 32
 COLOR =  "#888888"
-
+JUMP_POWER = 10
+GRAVITY = 0.35
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.xvel = 0   #скорость перемещения. 0 - стоять на месте
-        self.startX = x # Начальная позиция Х, пригодится когда будем переигрывать уровень
-        self.startY = y
+
+        self.speed_x = 0 
+        self.start_x = x 
+
+        
+        self.speed_y = 0
+        self.start_y = y
+
+        self.on_ground = False
+
         self.image = pygame.Surface((WIDTH,HEIGHT))
         self.image.fill(pygame.Color(COLOR))
-        self.rect = pygame.Rect(x, y, WIDTH, HEIGHT) # прямоугольный объект
+        self.rect = pygame.Rect(x, y, WIDTH, HEIGHT) 
 
-    def update(self,  left, right):
+    def update(self, left, right, up):
         if left:
-            self.xvel = -MOVE_SPEED # Лево = x- n
+            self.speed_x = -MOVE_SPEED # left = x- n
  
         if right:
-            self.xvel = MOVE_SPEED # Право = x + n
-         
-        if not(left or right): # стоим, когда нет указаний идти
-            self.xvel = 0
+            self.speed_x = MOVE_SPEED # right = x + n
 
-        self.rect.x += self.xvel # переносим свои положение на xvel 
-   
-    def draw(self, screen): # Выводим себя на экран
+        if up:
+            if self.on_ground:
+                self.speed_y = -JUMP_POWER
+         
+        if not(left or right): # hero stands
+            self.speed_x = 0
+        if not self.on_ground:
+            self.speed_y +=  GRAVITY
+
+        self.on_ground = False; # Мы не знаем, когда мы на земле((   
+        self.rect.y += self.speed_y
+
+        self.rect.x += self.speed_x 
+
+    def draw(self, screen):
         screen.blit(self.image, (self.rect.x,self.rect.y))
