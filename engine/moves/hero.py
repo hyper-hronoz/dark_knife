@@ -1,4 +1,4 @@
-from pygame import *
+import pygame
 
 MOVE_SPEED = 7
 WIDTH = 22
@@ -6,14 +6,14 @@ HEIGHT = 32
 COLOR =  "#888888"
 
 
-class Player(sprite.Sprite):
+class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
-        sprite.Sprite.__init__(self)
+        pygame.sprite.Sprite.__init__(self)
         self.xvel = 0   #скорость перемещения. 0 - стоять на месте
         self.startX = x # Начальная позиция Х, пригодится когда будем переигрывать уровень
         self.startY = y
         self.image = pygame.Surface((WIDTH,HEIGHT))
-        self.image.fill(Color(COLOR))
+        self.image.fill(pygame.Color(COLOR))
         self.rect = pygame.Rect(x, y, WIDTH, HEIGHT) # прямоугольный объект
 
     def update(self,  left, right):
