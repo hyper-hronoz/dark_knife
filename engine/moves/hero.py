@@ -40,7 +40,7 @@ class Player(pygame.sprite.Sprite):
         if not self.on_ground:
             self.speed_y +=  GRAVITY
 
-        self.on_ground = False; # Мы не знаем, когда мы на земле((   
+        self.on_ground = False;
         self.rect.y += self.speed_y
 
         self.rect.x += self.speed_x 
