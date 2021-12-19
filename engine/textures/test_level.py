@@ -44,5 +44,3 @@ class Level:
                 rect = picture.get_rect()
                 rect = rect.move((x * cell_size, y * cell_size))
                 screen.blit(picture, rect)
-
-        print(self.usedTextures)                                 
