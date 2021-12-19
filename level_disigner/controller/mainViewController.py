@@ -28,6 +28,11 @@ class MainViewController():
 		if text.isdigit() and int(text) >= 0:
 			self._canvasSize["height"] = int(text)
 			self._createCanvas()
+
+	def onCellChanged(self, text: str):
+		if text.isdigit() and int(text) > 0:
+			Cell.side = int(text)
+			self._createCanvas()
 	
 	def _createCanvas(self):
 		self.painterModel = PainterModel([])
@@ -39,14 +44,7 @@ class MainViewController():
 		for texture in self.texturesModel.__dict__["textures"]:
 			textures.append({texture : self.texturesModel.__dict__["textures"][texture].__dict__["texture"]})
 
-		texturesMap = []
-		for texture in	self.painterModel.texturesMap:
-			texture["y"] = (texture["y"] // Cell.side) * Cell.side
-			texture["x"] = (texture["x"] // Cell.side) * Cell.side
-			texturesMap.append(texture)
-
-		print(texturesMap)
-		content = LevelModel(Cell.side, textures, texturesMap)
+		content = LevelModel(Cell.side, textures, self.painterModel.texturesMap)
 
 		options = QFileDialog.Options()
 		fileName, _ = QFileDialog.getSaveFileName(self.mView,"QFileDialog.getSaveFileName()","hyi","All Files (*);;Text Files (*.hyi)", options=options)

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1018</width>
-    <height>760</height>
+    <height>755</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -256,7 +256,7 @@ background-color: #07CAF2;</string>
                <x>0</x>
                <y>0</y>
                <width>201</width>
-               <height>689</height>
+               <height>684</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -420,6 +420,33 @@ background-color: #07CAF2;</string>
           </item>
           <item>
            <widget class="QLineEdit" name="line_edit_height">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: #fff;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: #fff;</string>
+            </property>
+            <property name="text">
+             <string>cell:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="line_edit_cell">
             <property name="font">
              <font>
               <pointsize>14</pointsize>

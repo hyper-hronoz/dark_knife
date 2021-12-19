@@ -27,12 +27,16 @@ class MainView(QMainWindow, MetaObserver, metaclass=FinalMetaMainWindow):
 		self._template.header_add_button.clicked.connect(self._controller.addNewTexture)
 		self._template.line_edit__width.textChanged.connect(self._onWidthChanged)
 		self._template.line_edit_height.textChanged.connect(self._onHeightChanged)
+		self._template.line_edit_cell.textChanged.connect(self._onCellChanged)
 
 	def _onWidthChanged(self, text: str):
 		self._controller.onWidthChanged(text)
 			
 	def _onHeightChanged(self, text):
 		self._controller.onHeightChanged(text)
+
+	def _onCellChanged(self, text):
+		self._controller.onCellChanged(text)
 
 	def pasteCanvas(self, canvas):
 		for child in self._template.grid_frame.children():

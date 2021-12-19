@@ -26,18 +26,29 @@ class Level:
     def draw_textures(self, screen):
         x=y=0 
 
-        for position in self.level["texturesMap"]:
-            texture_id = position["fill"]
+        cell_size = self.level["cell_size"]
 
-            if (texture_id == ""):
-                continue
+        textures_map = self.level["texturesMap"]
+        #     if (texture_id == ""):
+        #         continue
+        for y in range(len(textures_map)):
+            for x in range(len(textures_map[y])):
+                texture_id = textures_map[y][x]
+
+                if (texture_id == ""):
+                    continue
+
+                if texture_id not in self.usedTextures:
+                    self.usedTextures[texture_id] = self.getTexture(texture_id)
+
+                picture = pygame.transform.scale(self.usedTextures[texture_id], (cell_size, cell_size))
+                rect = picture.get_rect()
+                rect = rect.move((x * cell_size, y * cell_size))
+                screen.blit(picture, rect)
+        # for position in self.level["texturesMap"]:
+        #     texture_id = position["fill"]
+
                 
-            if texture_id not in self.usedTextures:
-                self.usedTextures[texture_id] = self.getTexture(texture_id)
 
-            picture = pygame.transform.scale(self.usedTextures[texture_id], (20, 20))
-            rect = picture.get_rect()
-            rect = rect.move((position["x"], position["y"]))
-            screen.blit(picture, rect)
 
         print(self.usedTextures)                                 
