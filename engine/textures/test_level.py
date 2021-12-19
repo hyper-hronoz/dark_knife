@@ -29,8 +29,7 @@ class Level:
         cell_size = self.level["cell_size"]
 
         textures_map = self.level["texturesMap"]
-        #     if (texture_id == ""):
-        #         continue
+
         for y in range(len(textures_map)):
             for x in range(len(textures_map[y])):
                 texture_id = textures_map[y][x]
@@ -45,10 +44,5 @@ class Level:
                 rect = picture.get_rect()
                 rect = rect.move((x * cell_size, y * cell_size))
                 screen.blit(picture, rect)
-        # for position in self.level["texturesMap"]:
-        #     texture_id = position["fill"]
-
-                
-
 
         print(self.usedTextures)                                 
