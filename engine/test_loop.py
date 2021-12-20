@@ -4,23 +4,17 @@ from textures import drawer
 from moves import hero
 
 
+with open(r"./levels/1.hyi", "r") as file:
+    content = file.read()
+    LEVEL = ast.literal_eval(content)
+    cell_size = LEVEL["cell_size"]
+    WINDOW_WIDTH = len(LEVEL["texturesMap"][0]) * cell_size
+    WINDOW_HEIGHT = len(LEVEL["texturesMap"]) * cell_size
 
+DISPLAY = (WINDOW_WIDTH, WINDOW_HEIGHT)
 BACKGROUND_COLOR = "#223759"
 
 def main():
-
-    with open(r"./levels/1.hyi", "r") as file:
-        content = file.read()
-        level = ast.literal_eval(content)
-        cell_size = level["cell_size"]
-        WINDOW_WIDTH = len(level["texturesMap"][0]) * cell_size
-        WINDOW_HEIGHT = len(level["texturesMap"]) * cell_size
-
-    WINDOW_WIDTH = WINDOW_WIDTH 
-    WINDOW_HEIGHT = WINDOW_HEIGHT 
-    DISPLAY = (WINDOW_WIDTH, WINDOW_HEIGHT)
-    BACKGROUND_COLOR = "#223759"
-
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY)
     clock = pygame.time.Clock()
@@ -29,10 +23,9 @@ def main():
 
     backgroung.fill(pygame.Color(BACKGROUND_COLOR))
     player = hero.Player(55,55)
-    left = right = False
-    up = False
+    left = right = up = False
 
-    level = test_level.Level(level)
+    level = drawer.Level(LEVEL)
 
     while True:
         clock.tick(60)
@@ -68,4 +61,4 @@ if __name__ == "__main__":
     main()
 
 # venv\Scripts\activate.bat 
-# python engine\TestGameLoop.py
+# python engine\test_loop.py
