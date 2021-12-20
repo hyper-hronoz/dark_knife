@@ -5,17 +5,14 @@ import base64
 
 
 class Level:
-    def __init__(self):
+    def __init__(self, level):
+        self.level = level
         self.PLATFORM_WIDTH = 15
         self.PLATFORM_HEIGHT = 15
         self.PLATFORM_GEOMETRY = (self.PLATFORM_WIDTH, self.PLATFORM_HEIGHT)
         self.PLATFORM_COLOR = "#000000"
 
         self.usedTextures = {}
-
-        with open(r"./levels/1.hyi", "r") as file:
-            content = file.read()
-            self.level = ast.literal_eval(content)
 
     def getTexture(self, id):
         for texture in self.level["textures"]:
