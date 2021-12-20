@@ -5,24 +5,19 @@ from moves import hero
 
 
 
-class WindowKeeper:
-    WINDOW_WIDTH = 100 
-    WINDOW_HEIGHT = 100 
-    DISPLAY = (WINDOW_WIDTH, WINDOW_HEIGHT)
-    BACKGROUND_COLOR = "#223759"
+BACKGROUND_COLOR = "#223759"
 
 def main():
 
     with open(r"./levels/1.hyi", "r") as file:
-        global WINDOW_HEIGHT, WINDOW_WIDTH
         content = file.read()
         level = ast.literal_eval(content)
         cell_size = level["cell_size"]
-        WindowKeeper.WINDOW_WIDTH = len(level["texturesMap"][0]) * cell_size
-        WindowKeeper.WINDOW_HEIGHT = len(level["texturesMap"]) * cell_size
+        WINDOW_WIDTH = len(level["texturesMap"][0]) * cell_size
+        WINDOW_HEIGHT = len(level["texturesMap"]) * cell_size
 
-    WINDOW_WIDTH = WindowKeeper.WINDOW_WIDTH 
-    WINDOW_HEIGHT = WindowKeeper.WINDOW_HEIGHT 
+    WINDOW_WIDTH = WINDOW_WIDTH 
+    WINDOW_HEIGHT = WINDOW_HEIGHT 
     DISPLAY = (WINDOW_WIDTH, WINDOW_HEIGHT)
     BACKGROUND_COLOR = "#223759"
 
@@ -37,7 +32,7 @@ def main():
     left = right = False
     up = False
 
-    level = test_level.Level()
+    level = test_level.Level(level)
 
     while True:
         clock.tick(60)
