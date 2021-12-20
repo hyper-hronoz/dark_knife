@@ -22,6 +22,7 @@ class Player(pygame.sprite.Sprite):
 
         self.image = pygame.Surface((WIDTH,HEIGHT))
         self.image.fill(pygame.Color(COLOR))
+        
         self.rect = pygame.Rect(x, y, WIDTH, HEIGHT) 
 
     def update(self, left, right, up):
