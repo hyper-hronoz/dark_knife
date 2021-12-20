@@ -25,6 +25,10 @@ def main():
     player = hero.Player(55,55)
     left = right = up = False
 
+    # entities = pygame.sprite.Group()
+    # platforms = []
+    # entities.add(hero)
+
     level = drawer.Level(LEVEL)
 
     while True:
