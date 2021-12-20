@@ -1,9 +1,9 @@
 import pygame
 
 MOVE_SPEED = 7
-WIDTH = 22
-HEIGHT = 32
-COLOR =  "#888888"
+HERO_WIDTH = 22
+HERO_HEIGHT = 32
+HERO_COLOR =  pygame.Color("red")
 JUMP_POWER = 10
 GRAVITY = 0.35
 
@@ -20,10 +20,10 @@ class Player(pygame.sprite.Sprite):
 
         self.on_ground = False
 
-        self.image = pygame.Surface((WIDTH,HEIGHT))
-        self.image.fill(pygame.Color(COLOR))
+        self.image = pygame.Surface((HERO_WIDTH,HERO_HEIGHT))
+        self.image.fill(pygame.Color(HERO_COLOR))
 
-        self.rect = pygame.Rect(x, y, WIDTH, HEIGHT) 
+        self.rect = pygame.Rect(x, y, HERO_WIDTH, HERO_HEIGHT) 
 
     def update(self, left, right, up):
         if left:
