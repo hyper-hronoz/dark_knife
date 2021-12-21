@@ -1,7 +1,6 @@
-import ast
-import pygame, sys
-from textures import drawer
-from moves import hero
+import pygame, sys, ast
+from model import Platform, Player
+from textures import Level
 
 
 with open(r"./levels/1.hyi", "r") as file:
@@ -22,17 +21,17 @@ def main():
     backgroung = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
 
     backgroung.fill(pygame.Color(BACKGROUND_COLOR))
-    player = hero.Player(55,55)
+    player = Player(55,55)
     left = right = up = False
 
-    # entities = pygame.sprite.Group()
-    # platforms = []
-    # entities.add(hero)
+    level = Level(LEVEL)
+    platforms = level.fill_textures(screen).get_platforms()
 
-    level = drawer.Level(LEVEL)
+    
+  
 
     while True:
-        clock.tick(60)
+        clock.tick(120)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -51,14 +50,40 @@ def main():
             if event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 right = False
             if event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                left = False
+                left = False  
 
-        
         screen.blit(backgroung, (0,0))
-        level.draw_textures(screen)
-
+        
         player.update(left, right, up)
         player.draw(screen)
+
+        for platform in platforms:
+            platform: Platform 
+            screen.blit(platform.image, platform.rect)
+            if platform.rect.colliderect(player):
+                print("done")
+                if player.speed_x > 0:                      
+                    player.right = player.rect.left
+                    player.speed_x = 0
+                    print(1)
+
+                if player.speed_x < 0:                      
+                    player.left = player.rect.right 
+                    player.speed_x = 0
+                    print(2)
+
+                if player.speed_y > 0:                     
+                    player.bottom = player.rect.top 
+                    onGround = True          
+                    player.speed_y = 0
+                    print(3)                 
+
+                if player.speed_y < 0:                     
+                    player.rect.top = player.rect.bottom 
+                    player.speed_y = 0  
+                    print(4)
+
+    
         pygame.display.update()
         
 if __name__ == "__main__":
