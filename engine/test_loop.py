@@ -1,17 +1,21 @@
-import pygame, sys, ast
-from model import Platform, Player
-from textures import Level
+import pygame
+import sys
+import ast
+
+from pygame.constants import KEYDOWN
+from model import Platform, Player, Level
 
 
 with open(r"./levels/1.hyi", "r") as file:
     content = file.read()
     LEVEL = ast.literal_eval(content)
     cell_size = LEVEL["cell_size"]
-    WINDOW_WIDTH = len(LEVEL["texturesMap"][0]) * cell_size
-    WINDOW_HEIGHT = len(LEVEL["texturesMap"]) * cell_size
+    WINDOW_WIDTH = len(LEVEL["textures_map"][0]) * cell_size
+    WINDOW_HEIGHT = len(LEVEL["textures_map"]) * cell_size
 
 DISPLAY = (WINDOW_WIDTH, WINDOW_HEIGHT)
 BACKGROUND_COLOR = "#223759"
+
 
 def main():
     pygame.init()
@@ -21,73 +25,77 @@ def main():
     backgroung = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
 
     backgroung.fill(pygame.Color(BACKGROUND_COLOR))
-    player = Player(55,55)
-    left = right = up = False
+
+    player = Player(55, 55)
 
     level = Level(LEVEL)
-    platforms = level.fill_textures(screen).get_platforms()
-
-    
-  
+    platforms = level.create_platforms().get_platforms()
 
     while True:
-        clock.tick(120)
+        clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
-                up = True
-            if event.type == pygame.KEYUP and event.key == pygame.K_UP:
-                up = False
+            if event.type == pygame.KEYDOWN:
 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                left = True
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                right = True
+                if event.key == pygame.K_LEFT:
+                    player.isLeftPressed = True
 
-            if event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
-                right = False
-            if event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                left = False  
+                if event.key == pygame.K_RIGHT:
+                    player.isRightPressed = True
 
-        screen.blit(backgroung, (0,0))
-        
-        player.update(left, right, up)
-        player.draw(screen)
+                if event.key == pygame.K_UP:
+                    player.isTopPressed = True
+
+                if event.key == pygame.K_DOWN:
+                    player.isBottomPressed = True
+
+
+            if event.type == pygame.KEYUP:
+
+                if event.key == pygame.K_LEFT:
+                    player.isLeftPressed = False
+
+                if event.key == pygame.K_RIGHT:
+                    player.isRightPressed = False
+
+                if event.key == pygame.K_UP:
+                    player.isTopPressed = False
+
+                if event.key == pygame.K_DOWN:
+                    player.isBottomPressed = False
+        screen.blit(backgroung, (0, 0))
+
+        player.updatePlayerPostion()
 
         for platform in platforms:
-            platform: Platform 
+            platform: Platform
+
+            if player.previousPosition.bottom <= platform.rect.top <= player.rect.bottom and (platform.rect.left < player.rect.right < platform.rect.right or platform.rect.right > player.rect.left > platform.rect.left):
+                player.fallSpeed = 0
+                player.rect.bottom = platform.rect.top
+
+            if player.previousPosition.top >= platform.rect.bottom >= player.rect.top and (platform.rect.left < player.rect.right < platform.rect.right or platform.rect.right > player.rect.left > platform.rect.left):
+                player.rect.top = platform.rect.bottom
+
+            if player.rect.colliderect(platform.rect):
+                if player.rect.left <= platform.rect.right <= player.previousPosition.right:
+                    player.rect.left = platform.rect.right
+
+                if player.rect.right >= platform.rect.left >= player.previousPosition.left:
+                    player.rect.right = platform.rect.left
+
             screen.blit(platform.image, platform.rect)
-            if platform.rect.colliderect(player):
-                print("done")
-                if player.speed_x > 0:                      
-                    player.right = player.rect.left
-                    player.speed_x = 0
-                    print(1)
 
-                if player.speed_x < 0:                      
-                    player.left = player.rect.right 
-                    player.speed_x = 0
-                    print(2)
+        player.draw(screen)
 
-                if player.speed_y > 0:                     
-                    player.bottom = player.rect.top 
-                    onGround = True          
-                    player.speed_y = 0
-                    print(3)                 
-
-                if player.speed_y < 0:                     
-                    player.rect.top = player.rect.bottom 
-                    player.speed_y = 0  
-                    print(4)
-
-    
         pygame.display.update()
-        
+
+
 if __name__ == "__main__":
     main()
 
-# venv\Scripts\activate.bat 
+# venv\Scripts\activate.bat
 # python engine\test_loop.py

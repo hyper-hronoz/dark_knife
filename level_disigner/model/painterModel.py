@@ -1,16 +1,16 @@
 class PainterModel:
 	def __init__(self, textures_map=[]) -> None:
-		self.texturesMap = textures_map
+		self.textures_map = textures_map
 
 		self.observers = []
 
 	def setTexturesMap(self, map):
-		self.texturesMap = map
+		self.textures_map = map
 		self.notifyChanges()
 
 	# textures
 	def changeTexture(self, x, y, texture):
-		self.texturesMap[x][y] = texture
+		self.textures_map[x][y] = texture
 		self.notifyChanges()
 
 	# observers

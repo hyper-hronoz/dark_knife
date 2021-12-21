@@ -17,12 +17,12 @@ class Level:
                 output = io.BytesIO(base64.b64decode(texture[id]))
                 return pygame.image.load(output)
 
-    def fill_textures(self):
+    def create_platforms(self):
         x=y=0 
 
         cell_size = self.level["cell_size"]
 
-        textures_map = self.level["texturesMap"]
+        textures_map = self.level["textures_map"]
 
         for y in range(len(textures_map)):
             for x in range(len(textures_map[y])):
@@ -40,8 +40,5 @@ class Level:
                 rect = rect.move((x * cell_size, y * cell_size))
 
                 self.platforms.add(Platform(rect, picture))
-
-                # screen.blit(picture, rect)
-
 
         return self

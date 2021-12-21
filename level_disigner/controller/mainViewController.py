@@ -44,7 +44,7 @@ class MainViewController():
 		for texture in self.texturesModel.__dict__["textures"]:
 			textures.append({texture : self.texturesModel.__dict__["textures"][texture].__dict__["texture"]})
 
-		content = LevelModel(Cell.side, textures, self.painterModel.texturesMap)
+		content = LevelModel(Cell.side, textures, self.painterModel.textures_map)
 
 		options = QFileDialog.Options()
 		fileName, _ = QFileDialog.getSaveFileName(self.mView,"QFileDialog.getSaveFileName()","hyi","All Files (*);;Text Files (*.hyi)", options=options)
