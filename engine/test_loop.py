@@ -66,6 +66,7 @@ def main():
 
                 if event.key == pygame.K_DOWN:
                     player.isBottomPressed = False
+
         screen.blit(backgroung, (0, 0))
 
         player.updatePlayerPostion()
@@ -73,14 +74,17 @@ def main():
         for platform in platforms:
             platform: Platform
 
-            if player.previousPosition.bottom <= platform.rect.top <= player.rect.bottom and (platform.rect.left < player.rect.right < platform.rect.right or platform.rect.right > player.rect.left > platform.rect.left):
-                player.fallSpeed = 0
-                player.rect.bottom = platform.rect.top
+            if platform.rect.left < player.rect.right < platform.rect.right or platform.rect.right > player.rect.left > platform.rect.left:
+                if player.previousPosition.bottom <= platform.rect.top <= player.rect.bottom:
+                    player.fallSpeed = 0
+                    player.rect.bottom = platform.rect.top
 
-            if player.previousPosition.top >= platform.rect.bottom >= player.rect.top and (platform.rect.left < player.rect.right < platform.rect.right or platform.rect.right > player.rect.left > platform.rect.left):
-                player.rect.top = platform.rect.bottom
+                if player.previousPosition.top >= platform.rect.bottom >= player.rect.top:
+                    player.rect.top = platform.rect.bottom
 
             if player.rect.colliderect(platform.rect):
+            # if player.previousPosition.top > platform.rect.bottom > player.rect.top or player.previousPosition.bottom < platform.rect.top < player.rect.bottom:
+            # if player.previousPosition.top >= platform.rect.bottom >= player.rect.top or player.previousPosition.bottom <= platform.rect.top <= player.rect.bottom:
                 if player.rect.left <= platform.rect.right <= player.previousPosition.right:
                     player.rect.left = platform.rect.right
 
