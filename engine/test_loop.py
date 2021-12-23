@@ -83,12 +83,10 @@ def main():
                     player.rect.top = platform.rect.bottom
 
             if player.rect.colliderect(platform.rect):
-            # if player.previousPosition.top > platform.rect.bottom > player.rect.top or player.previousPosition.bottom < platform.rect.top < player.rect.bottom:
-            # if player.previousPosition.top >= platform.rect.bottom >= player.rect.top or player.previousPosition.bottom <= platform.rect.top <= player.rect.bottom:
-                if player.rect.left <= platform.rect.right <= player.previousPosition.right:
+                if player.rect.left <= platform.rect.right <= player.previousPosition.left:
                     player.rect.left = platform.rect.right
 
-                if player.rect.right >= platform.rect.left >= player.previousPosition.left:
+                if player.previousPosition.right <= platform.rect.left <= player.rect.right:
                     player.rect.right = platform.rect.left
 
             screen.blit(platform.image, platform.rect)
