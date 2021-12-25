@@ -10,7 +10,11 @@ GRAVITY = 0.35
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((HERO_WIDTH,HERO_HEIGHT))
+        self.image.fill(HERO_COLOR)
 
+        self.rect = pygame.Rect(x, y, HERO_WIDTH, HERO_HEIGHT) 
+        
         self.speed_x = 0 
         self.start_x = x 
 
@@ -19,12 +23,6 @@ class Player(pygame.sprite.Sprite):
         self.start_y = y
 
         self.on_ground = False
-
-        self.image = pygame.Surface((HERO_WIDTH,HERO_HEIGHT))
-        self.image.fill(pygame.Color(HERO_COLOR))
-
-        self.rect = pygame.Rect(x, y, HERO_WIDTH, HERO_HEIGHT) 
-
     def update(self, left, right, up):
         if left:
             self.speed_x = -MOVE_SPEED # left = x- n

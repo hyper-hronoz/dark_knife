@@ -1,7 +1,8 @@
 import ast
 import pygame, sys
 from textures import drawer
-from moves import hero
+from models import hero
+from textures import drawer
 
 
 with open(r"./levels/1.hyi", "r") as file:
@@ -25,11 +26,8 @@ def main():
     player = hero.Player(55,55)
     left = right = up = False
 
-    # entities = pygame.sprite.Group()
-    # platforms = []
-    # entities.add(hero)
-
     level = drawer.Level(LEVEL)
+    platforms = level.create_platforms()
 
     while True:
         clock.tick(60)
@@ -52,10 +50,13 @@ def main():
                 right = False
             if event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
                 left = False
-
         
         screen.blit(backgroung, (0,0))
-        level.draw_textures(screen)
+
+        for platform in platforms:
+            screen.blit(platform.image, platform.rect)
+        
+        
 
         player.update(left, right, up)
         player.draw(screen)
