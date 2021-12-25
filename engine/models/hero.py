@@ -41,7 +41,6 @@ class Player(pygame.sprite.Sprite):
 
         self.on_ground = False;
         self.rect.y += self.speed_y
-
         self.rect.x += self.speed_x 
 
     def draw(self, screen):
