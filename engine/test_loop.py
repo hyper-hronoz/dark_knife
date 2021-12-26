@@ -3,6 +3,7 @@ import pygame, sys
 from textures import drawer
 from models import hero
 from textures import drawer
+from models import hero
 
 
 with open(r"./levels/1.hyi", "r") as file:
@@ -23,12 +24,13 @@ def main():
     backgroung = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
 
     backgroung.fill(pygame.Color(BACKGROUND_COLOR))
-    player = hero.Player(55,55)
-    left = right = up = False
+
+    player = pygame.sprite.GroupSingle()
+    player_sprite = hero.Player(55,55)
+    player.add(player_sprite)
 
     level = drawer.Level(LEVEL)
     platforms = level.create_platforms()
-
     while True:
         clock.tick(60)
         for event in pygame.event.get():
@@ -36,30 +38,16 @@ def main():
                 pygame.quit()
                 sys.exit()
 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
-                up = True
-            if event.type == pygame.KEYUP and event.key == pygame.K_UP:
-                up = False
-
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                left = True
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                right = True
-
-            if event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
-                right = False
-            if event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                left = False
-        
         screen.blit(backgroung, (0,0))
+
+        player.update()
 
         for platform in platforms:
             screen.blit(platform.image, platform.rect)
-        
-        
 
-        player.update(left, right, up)
+        
         player.draw(screen)
+
         pygame.display.update()
         
 if __name__ == "__main__":
