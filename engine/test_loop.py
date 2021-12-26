@@ -25,12 +25,26 @@ class Level:
     def horizontal_movement_collision(self):
         player = self.player.sprite
         player.rect.x += player.direction.x * hero.MOVE_SPEED
+
         for sprite in self.platforms.sprites():
             if sprite.rect.colliderect(player.rect):
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
+    
+    def vertical_movement_collision(self):
+        player = self.player.sprite
+        player.gravity()
+        
+        for sprite in self.platforms.sprites():
+            if sprite.rect.colliderect(player.rect):
+                if player.direction.y > 0:
+                    player.rect.bottom = sprite.rect.top
+                    player.direction.y = 0
+                elif player.direction.y < 0:
+                    player.rect.top = sprite.rect.bottom
+                    player.direction.y = 0
 
     def main(self):
         pygame.init()
@@ -61,6 +75,7 @@ class Level:
 
             self.player.update()
             self.horizontal_movement_collision()
+            self.vertical_movement_collision()
             self.player.draw(screen)
 
             pygame.display.update()
