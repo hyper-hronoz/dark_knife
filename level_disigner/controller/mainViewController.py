@@ -23,7 +23,6 @@ class MainViewController():
 		self.texturesModel.addTexture(finish, "finish")
 
 		self._canvasSize = {"height": None, "width": None}
-		self._startMap = []
 		self._createCanvas()
 
 		self.mView.show()
@@ -43,8 +42,10 @@ class MainViewController():
 			Cell.side = int(text)
 			self._createCanvas()
 	
-	def _createCanvas(self):
-		self.painterModel = PainterModel(self._startMap)
+	def _createCanvas(self, textures_map=None):
+		if not textures_map:
+			textures_map = []
+		self.painterModel = PainterModel(textures_map)
 		self._chartilo = Painter(self.texturesModel, self.painterModel, self._canvasSize)
 		self.mView.pasteCanvas(self._chartilo)
 		
@@ -75,11 +76,9 @@ class MainViewController():
 				key, value = textures[i].popitem()
 				self.texturesModel.addTexture(TextureModel(value, key), key)
 			self.onCellChanged(str(file["cell_size"]))
-			self._startMap = file["textures_map"]
 			self._canvasSize = {"height": len(file["textures_map"]), "width": len(file["textures_map"][0])}
-			self._createCanvas()
+			self._createCanvas(file["textures_map"])
 
-	
 	def setPainterBrash(self, obj, event):
 		if isinstance(obj, QFrame) and event.type() == QtCore.QEvent.MouseButtonPress:
 			Painter.textureBrash = obj.objectName()
