@@ -1,9 +1,9 @@
-from typing import Collection
-import pygame, sys, ast
-from engine.test_moves.player_movement import Collision
-from model import Platform, Player
-from textures import Level
-from test_moves import player_movement.Collision as Collision
+import ast
+import pygame, sys
+from textures import drawer
+from models import hero
+from textures import drawer
+from models import hero
 
 
 with open(r"./levels/1.hyi", "r") as file:
@@ -16,80 +16,73 @@ with open(r"./levels/1.hyi", "r") as file:
 DISPLAY = (WINDOW_WIDTH, WINDOW_HEIGHT)
 BACKGROUND_COLOR = "#223759"
 
-def main():
-    pygame.init()
-    screen = pygame.display.set_mode(DISPLAY)
-    clock = pygame.time.Clock()
-    pygame.display.set_caption("Dark Knife")
-    backgroung = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+class Level:
+    def add_player(self):
+        self.player = pygame.sprite.GroupSingle()
+        player_sprite = hero.Player(55,55)
+        self.player.add(player_sprite)
 
-    backgroung.fill(pygame.Color(BACKGROUND_COLOR))
-    player = Player(55,55)
-    left = right = up = False
+    def horizontal_movement_collision(self):
+        player = self.player.sprite
+        player.rect.x += player.direction.x * hero.MOVE_SPEED
 
-    level = Level(LEVEL)
-    platforms = level.fill_textures().get_platforms()
-
-    while True:
-        clock.tick(120)
-        for event in pygame.event.get():
-            
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
-                up = True
-            if event.type == pygame.KEYUP and event.key == pygame.K_UP:
-                up = False
-
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                left = True
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                right = True
-
-            if event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
-                right = False
-            if event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                left = False  
-
-        screen.blit(backgroung, (0,0))
-        
-        player.update(left, right, up)
-        player.draw(screen)
-        x = Collision(platforms)
-        x.main()
-        # for platform in platforms:
-        #     platform: Platform 
-        #     screen.blit(platform.image, platform.rect)
-        #     if platform.rect.colliderect(player):
-        #         print("done")
-        #         if player.speed_x > 0:                      
-        #             player.right = player.rect.left
-        #             player.speed_x = 0
-        #             print(1)
-
-        #         if player.speed_x < 0:                      
-        #             player.left = player.rect.right 
-        #             player.speed_x = 0
-        #             print(2)
-
-        #         if player.speed_y > 0:                     
-        #             player.bottom = player.rect.top 
-        #             onGround = True          
-        #             player.speed_y = 0
-        #             print(3)                 
-
-        #         if player.speed_y < 0:                     
-        #             player.rect.top = player.rect.bottom 
-        #             player.speed_y = 0  
-        #             print(4)
-
+        for sprite in self.platforms.sprites():
+            if sprite.rect.colliderect(player.rect):
+                if player.direction.x < 0:
+                    player.rect.left = sprite.rect.right
+                elif player.direction.x > 0:
+                    player.rect.right = sprite.rect.left
     
-        pygame.display.update()
+    def vertical_movement_collision(self):
+        player = self.player.sprite
+        player.gravity()
+        
+        for sprite in self.platforms.sprites():
+            if sprite.rect.colliderect(player.rect):
+                if player.direction.y > 0:
+                    player.rect.bottom = sprite.rect.top
+                    player.direction.y = 0
+                elif player.direction.y < 0:
+                    player.rect.top = sprite.rect.bottom
+                    player.direction.y = 0
+
+    def main(self):
+        pygame.init()
+        screen = pygame.display.set_mode(DISPLAY)
+        clock = pygame.time.Clock()
+        pygame.display.set_caption("Dark Knife")
+        backgroung = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+
+        backgroung.fill(pygame.Color(BACKGROUND_COLOR))
+
+        self.add_player()
+
+        level = drawer.Level(LEVEL)
+        self.platforms = level.create_platforms()
+
+        while True:
+            clock.tick(60)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            screen.blit(backgroung, (0,0))
+
+            for platform in self.platforms:
+                screen.blit(platform.image, platform.rect)
+
+            self.player.update()
+            self.horizontal_movement_collision()
+            self.vertical_movement_collision()
+            self.player.draw(screen)
+
+            pygame.display.update()
         
 if __name__ == "__main__":
-    main()
+    run = Level()
+    run.main()
 
 # venv\Scripts\activate.bat 
 # python engine\test_loop.py
