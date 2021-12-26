@@ -4,7 +4,7 @@ MOVE_SPEED = 7
 HERO_WIDTH = 22
 HERO_HEIGHT = 32
 HERO_COLOR =  pygame.Color("red")
-JUMP_HEIGHT = 10
+JUMP_HEIGHT = -10
 GRAVITY = 0.35
 
 class Player(pygame.sprite.Sprite):
@@ -29,9 +29,15 @@ class Player(pygame.sprite.Sprite):
         else:
             self.direction.x = 0
 
+        if keys[pygame.K_SPACE]:
+            self.jump()
+
     def gravity(self):
         self.direction.y += GRAVITY
         self.rect.y += self.direction.y
+
+    def jump(self):
+        self.direction.y = JUMP_HEIGHT
 
     def update(self):
         self.get_input()
