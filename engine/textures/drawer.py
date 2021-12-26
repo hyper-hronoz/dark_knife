@@ -48,3 +48,4 @@ class Level:
                 self.platforms.add(Platform(rect, picture))
                 # screen.blit(picture, rect)
         return self.platforms
+
