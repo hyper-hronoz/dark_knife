@@ -32,7 +32,7 @@ def main():
     platforms = level.create_platforms().get_platforms()
 
     while True:
-        clock.tick(60)
+        clock.tick(75)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -73,21 +73,6 @@ def main():
 
         for platform in platforms:
             platform: Platform
-
-            if platform.rect.left < player.rect.right < platform.rect.right or platform.rect.right > player.rect.left > platform.rect.left:
-                if player.previousPosition.bottom <= platform.rect.top <= player.rect.bottom:
-                    player.fallSpeed = 0
-                    player.rect.bottom = platform.rect.top
-
-                if player.previousPosition.top >= platform.rect.bottom >= player.rect.top:
-                    player.rect.top = platform.rect.bottom
-
-            if player.rect.colliderect(platform.rect):
-                if player.rect.left <= platform.rect.right <= player.previousPosition.left:
-                    player.rect.left = platform.rect.right
-
-                if player.previousPosition.right <= platform.rect.left <= player.rect.right:
-                    player.rect.right = platform.rect.left
 
             screen.blit(platform.image, platform.rect)
 

@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QFileDialog, QFrame
 from view import MainView, Painter
 from model import TextureModel, TexturesModel, PainterModel, LevelModel, Cell
+from res import textures
 import json
 
 import os
@@ -13,6 +14,12 @@ class MainViewController():
 		self.texturesModel = TexturesModel()
 
 		self.mView = MainView(self, self.texturesModel)
+
+		start = TextureModel(textures.textures["start"], "start")
+		finish = TextureModel(textures.textures["finish"], "finish")
+
+		self.texturesModel.addTexture(start, "start")
+		self.texturesModel.addTexture(finish, "finish")
 
 		self._canvasSize = {"height": None, "width": None}
 		self._createCanvas()
@@ -52,6 +59,9 @@ class MainViewController():
 			file = open(fileName,'w')
 			file.write(str(content.__dict__))
 			file.close()
+
+	def openFileAs(self):
+		pass
 	
 	def setPainterBrash(self, obj, event):
 		if isinstance(obj, QFrame) and event.type() == QtCore.QEvent.MouseButtonPress:
@@ -69,8 +79,9 @@ class MainViewController():
 		if event.key()==QtCore.Qt.Key_Space:
 			self._chartilo.setIsSpacePressed(False)
 
-	def addNewTexture(self):
-		fname = QFileDialog.getOpenFileName(self.mView, 'Выбрать картинку ', '', "(*.jpg *.png *.jpeg, *.JPEG *.JPG, *.PNG)")[0]
+	def addNewTexture(self, fname=None):
+		if not fname: 
+			fname = QFileDialog.getOpenFileName(self.mView, 'Выбрать картинку ', '', "(*.jpg *.png *.jpeg, *.JPEG *.JPG, *.PNG)")[0]
 		if not fname:
 			return
 		head, tail = os.path.split(fname)
