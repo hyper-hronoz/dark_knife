@@ -1,8 +1,10 @@
 import io
-import pygame, sys
+import pygame
+import sys
 import ast
 import base64
 from models import Platform
+
 
 class Level:
     def __init__(self, level):
@@ -12,7 +14,7 @@ class Level:
         self.PLATFORM_GEOMETRY = (self.PLATFORM_WIDTH, self.PLATFORM_HEIGHT)
         self.PLATFORM_COLOR = "#000000"
         self.platforms = pygame.sprite.Group()
-        
+
         self.used_textures = {}
 
     def getTexture(self, id):
@@ -22,7 +24,7 @@ class Level:
                 return pygame.image.load(output)
 
     def create_platforms(self):
-        x=y=0 
+        x = y = 0
 
         cell_size = self.level["cell_size"]
 
@@ -36,9 +38,11 @@ class Level:
                     continue
 
                 if texture_id not in self.used_textures:
-                    self.used_textures[texture_id] = self.getTexture(texture_id)
+                    self.used_textures[texture_id] = self.getTexture(
+                        texture_id)
 
-                picture = pygame.transform.scale(self.used_textures[texture_id], (cell_size, cell_size))
+                picture = pygame.transform.scale(
+                    self.used_textures[texture_id], (cell_size, cell_size))
                 rect = picture.get_rect()
                 rect = rect.move((x * cell_size, y * cell_size))
                 self.platforms.add(Platform(rect, picture))

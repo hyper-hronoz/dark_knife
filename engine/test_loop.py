@@ -1,5 +1,6 @@
 import ast
-import pygame, sys
+import pygame
+import sys
 from textures import drawer
 from models import hero
 from textures import drawer
@@ -16,10 +17,11 @@ with open(r"./levels/1.hyi", "r") as file:
 DISPLAY = (WINDOW_WIDTH, WINDOW_HEIGHT)
 BACKGROUND_COLOR = "#223759"
 
+
 class Level:
     def add_player(self):
         self.player = pygame.sprite.GroupSingle()
-        player_sprite = hero.Player(55,55)
+        player_sprite = hero.Player(55, 55)
         self.player.add(player_sprite)
 
     def horizontal_movement_collision(self):
@@ -32,11 +34,11 @@ class Level:
                     player.rect.left = sprite.rect.right
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
-    
+
     def vertical_movement_collision(self):
         player = self.player.sprite
         player.gravity()
-        
+
         for sprite in self.platforms.sprites():
             if sprite.rect.colliderect(player.rect):
                 if player.direction.y > 0:
@@ -68,7 +70,7 @@ class Level:
                     pygame.quit()
                     sys.exit()
 
-            screen.blit(backgroung, (0,0))
+            screen.blit(backgroung, (0, 0))
 
             for platform in self.platforms:
                 screen.blit(platform.image, platform.rect)
@@ -79,10 +81,11 @@ class Level:
             self.player.draw(screen)
 
             pygame.display.update()
-        
+
+
 if __name__ == "__main__":
     run = Level()
     run.main()
 
-# venv\Scripts\activate.bat 
+# venv\Scripts\activate.bat
 # python engine\test_loop.py
