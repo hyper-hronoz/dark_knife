@@ -16,42 +16,58 @@ with open(r"./levels/1.hyi", "r") as file:
 DISPLAY = (WINDOW_WIDTH, WINDOW_HEIGHT)
 BACKGROUND_COLOR = "#223759"
 
-def main():
-    pygame.init()
-    screen = pygame.display.set_mode(DISPLAY)
-    clock = pygame.time.Clock()
-    pygame.display.set_caption("Dark Knife")
-    backgroung = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+class Level:
+    def add_player(self):
+        self.player = pygame.sprite.GroupSingle()
+        player_sprite = hero.Player(55,55)
+        self.player.add(player_sprite)
 
-    backgroung.fill(pygame.Color(BACKGROUND_COLOR))
+    def horizontal_movement_collision(self):
+        player = self.player.sprite
+        player.rect.x += player.direction.x * hero.MOVE_SPEED
+        for sprite in self.platforms.sprites():
+            if sprite.rect.colliderect(player.rect):
+                if player.direction.x < 0:
+                    player.rect.left = sprite.rect.right
+                elif player.direction.x > 0:
+                    player.rect.right = sprite.rect.left
 
-    player = pygame.sprite.GroupSingle()
-    player_sprite = hero.Player(55,55)
-    player.add(player_sprite)
+    def main(self):
+        pygame.init()
+        screen = pygame.display.set_mode(DISPLAY)
+        clock = pygame.time.Clock()
+        pygame.display.set_caption("Dark Knife")
+        backgroung = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-    level = drawer.Level(LEVEL)
-    platforms = level.create_platforms()
-    while True:
-        clock.tick(60)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+        backgroung.fill(pygame.Color(BACKGROUND_COLOR))
 
-        screen.blit(backgroung, (0,0))
+        self.add_player()
 
-        player.update()
+        level = drawer.Level(LEVEL)
+        self.platforms = level.create_platforms()
 
-        for platform in platforms:
-            screen.blit(platform.image, platform.rect)
+        while True:
+            clock.tick(60)
 
-        
-        player.draw(screen)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
 
-        pygame.display.update()
+            screen.blit(backgroung, (0,0))
+
+            for platform in self.platforms:
+                screen.blit(platform.image, platform.rect)
+
+            self.player.update()
+            self.horizontal_movement_collision()
+            self.player.draw(screen)
+
+            pygame.display.update()
         
 if __name__ == "__main__":
-    main()
+    run = Level()
+    run.main()
 
 # venv\Scripts\activate.bat 
 # python engine\test_loop.py
