@@ -21,6 +21,10 @@ class TexturesModel:
 		self.textures[id] = texture
 		self.notifyChanges()
 
+	def deleteTextures(self) -> None:
+		self.textures.clear()
+		self.notifyChanges()
+
 	def addObserver(self, observer) -> None:
 		self.observers.append(observer)
 

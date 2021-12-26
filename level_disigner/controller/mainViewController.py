@@ -1,3 +1,4 @@
+import ast
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QFileDialog, QFrame
 from view import MainView, Painter
@@ -22,6 +23,7 @@ class MainViewController():
 		self.texturesModel.addTexture(finish, "finish")
 
 		self._canvasSize = {"height": None, "width": None}
+		self._startMap = []
 		self._createCanvas()
 
 		self.mView.show()
@@ -42,7 +44,7 @@ class MainViewController():
 			self._createCanvas()
 	
 	def _createCanvas(self):
-		self.painterModel = PainterModel([])
+		self.painterModel = PainterModel(self._startMap)
 		self._chartilo = Painter(self.texturesModel, self.painterModel, self._canvasSize)
 		self.mView.pasteCanvas(self._chartilo)
 		
@@ -60,8 +62,23 @@ class MainViewController():
 			file.write(str(content.__dict__))
 			file.close()
 
-	def openFileAs(self):
-		pass
+	def openFile(self):
+		self.texturesModel.deleteTextures()
+		fname = QFileDialog.getOpenFileName(self.mView, 'Выбрать картинку ', '', "(*.hyi)")[0]
+		if not fname:
+			return
+		head, tail = os.path.split(fname)
+		with open(fname, "r") as file:
+			file = ast.literal_eval(file.read())
+			textures = file["textures"]
+			for i in range(len(textures)):
+				key, value = textures[i].popitem()
+				self.texturesModel.addTexture(TextureModel(value, key), key)
+			self.onCellChanged(str(file["cell_size"]))
+			self._startMap = file["textures_map"]
+			self._canvasSize = {"height": len(file["textures_map"]), "width": len(file["textures_map"][0])}
+			self._createCanvas()
+
 	
 	def setPainterBrash(self, obj, event):
 		if isinstance(obj, QFrame) and event.type() == QtCore.QEvent.MouseButtonPress:
