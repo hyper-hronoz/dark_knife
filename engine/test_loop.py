@@ -87,5 +87,10 @@ if __name__ == "__main__":
     run = Level()
     run.main()
 
+# Windows
 # venv\Scripts\activate.bat
-# python engine\test_loop.py
+# python3 engine\test_loop.py
+
+# Linux
+# source venv/bin/activate
+# python3 engine/test_loop.py
