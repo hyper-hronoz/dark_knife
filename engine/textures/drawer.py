@@ -17,11 +17,14 @@ class Level:
 
         self.used_textures = {}
 
-    def getTexture(self, id):
+    def get_texture(self, id):
         for texture in self.level["textures"]:
             if id in texture:
                 output = io.BytesIO(base64.b64decode(texture[id]))
                 return pygame.image.load(output)
+                
+    def get_player_position(self):
+        pass
 
     def create_platforms(self):
         x = y = 0
@@ -38,7 +41,7 @@ class Level:
                     continue
 
                 if texture_id not in self.used_textures:
-                    self.used_textures[texture_id] = self.getTexture(
+                    self.used_textures[texture_id] = self.get_texture(
                         texture_id)
 
                 picture = pygame.transform.scale(
