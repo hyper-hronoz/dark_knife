@@ -24,13 +24,14 @@ class Level:
                 return pygame.image.load(output)
                 
     def get_player_position(self):
-        pass
+        for y in self.level["textures_map"]:
+            for x in y:
+                if ("start" in self.level[y][x]):
+                    return (x, y)
 
     def create_platforms(self):
         x = y = 0
-
         cell_size = self.level["cell_size"]
-
         textures_map = self.level["textures_map"]
 
         for y in range(len(textures_map)):
