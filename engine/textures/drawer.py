@@ -28,7 +28,7 @@ class Level:
 
         cell_size = self.level["cell_size"]
 
-        textures_map = self.level["texturesMap"]
+        textures_map = self.level["textures_map"]
 
         for y in range(len(textures_map)):
             for x in range(len(textures_map[y])):

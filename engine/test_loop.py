@@ -11,8 +11,8 @@ with open(r"./levels/1.hyi", "r") as file:
     content = file.read()
     LEVEL = ast.literal_eval(content)
     cell_size = LEVEL["cell_size"]
-    WINDOW_WIDTH = len(LEVEL["texturesMap"][0]) * cell_size
-    WINDOW_HEIGHT = len(LEVEL["texturesMap"]) * cell_size
+    WINDOW_WIDTH = len(LEVEL["textures_map"][0]) * cell_size
+    WINDOW_HEIGHT = len(LEVEL["textures_map"]) * cell_size
 
 DISPLAY = (WINDOW_WIDTH, WINDOW_HEIGHT)
 BACKGROUND_COLOR = "#223759"
