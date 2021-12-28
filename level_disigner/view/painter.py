@@ -47,13 +47,13 @@ class Painter(QWidget, MetaObserver, metaclass=FinalMetaQWidget):
 		self.marging_vertical = int(
 			(height - (Cell.side * self._size["height"])) / 2)
 
-		if (len(self._mapModel.texturesMap) == 0):
+		if (len(self._mapModel.textures_map) == 0):
 			for y in range((self._size["height"])):
-				self._mapModel.texturesMap.append([])
+				self._mapModel.textures_map.append([])
 				for x in range((self._size["width"])):
-					self._mapModel.texturesMap[y].append("")
+					self._mapModel.textures_map[y].append("")
 
-		self.drawGrid(self._mapModel.texturesMap)
+		self.drawGrid(self._mapModel.textures_map)
 
 		self.painter.end()
 
@@ -129,12 +129,12 @@ class Painter(QWidget, MetaObserver, metaclass=FinalMetaQWidget):
 		if (self.isSpacePressed or (not Painter.isRightMouseButtonPressed)) and Painter.textureBrash != None:
 			return
 		currentPosition = self.getCurrentPosition(event)
-		for y in range(len(self._mapModel.texturesMap)):
-			for x in range(len(self._mapModel.texturesMap[y])):
+		for y in range(len(self._mapModel.textures_map)):
+			for x in range(len(self._mapModel.textures_map[y])):
 				cell_x = x * Cell.side + self.margin_horizontal 
 				cell_y = y * Cell.side + self.marging_vertical
 				if cell_x <= currentPosition["x"] <= cell_x + Cell.side and cell_y <= currentPosition["y"] <= cell_y + Cell.side:
-					self._mapModel.texturesMap[y][x] = ""
+					self._mapModel.textures_map[y][x] = ""
 		self._mapModel.notifyChanges()
 
 	def drawTextures(self, event):
@@ -142,12 +142,12 @@ class Painter(QWidget, MetaObserver, metaclass=FinalMetaQWidget):
 			return
 		currentPosition = self.getCurrentPosition(event)
 
-		for y in range(len(self._mapModel.texturesMap)):
-			for x in range(len(self._mapModel.texturesMap[y])):
+		for y in range(len(self._mapModel.textures_map)):
+			for x in range(len(self._mapModel.textures_map[y])):
 				cell_x = x * Cell.side + self.margin_horizontal 
 				cell_y = y * Cell.side + self.marging_vertical
 				if cell_x <= currentPosition["x"] <= cell_x + Cell.side and cell_y <= currentPosition["y"] <= cell_y + Cell.side:
-					self._mapModel.texturesMap[y][x] = Painter.textureBrash
+					self._mapModel.textures_map[y][x] = Painter.textureBrash
 
 		self._mapModel.notifyChanges()
 

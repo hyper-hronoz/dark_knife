@@ -7,8 +7,10 @@ class TexturesModel:
 
 		self.observers = []
 
-	def addTexture(self, texture) -> None:
-		self.textures[str(uuid.uuid4())] = texture
+	def addTexture(self, texture, id=None) -> None:
+		if not id: 
+			id = str(uuid.uuid4())
+		self.textures[id] = texture
 		self.notifyChanges()
 
 	def removeTexture(self, id, texture) -> None:
@@ -17,6 +19,10 @@ class TexturesModel:
 
 	def updateTexture(self, id, texture) -> None:
 		self.textures[id] = texture
+		self.notifyChanges()
+
+	def deleteTextures(self) -> None:
+		self.textures.clear()
 		self.notifyChanges()
 
 	def addObserver(self, observer) -> None:

@@ -24,6 +24,7 @@ class MainView(QMainWindow, MetaObserver, metaclass=FinalMetaMainWindow):
 		self._template.header_add_button.setFocusPolicy(QtCore.Qt.NoFocus)
 
 		self._template.actionsave_as.triggered.connect(self._controller.saveFileAs)
+		self._template.actionopen.triggered.connect(self._controller.openFile)
 		self._template.header_add_button.clicked.connect(self._controller.addNewTexture)
 		self._template.line_edit__width.textChanged.connect(self._onWidthChanged)
 		self._template.line_edit_height.textChanged.connect(self._onHeightChanged)
