@@ -1,6 +1,6 @@
 import pygame
 
-MOVE_SPEED = 10
+MOVE_SPEED = 5
 HERO_WIDTH = 22
 HERO_HEIGHT = 32
 HERO_COLOR = pygame.Color("red")
@@ -16,6 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = pygame.Rect(x, y, HERO_WIDTH, HERO_HEIGHT)
 
         self.direction = pygame.math.Vector2(0, 0)
+        self.isJump = False
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
@@ -38,7 +39,9 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.direction.y
 
     def jump(self):
-        self.direction.y -= JUMP_HEIGHT
+        if self.direction.y == 0 and not self.isJump:
+            self.direction.y -= JUMP_HEIGHT
+            self.isJump = True
 
     def update(self):
         self.get_input()
