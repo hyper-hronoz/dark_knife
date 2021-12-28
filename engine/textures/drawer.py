@@ -24,15 +24,11 @@ class Level:
                 return pygame.image.load(output)
 
     def create_platforms(self):
-<<<<<<< HEAD:engine/textures/drawer.py
         x = y = 0
-=======
-        x=y=0 
->>>>>>> abbf7d89f3c729945c15709d501d6879caeb0f87:engine/model/level.py
 
         cell_size = self.level["cell_size"]
 
-        textures_map = self.level["textures_map"]
+        textures_map = self.level["texturesMap"]
 
         for y in range(len(textures_map)):
             for x in range(len(textures_map[y])):
@@ -50,11 +46,6 @@ class Level:
                 rect = picture.get_rect()
                 rect = rect.move((x * cell_size, y * cell_size))
                 self.platforms.add(Platform(rect, picture))
-<<<<<<< HEAD:engine/textures/drawer.py
                 # screen.blit(picture, rect)
         return self.platforms
 
-=======
-
-        return self
->>>>>>> abbf7d89f3c729945c15709d501d6879caeb0f87:engine/model/level.py
