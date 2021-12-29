@@ -22,10 +22,11 @@ class Level:
             if id in texture:
                 output = io.BytesIO(base64.b64decode(texture[id]))
                 return pygame.image.load(output)
-                
+
     def get_player_position(self):
         for y in self.level["textures_map"]:
             for x in y:
+                print(self.level[y][x])
                 if ("start" in self.level[y][x]):
                     return (x, y)
 
@@ -52,4 +53,3 @@ class Level:
                 self.platforms.add(Platform(rect, picture))
                 # screen.blit(picture, rect)
         return self.platforms
-

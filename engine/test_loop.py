@@ -19,7 +19,7 @@ BACKGROUND_COLOR = "#223759"
 
 
 class Level:
-    def add_player(self):
+    def add_player(self, player_position):
         self.player = pygame.sprite.GroupSingle()
         player_sprite = hero.Player(55, 55)
         self.player.add(player_sprite)
@@ -59,9 +59,10 @@ class Level:
 
         backgroung.fill(pygame.Color(BACKGROUND_COLOR))
 
-        self.add_player()
-
         level = drawer.Level(LEVEL)
+        player_position = level.get_player_position()
+        self.add_player(player_position)
+
         self.platforms = level.create_platforms()
 
         while True:
