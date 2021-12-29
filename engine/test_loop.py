@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
 # Windows
 # venv\Scripts\activate.bat
-# python3 engine\test_loop.py
+# python engine\test_loop.py
 
 # Linux
 # source venv/bin/activate
