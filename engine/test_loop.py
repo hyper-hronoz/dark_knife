@@ -4,7 +4,7 @@ import sys
 from textures import drawer
 from models import hero
 from textures import drawer
-from models import hero
+from models import armor
 
 
 with open(r"./levels/1.hyi", "r") as file:
@@ -19,6 +19,11 @@ BACKGROUND_COLOR = "#223759"
 
 
 class Level:
+    def add_knife(self, player_position):
+        self.knife = pygame.sprite.GroupSingle()
+        knife_sprite = armor.Knife(55, 55)
+        self.knife.add(knife_sprite)
+
     def add_player(self, player_position):
         self.player = pygame.sprite.GroupSingle()
         player_sprite = hero.Player(55, 55)
@@ -59,10 +64,11 @@ class Level:
 
         backgroung.fill(pygame.Color(BACKGROUND_COLOR))
 
-        level = drawer.Level(LEVEL)
-        player_position = level.get_player_position()
-        self.add_player(player_position)
+        # player_position = level.get_player_position()
+        self.add_player(0)
+        self.add_knife(0)
 
+        level = drawer.Level(LEVEL)
         self.platforms = level.create_platforms()
 
         while True:
@@ -82,6 +88,9 @@ class Level:
             self.horizontal_movement_collision()
             self.vertical_movement_collision()
             self.player.draw(screen)
+
+            self.knife.update()
+            self.knife.draw(screen)
 
             pygame.display.update()
 

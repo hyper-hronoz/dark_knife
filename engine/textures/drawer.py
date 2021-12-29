@@ -26,7 +26,6 @@ class Level:
     def get_player_position(self):
         for y in self.level["textures_map"]:
             for x in y:
-                print(self.level[y][x])
                 if ("start" in self.level[y][x]):
                     return (x, y)
 
