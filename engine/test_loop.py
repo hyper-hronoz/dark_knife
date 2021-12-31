@@ -1,24 +1,74 @@
 import ast
 import pygame
 import sys
+import os
 from random import randrange
+
+from pygame import sprite
 from drawers import Level
 from models import Knife, Platform, Player
+from typing import Union
 
 BACKGROUND_COLOR = "#223759"
 
 class Loop: 
+
+
     def __init__(self) -> None:
-        self.level_data = self.get_level(0)
+        self.level_number = 0
+
+        self.load_next_level()
+
+    def load_next_level(self):
+        self.level_data = self.get_level()
+
+        if self.level_data == "gg":
+            self.game_end_congratulations()
+            return
+
+        if not self.level_data:
+            self.game_id_failure_to_start()
+            return
+        
 
         self.cell_size = self.level_data["cell_size"]
         self.WINDOW_WIDTH = len(self.level_data["textures_map"][0]) * self.cell_size
         self.WINDOW_HEIGHT = len(self.level_data["textures_map"]) * self.cell_size
+
+
+        level = Level(self.level_data)
+        self.platforms = level.get_platforms()
+        
+        spawn_coordinates: list = level.get_spawn_coords()
+        self.add_player(spawn_coordinates[randrange(len(spawn_coordinates))])
+
+        level_up_coordinates: list = level.get_level_up_coordinates()
+        self.level_up_platforms = [pygame.Rect(coordinate[0], coordinate[1], self.cell_size, self.cell_size) for coordinate in level_up_coordinates]
+
+        self.level_number += 1
+
+        self.main()
     
-    def get_level(self, level_id: str | int) -> dict:
-        with open(f"./levels/{level_id}.hyi", "r") as file:
-            content = file.read()
-            return ast.literal_eval(content)
+    def get_level(self) -> dict:
+        try:
+            if not os.path.isfile(f"./levels/{self.level_number}.hyi"):
+                self.level_number = "boss.hyi"
+
+            if not os.path.isfile(f"./levels/{self.level_number}.hyi"):
+                self.level_number = "gg"
+                return
+
+            with open(f"./levels/{self.level_number}.hyi", "r") as file:
+                content = file.read()
+                return ast.literal_eval(content)
+        except Exception as e:
+            print(f"File opening error probably because of {e}")
+        
+    def game_end_congratulations(self):
+        pass
+
+    def game_id_failure_to_start(self):
+        pass
 
     def add_knife(self, knife_position: tuple[int]) -> None:
         x, y = knife_position
@@ -43,6 +93,8 @@ class Loop:
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
 
+                self.isNextLevel(sprite) 
+
     def vertical_movement_collision_listener(self) -> None:
         player = self.player.sprite
         player.gravity()
@@ -58,15 +110,13 @@ class Loop:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
 
-    def next_level_collision_listener(self, level_up_platforms: list[pygame.Rect]) -> None:
-        player = self.player.sprite
+                self.isNextLevel(sprite) 
 
-        for platform in level_up_platforms:
-            if player.rect.colliderect(platform):
-                self.level_up()
+    def isNextLevel(self, sprite) -> None:
+        for level_up_platfrom in self.level_up_platforms:
+            if level_up_platfrom.colliderect(sprite):
+                self.load_next_level()
 
-    def level_up(self):
-        pass
 
     def main(self) -> None:
         pygame.init()
@@ -80,14 +130,6 @@ class Loop:
 
         # self.add_knife(0)
 
-        level = Level(self.level_data)
-        self.platforms = level.get_platforms()
-        
-        spawn_coordinates: list = level.get_spawn_coords()
-        self.add_player(spawn_coordinates[randrange(len(spawn_coordinates))])
-
-        level_up_coordinates: list = level.get_level_up_coordinates()
-        self.next_level_collision_listener([pygame.Rect(coordinate[0], coordinate[1], self.cell_size, self.cell_size) for coordinate in level_up_coordinates])
 
         while True:
             clock.tick(75)
@@ -114,7 +156,6 @@ class Loop:
 
 if __name__ == "__main__":
     run = Loop()
-    run.main()
 
 # Windows
 # venv\Scripts\activate.bat
