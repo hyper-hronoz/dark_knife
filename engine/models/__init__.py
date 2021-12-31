@@ -1,3 +1,4 @@
 from .player import Player
 from .platform import Platform
-from .level import Level
+
+from .armor.knife import Knife
