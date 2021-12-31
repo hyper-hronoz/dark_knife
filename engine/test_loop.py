@@ -72,7 +72,7 @@ class Level:
         self.platforms = level.create_platforms()
 
         while True:
-            clock.tick(60)
+            clock.tick(75)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

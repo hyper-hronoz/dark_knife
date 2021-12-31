@@ -50,9 +50,9 @@ class MainViewController():
 		self.mView.pasteCanvas(self._chartilo)
 		
 	def saveFileAs(self):
-		textures = []
+		textures = {} 
 		for texture in self.texturesModel.__dict__["textures"]:
-			textures.append({texture : self.texturesModel.__dict__["textures"][texture].__dict__["texture"]})
+			textures[texture] = self.texturesModel.__dict__["textures"][texture].__dict__["texture"]
 
 		content = LevelModel(Cell.side, textures, self.painterModel.textures_map)
 
@@ -72,9 +72,8 @@ class MainViewController():
 		with open(fname, "r") as file:
 			file = ast.literal_eval(file.read())
 			textures = file["textures"]
-			for i in range(len(textures)):
-				key, value = textures[i].popitem()
-				self.texturesModel.addTexture(TextureModel(value, key), key)
+			for key in textures:
+				self.texturesModel.addTexture(TextureModel(textures[key], key), key)
 			self.onCellChanged(str(file["cell_size"]))
 			self._canvasSize = {"height": len(file["textures_map"]), "width": len(file["textures_map"][0])}
 			self._createCanvas(file["textures_map"])

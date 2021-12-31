@@ -18,10 +18,11 @@ class Level:
         self.used_textures = {}
 
     def get_texture(self, id):
-        for texture in self.level["textures"]:
-            if id in texture:
-                output = io.BytesIO(base64.b64decode(texture[id]))
-                return pygame.image.load(output)
+        try:
+            output = io.BytesIO(base64.b64decode(self.level["textures"][id]))
+            return pygame.image.load(output)
+        except Exception as e:
+            print(f"Textures with {id=} not found")
 
     def get_player_position(self):
         for y in self.level["textures_map"]:
