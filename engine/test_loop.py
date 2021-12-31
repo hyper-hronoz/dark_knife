@@ -117,17 +117,6 @@ class Loop:
             if level_up_platfrom.colliderect(sprite):
                 self.load_next_level()
 
-<<<<<<< HEAD
-        for platform in platforms:
-            screen.blit(platform.image, platform.rect)
-
-        player.keyPressListener()
-
-        player.updatePosition(platforms)
-
-        player.draw(screen)
-=======
-
     def main(self) -> None:
         pygame.init()
         pygame.display.set_caption("Dark Knife")
@@ -137,9 +126,8 @@ class Loop:
 
         backgroung = pygame.Surface((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         backgroung.fill(pygame.Color(BACKGROUND_COLOR))
->>>>>>> master
 
-        # self.add_knife(0)
+        self.add_knife(0)
 
 
         while True:
@@ -159,8 +147,8 @@ class Loop:
             self.vertical_movement_collision_listener()
             self.player.draw(screen)
 
-            # self.knife.update()
-            # self.knife.draw(screen)
+            self.knife.update()
+            self.knife.draw(screen)
 
             pygame.display.update()
 
