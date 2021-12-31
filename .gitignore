@@ -1,5 +1,4 @@
 /venv
-<<<<<<< HEAD
 .qt_for_python
 =======
 __pycache__/
@@ -14,7 +13,6 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -131,4 +129,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
->>>>>>> 5aedbdc (hello pornhub)
