@@ -5,7 +5,7 @@ import os
 from random import randrange
 
 from pygame import sprite
-from drawers import Level
+from utils import Level
 from models import Knife, Platform, Player
 from typing import Union
 
@@ -71,7 +71,7 @@ class Loop:
         pass
 
     def add_knife(self, knife_position: tuple[int]) -> None:
-        x, y = knife_position
+        x, y = (50, 50)
         self.knife = pygame.sprite.GroupSingle()
         knife_sprite = Knife(55, 55)
         self.knife.add(knife_sprite)
