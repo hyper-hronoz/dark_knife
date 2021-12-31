@@ -69,12 +69,12 @@ def main():
 
         screen.blit(backgroung, (0, 0))
 
-        player.updatePlayerPostion()
-
         for platform in platforms:
-            platform: Platform
-
             screen.blit(platform.image, platform.rect)
+
+        player.keyPressListener()
+
+        player.updatePosition(platforms)
 
         player.draw(screen)
 
