@@ -2,6 +2,7 @@ import ast
 import pygame
 import sys
 import os
+import re
 from random import randrange
 
 from pygame import sprite
@@ -17,9 +18,23 @@ class Loop:
     def __init__(self) -> None:
         self.level_number = 0
 
-        self.load_next_level()
+        self.player_textures = {}
+        # setting default values
+        # self.player_coordinates = 0, 0
 
-    def load_next_level(self):
+        self.load_player_textures()
+        self.load_next_level()
+        self.main()
+
+    def load_player_textures(self):
+        absolute_folder = re.sub(os.path.basename(__file__), "", os.path.abspath(__file__))
+        right_movement_textures_path = os.path.join(absolute_folder, "resources/images/right_movement_set/")
+        self.player_textures["right"] = [pygame.image.load(f"{right_movement_textures_path}right-{i}.png") for i in range(1, 14)]
+        left_movement_textures_path = os.path.join(absolute_folder, "resources/images/left_movement_set/")
+        self.player_textures["left"] = [pygame.image.load(f"{left_movement_textures_path}left-{i}.png") for i in range(1, 14)]
+        print(self.player_textures)
+
+    def load_next_level(self) -> None:
         self.level_data = self.get_level()
 
         if self.level_data == "gg":
@@ -29,12 +44,10 @@ class Loop:
         if not self.level_data:
             self.game_id_failure_to_start()
             return
-        
 
         self.cell_size = self.level_data["cell_size"]
         self.WINDOW_WIDTH = len(self.level_data["textures_map"][0]) * self.cell_size
         self.WINDOW_HEIGHT = len(self.level_data["textures_map"]) * self.cell_size
-
 
         level = Level(self.level_data)
         self.platforms = level.get_platforms()
@@ -47,8 +60,6 @@ class Loop:
 
         self.level_number += 1
 
-        self.main()
-    
     def get_level(self) -> dict:
         try:
             if not os.path.isfile(f"./levels/{self.level_number}.hyi"):
@@ -78,12 +89,11 @@ class Loop:
 
     def add_player(self, player_position: tuple[int]) -> None:
         x, y = player_position
-        self.player = pygame.sprite.GroupSingle()
-        player_sprite = Player(x, y)
-        self.player.add(player_sprite)
+        self.player = Player(x, y)
+        self.player.setPlayerAnimation(self.player_textures)
 
     def horizontal_movement_collision_listener(self) -> None:
-        player = self.player.sprite
+        player = self.player.ground.sprite
         player.rect.x += player.direction.x * player.MOVE_SPEED
 
         for sprite in self.platforms.sprites():
@@ -96,7 +106,7 @@ class Loop:
                 self.isNextLevel(sprite) 
 
     def vertical_movement_collision_listener(self) -> None:
-        player = self.player.sprite
+        player = self.player.ground.sprite
         player.gravity()
 
         for sprite in self.platforms.sprites():
