@@ -29,7 +29,7 @@ class Level:
         except Exception as e:
             print(f"Textures with {id=} not found because of {e}")
 
-    def get_spawn_coords(self) -> list[tuple]:
+    def get_spawn_coords(self):
         spawn_coordinates = []
 
         for y in range(len(self.textures_map)):
@@ -37,7 +37,8 @@ class Level:
                 texture_id = self.textures_map[y][x]
 
                 if (texture_id == "start"):
-                    spawn_coordinates.append((x * self.cell_size, y * self.cell_size))
+                    spawn_coordinates.append(
+                        (x * self.cell_size, y * self.cell_size))
 
         if not spawn_coordinates:
             for y in range(len(self.textures_map) // 2):
@@ -46,21 +47,23 @@ class Level:
                     texture_id_2 = self.textures_map[y + 1][x]
 
                     if (texture_id_1 == texture_id_2 == ""):
-                        spawn_coordinates.append((x * self.cell_size, (y + 1) * self.cell_size))
+                        spawn_coordinates.append(
+                            (x * self.cell_size, (y + 1) * self.cell_size))
 
         return spawn_coordinates
 
-    def get_level_up_coordinates(self) -> list[tuple]:
-        level_up_coordinates = [] 
+    def get_level_up_coordinates(self):
+        level_up_coordinates = []
         for y in range(len(self.textures_map)):
             for x in range(len(self.textures_map[y])):
                 texture_id = self.textures_map[y][x]
 
                 if (texture_id == "finish"):
-                    level_up_coordinates.append((x * self.cell_size, y * self.cell_size))
+                    level_up_coordinates.append(
+                        (x * self.cell_size, y * self.cell_size))
         return level_up_coordinates
 
-    def get_platforms(self) -> list[pygame.Rect]:
+    def get_platforms(self):
         x = y = 0
 
         for y in range(len(self.textures_map)):

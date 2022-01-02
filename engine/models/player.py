@@ -4,12 +4,11 @@ import os
 
 class Player(pygame.sprite.Sprite):
     MOVE_SPEED = 5
-    HERO_WIDTH = 50 
-    HERO_HEIGHT = 80 
+    HERO_WIDTH = 20
+    HERO_HEIGHT = 50
     HERO_COLOR = pygame.Color("red")
     JUMP_HEIGHT = 10
     GRAVITY = 0.5
-
 
     def __init__(self, x, y) -> None:
         pygame.sprite.Sprite.__init__(self)
@@ -30,25 +29,28 @@ class Player(pygame.sprite.Sprite):
 
     def animate(self):
         if self.direction.x < 0:
-            self.image = self.animations["left"][self.walk_count % len(self.animations)]
+            self.image = self.animations["left"][self.walk_count % len(
+                self.animations)]
             self.walk_count += 1
             self.last_direction = "left"
         elif self.direction.x > 0:
-            self.image = self.animations["right"][self.walk_count % len(self.animations)]
+            self.image = self.animations["right"][self.walk_count % len(
+                self.animations)]
             self.walk_count += 1
             self.last_direction = "right"
         else:
             self.image = self.animations[self.last_direction][0]
 
     def setPlayerAnimation(self, animations):
-        self.animations = animations 
+        self.animations = animations
         self.animate()
 
     def draw(self, screen) -> None:
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def draw(self, screen) -> None:
-        picture = pygame.transform.scale(self.image, (self.HERO_WIDTH, self.HERO_HEIGHT))
+        picture = pygame.transform.scale(
+            self.image, (self.HERO_WIDTH, self.HERO_HEIGHT))
         rect = picture.get_rect()
         rect = rect.move((self.HERO_WIDTH, self.HERO_HEIGHT))
         screen.blit(picture, (self.rect.x, self.rect.y))
@@ -65,9 +67,8 @@ class Player(pygame.sprite.Sprite):
 
         if keys[pygame.K_UP]:
             self.jump()
-        
-        self.animate()
 
+        self.animate()
 
     def gravity(self) -> None:
         self.direction.y += self.GRAVITY
