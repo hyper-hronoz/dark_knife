@@ -15,7 +15,7 @@ BACKGROUND_COLOR = "#223759"
 
 class Loop:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.level_number = 0
 
         self.player_textures = {}
@@ -39,7 +39,7 @@ class Loop:
             f"{left_movement_textures_path}left-{i}.png") for i in range(1, 14)]
         print(self.player_textures)
 
-    def load_next_level(self):
+    def load_next_level(self) -> None:
         self.level_data = self.get_level()
 
         if self.level_data == "gg":
@@ -68,7 +68,7 @@ class Loop:
 
         self.level_number += 1
 
-    def get_level(self):
+    def get_level(self) -> dict:
         try:
             if not os.path.isfile(f"./levels/{self.level_number}.hyi"):
                 self.level_number = "boss.hyi"

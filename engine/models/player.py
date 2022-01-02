@@ -46,9 +46,6 @@ class Player(pygame.sprite.Sprite):
         self.animate()
 
     def draw(self, screen) -> None:
-        screen.blit(self.image, (self.rect.x, self.rect.y))
-
-    def draw(self, screen) -> None:
         picture = pygame.transform.scale(
             self.image, (self.HERO_WIDTH, self.HERO_HEIGHT))
         rect = picture.get_rect()

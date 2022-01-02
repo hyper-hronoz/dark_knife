@@ -16,15 +16,18 @@ class Knife(pygame.sprite.Sprite):
     def get_input(self):
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_SPACE]:
-            print('hi')
-            self.knife_move()
-
-    def knife_move(self):
-        self.rect.x + 10
+        if keys[pygame.K_e]:
+            self.direction.x = 3
+        elif keys[pygame.K_q]:
+            self.direction.x = -3
 
     def draw(self, screen):
-        screen.blit(self.image, (self.rect.x, self.rect.y))
+        picture = pygame.transform.scale(
+            self.image, (self.KNIFE_WIDTH, self.KNIFE_HEIGHT))
+        rect = picture.get_rect()
+        rect = rect.move((self.KNIFE_WIDTH, self.KNIFE_HEIGHT))
+        screen.blit(picture, (self.rect.x, self.rect.y))
 
     def update(self):
         self.get_input()
+        self.rect.x += self.direction.x
