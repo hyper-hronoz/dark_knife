@@ -4,8 +4,8 @@ import os
 
 class Player(pygame.sprite.Sprite):
     MOVE_SPEED = 5
-    HERO_WIDTH = 20
-    HERO_HEIGHT = 50
+    HERO_WIDTH = 30
+    HERO_HEIGHT = 50 
     HERO_COLOR = pygame.Color("red")
     JUMP_HEIGHT = 10
     GRAVITY = 0.5
@@ -25,17 +25,14 @@ class Player(pygame.sprite.Sprite):
         self.ground.add(self)
 
         self.last_direction = "right"
-        self.animation_delay = 5
 
     def animate(self):
         if self.direction.x < 0:
-            self.image = self.animations["left"][self.walk_count % len(
-                self.animations)]
+            self.image = self.animations["left"][self.walk_count // 2 % len(self.animations["left"])]
             self.walk_count += 1
             self.last_direction = "left"
         elif self.direction.x > 0:
-            self.image = self.animations["right"][self.walk_count % len(
-                self.animations)]
+            self.image = self.animations["right"][self.walk_count // 2 % len(self.animations["right"])]
             self.walk_count += 1
             self.last_direction = "right"
         else:
