@@ -40,15 +40,15 @@ class Level:
                     spawn_coordinates.append(
                         (x * self.cell_size, y * self.cell_size))
 
-        if not spawn_coordinates:
-            for y in range(len(self.textures_map) // 2):
-                for x in range(len(self.textures_map[y])):
-                    texture_id_1 = self.textures_map[y][x]
-                    texture_id_2 = self.textures_map[y + 1][x]
+        # if not spawn_coordinates:
+        #     for y in range(len(self.textures_map) // 2):
+        #         for x in range(len(self.textures_map[y])):
+        #             texture_id_1 = self.textures_map[y][x]
+        #             texture_id_2 = self.textures_map[y + 1][x]
 
-                    if (texture_id_1 == texture_id_2 == ""):
-                        spawn_coordinates.append(
-                            (x * self.cell_size, (y + 1) * self.cell_size))
+        #             if (texture_id_1 == texture_id_2 == ""):
+        #                 spawn_coordinates.append(
+        #                     (x * self.cell_size, (y + 1) * self.cell_size))
 
         return spawn_coordinates
 

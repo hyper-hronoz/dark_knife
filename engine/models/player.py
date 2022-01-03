@@ -4,7 +4,7 @@ import os
 
 class Player(pygame.sprite.Sprite):
     MOVE_SPEED = 5
-    HERO_WIDTH = 30
+    HERO_WIDTH = 20 
     HERO_HEIGHT = 50 
     HERO_COLOR = pygame.Color("red")
     JUMP_HEIGHT = 10
@@ -43,11 +43,8 @@ class Player(pygame.sprite.Sprite):
         self.animate()
 
     def draw(self, screen) -> None:
-        picture = pygame.transform.scale(
-            self.image, (self.HERO_WIDTH, self.HERO_HEIGHT))
-        rect = picture.get_rect()
-        rect = rect.move((self.HERO_WIDTH, self.HERO_HEIGHT))
-        screen.blit(picture, (self.rect.x, self.rect.y))
+        print(self.rect.x, self.rect.y)
+        screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def get_input(self) -> None:
         keys = pygame.key.get_pressed()

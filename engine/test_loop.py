@@ -19,8 +19,6 @@ class Loop:
         self.level_number = 0
 
         self.player_textures = {}
-        # setting default values
-        # self.player_coordinates = 0, 0
 
         self.load_player_textures()
         self.load_next_level()
@@ -29,15 +27,10 @@ class Loop:
     def load_player_textures(self):
         absolute_folder = re.sub(os.path.basename(
             __file__), "", os.path.abspath(__file__))
-        right_movement_textures_path = os.path.join(
-            absolute_folder, "resources/images/right_movement_set/")
-        self.player_textures["right"] = [pygame.image.load(
-            f"{right_movement_textures_path}right-{i}.png") for i in range(1, 14)]
-        left_movement_textures_path = os.path.join(
-            absolute_folder, "resources/images/left_movement_set/")
-        self.player_textures["left"] = [pygame.image.load(
-            f"{left_movement_textures_path}left-{i}.png") for i in range(1, 14)]
-        print(self.player_textures)
+        right_movement_textures_path = os.path.join(absolute_folder, "resources/images/right_movement_set/")
+        self.player_textures["right"] = [pygame.transform.scale(pygame.image.load(f"{right_movement_textures_path}right-{i}.png"), (Player.HERO_WIDTH, Player.HERO_HEIGHT))  for i in range(1, 14)]
+        left_movement_textures_path = os.path.join(absolute_folder, "resources/images/left_movement_set/")
+        self.player_textures["left"] = [pygame.transform.scale(pygame.image.load(f"{left_movement_textures_path}left-{i}.png"), (Player.HERO_WIDTH, Player.HERO_HEIGHT))  for i in range(1, 14)]
 
     def load_next_level(self) -> None:
         self.level_data = self.get_level()
@@ -60,11 +53,11 @@ class Loop:
         self.platforms = level.get_platforms()
 
         spawn_coordinates: list = level.get_spawn_coords()
+        print(spawn_coordinates)
         self.add_player(spawn_coordinates[randrange(len(spawn_coordinates))])
 
         level_up_coordinates: list = level.get_level_up_coordinates()
-        self.level_up_platforms = [pygame.Rect(
-            coordinate[0], coordinate[1], self.cell_size, self.cell_size) for coordinate in level_up_coordinates]
+        self.level_up_platforms = [pygame.Rect(x, y, self.cell_size, self.cell_size) for x, y in level_up_coordinates]
 
         self.level_number += 1
 
