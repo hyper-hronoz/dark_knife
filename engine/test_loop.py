@@ -84,20 +84,19 @@ class Loop:
 
     def add_knife(self, knife_position):
         x, y = (50, 50)
-        self.knife = pygame.sprite.GroupSingle()
-        knife_sprite = Knife(x, y)
-        self.knife.add(knife_sprite)
+        self.knife = Knife(x, y)
 
     def add_player(self, player_position):
         x, y = player_position
         self.player = Player(x, y)
         self.player.setPlayerAnimation(self.player_textures)
+        self.player.is_moves = False
 
     def horizontal_movement_collision_listener(self):
-        player = self.player.ground.sprite
-        player.rect.x += player.direction.x * player.MOVE_SPEED
+        player = self.player
+        player.rect.x += player.direction.x 
 
-        for sprite in self.platforms.sprites():
+        for sprite in self.platforms:
             if sprite.rect.colliderect(player.rect):
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
@@ -107,21 +106,21 @@ class Loop:
                 self.isNextLevel(sprite)
 
     def vertical_movement_collision_listener(self):
-        player = self.player.ground.sprite
+        player = self.player
         player.gravity()
 
-        for sprite in self.platforms.sprites():
-            if sprite.rect.colliderect(player.rect):
+        for platform in self.platforms:
+            if platform.rect.colliderect(player.rect):
                 if player.direction.y > 0:
-                    player.rect.bottom = sprite.rect.top
+                    player.rect.bottom = platform.rect.top
                     player.direction.y = 0
                     player.isJump = False
 
                 elif player.direction.y < 0:
-                    player.rect.top = sprite.rect.bottom
+                    player.rect.top = platform.rect.bottom
                     player.direction.y = 0
 
-                self.isNextLevel(sprite)
+                self.isNextLevel(platform)
 
     def isNextLevel(self, sprite):
         for level_up_platfrom in self.level_up_platforms:
@@ -154,6 +153,7 @@ class Loop:
             [platform.draw(screen) for platform in self.platforms]
 
             self.player.update()
+            self.player.is_moves = True
             self.horizontal_movement_collision_listener()
             self.vertical_movement_collision_listener()
             self.player.draw(screen)

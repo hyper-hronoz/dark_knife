@@ -3,9 +3,9 @@ import os
 
 
 class Player(pygame.sprite.Sprite):
-    MOVE_SPEED = 5
-    HERO_WIDTH = 20 
+    HERO_WIDTH = 30 
     HERO_HEIGHT = 50 
+    MOVE_SPEED = 3 
     HERO_COLOR = pygame.Color("red")
     JUMP_HEIGHT = 10
     GRAVITY = 0.5
@@ -21,10 +21,9 @@ class Player(pygame.sprite.Sprite):
 
         self.walk_count = 0
 
-        self.ground = pygame.sprite.GroupSingle(self)
-        self.ground.add(self)
-
         self.last_direction = "right"
+
+        self.is_moves = True
 
     def animate(self):
         if self.direction.x < 0:
@@ -47,12 +46,14 @@ class Player(pygame.sprite.Sprite):
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def get_input(self) -> None:
+        if not self.is_moves: 
+            return
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_RIGHT]:
-            self.direction.x = 1
+            self.direction.x = self.MOVE_SPEED
         elif keys[pygame.K_LEFT]:
-            self.direction.x = -1
+            self.direction.x = -self.MOVE_SPEED
         else:
             self.direction.x = 0
 
