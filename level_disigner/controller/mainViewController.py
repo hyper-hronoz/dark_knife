@@ -57,7 +57,7 @@ class MainViewController():
 		content = LevelModel(Cell.side, textures, self.painterModel.textures_map)
 
 		options = QFileDialog.Options()
-		fileName, _ = QFileDialog.getSaveFileName(self.mView,"QFileDialog.getSaveFileName()","hyi","All Files (*);;Text Files (*.hyi)", options=options)
+		fileName, _ = QFileDialog.getSaveFileName(self.mView,"QFileDialog.getSaveFileName()","txt","All Files (*);;Text Files (*.txt)", options=options)
 		if fileName:
 			file = open(fileName,'w')
 			file.write(str(content.__dict__))
@@ -65,7 +65,7 @@ class MainViewController():
 
 	def openFile(self):
 		self.texturesModel.deleteTextures()
-		fname = QFileDialog.getOpenFileName(self.mView, 'Выбрать картинку ', '', "(*.hyi)")[0]
+		fname = QFileDialog.getOpenFileName(self.mView, 'Выбрать картинку ', '', "(*.txt)")[0]
 		if not fname:
 			return
 		head, tail = os.path.split(fname)

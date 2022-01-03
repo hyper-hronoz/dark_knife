@@ -63,14 +63,14 @@ class Loop:
 
     def get_level(self) -> dict:
         try:
-            if not os.path.isfile(f"./levels/{self.level_number}.hyi"):
-                self.level_number = "boss.hyi"
+            if not os.path.isfile(f"./levels/{self.level_number}.txt"):
+                self.level_number = "boss.txt"
 
-            if not os.path.isfile(f"./levels/{self.level_number}.hyi"):
+            if not os.path.isfile(f"./levels/{self.level_number}.txt"):
                 self.level_number = "gg"
                 return
 
-            with open(f"./levels/{self.level_number}.hyi", "r") as file:
+            with open(f"./levels/{self.level_number}.txt", "r") as file:
                 content = file.read()
                 return ast.literal_eval(content)
         except Exception as e:
