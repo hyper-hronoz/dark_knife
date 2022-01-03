@@ -84,7 +84,9 @@ class Loop:
 
     def add_knife(self, knife_position):
         x, y = (50, 50)
-        self.knife = Knife(x, y)
+        self.knife = pygame.sprite.GroupSingle()
+        knife_sprite = Knife(x, y)
+        self.knife.add(knife_sprite)
 
     def add_player(self, player_position):
         x, y = player_position
