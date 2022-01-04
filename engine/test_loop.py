@@ -141,8 +141,8 @@ class Loop:
 
         backgroung = pygame.Surface((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         backgroung.fill(pygame.Color(BACKGROUND_COLOR))
-        self.knife = Knife(500, 500)
         flag = False
+        self.knifes = pygame.sprite.Group()
         while True:
             clock.tick(75)
             for event in pygame.event.get():
@@ -156,22 +156,24 @@ class Loop:
 
             if keys[pygame.K_e]:
                 x, y = (self.player.rect.x, self.player.rect.y)
+                self.knife = Knife(x, y)
+                self.knifes.add(self.knife)
                 self.knife.rect.x = x
                 self.knife.rect.y = y
                 left = True
                 right = False
-                flag = True
+                # flag = True
             if keys[pygame.K_q]:
                 x, y = (self.player.rect.x, self.player.rect.y)
                 self.knife.rect.x = x
                 self.knife.rect.y = y
                 left = False
                 right = True
-                flag = True
+                # flag = True
 
-            if flag:
-                self.knife.update(left, right)
-                self.knife.draw(screen)
+            #self.knifes.update(left, right)
+            self.knifes.update()
+            self.knifes.draw(screen)
 
             [platform.draw(screen) for platform in self.platforms]
 

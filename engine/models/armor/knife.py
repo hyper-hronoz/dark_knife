@@ -20,10 +20,14 @@ class Knife(pygame.sprite.Sprite):
         rect = rect.move((KNIFE_WIDTH, KNIFE_HEIGHT))
         screen.blit(picture, (self.rect.x, self.rect.y))
 
-    def update(self, left, right):
-        if left:
-            self.direction.x = 3
-            self.rect.x += self.direction.x
-        if right:
-            self.direction.x = -3
-            self.rect.x += self.direction.x
+    def update(self):
+        self.direction.x = 3
+        self.rect.x += self.direction.x
+
+    # def update(self, left, right):
+    #     if left:
+    #         self.direction.x = 3
+    #         self.rect.x += self.direction.x
+    #     if right:
+    #         self.direction.x = -3
+    #         self.rect.x += self.direction.x
