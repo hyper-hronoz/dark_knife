@@ -100,34 +100,28 @@ class Loop:
         self.player.setPlayerAnimation(self.player_textures)
         self.player.is_moves = False
 
-    def horizontal_movement_collision_listener(self):
-        player = self.player
-        player.rect.x += player.direction.x
-
+    def horizontal_movement_collision_checker(self, object):
         for sprite in self.platforms:
-            if sprite.rect.colliderect(player.rect):
-                if player.direction.x < 0:
-                    player.rect.left = sprite.rect.right
-                elif player.direction.x > 0:
-                    player.rect.right = sprite.rect.left
+            if sprite.rect.colliderect(object.rect):
+                if object.direction.x < 0:
+                    object.rect.left = sprite.rect.right
+                elif object.direction.x > 0:
+                    object.rect.right = sprite.rect.left
 
                 self.isNextLevel(sprite)
 
-    def knife_horizontal_movement_collision_listener(self):
+    def player_horizontal_movement_collision(self):
+        player = self.player
+        player.rect.x += player.direction.x
+        self.horizontal_movement_collision_checker(player)
+
+    def knife_horizontal_movement_collision(self):
         knifes = self.knifes
         for knife in knifes:
             knife.rect.x += knife.direction.x
+            self.horizontal_movement_collision_checker(knife)
 
-            for sprite in self.platforms:
-                if sprite.rect.colliderect(knife.rect):
-                    if knife.direction.x < 0:
-                        knife.rect.left = sprite.rect.right
-                    elif knife.direction.x > 0:
-                        knife.rect.right = sprite.rect.left
-
-                    self.isNextLevel(sprite)
-
-    def vertical_movement_collision_listener(self):
+    def player_vertical_movement_collision(self):
         player = self.player
         player.gravity()
 
@@ -188,14 +182,14 @@ class Loop:
 
             self.knifes.update()
             self.knifes.draw(screen)
-            self.knife_horizontal_movement_collision_listener()
+            self.knife_horizontal_movement_collision()
 
             [platform.draw(screen) for platform in self.platforms]
 
             self.player.update()
             self.player.is_moves = True
-            self.horizontal_movement_collision_listener()
-            self.vertical_movement_collision_listener()
+            self.player_horizontal_movement_collision()
+            self.player_vertical_movement_collision()
             self.player.draw(screen)
 
             pygame.display.update()
