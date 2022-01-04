@@ -6,12 +6,13 @@ KNIFE_COLOR = pygame.Color("black")
 
 
 class Knife(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, marker):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((KNIFE_WIDTH, KNIFE_HEIGHT))
         self.image.fill(KNIFE_COLOR)
         self.rect = pygame.Rect(x, y, KNIFE_WIDTH, KNIFE_HEIGHT)
         self.direction = pygame.math.Vector2(0, 0)
+        self.marker = marker
 
     def draw(self, screen):
         picture = pygame.transform.scale(
@@ -21,13 +22,9 @@ class Knife(pygame.sprite.Sprite):
         screen.blit(picture, (self.rect.x, self.rect.y))
 
     def update(self):
-        self.direction.x = 3
-        self.rect.x += self.direction.x
-
-    # def update(self, left, right):
-    #     if left:
-    #         self.direction.x = 3
-    #         self.rect.x += self.direction.x
-    #     if right:
-    #         self.direction.x = -3
-    #         self.rect.x += self.direction.x
+        if self.marker == "left":
+            self.direction.x = 8
+            self.rect.x += self.direction.x
+        if self.marker == "right":
+            self.direction.x = -8
+            self.rect.x += self.direction.x

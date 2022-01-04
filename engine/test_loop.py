@@ -141,10 +141,13 @@ class Loop:
 
         backgroung = pygame.Surface((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         backgroung.fill(pygame.Color(BACKGROUND_COLOR))
-        flag = False
+
         self.knifes = pygame.sprite.Group()
+        timer = 50
         while True:
+            print(timer)
             clock.tick(75)
+            timer -= 1
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -155,23 +158,22 @@ class Loop:
             keys = pygame.key.get_pressed()
 
             if keys[pygame.K_e]:
-                x, y = (self.player.rect.x, self.player.rect.y)
-                self.knife = Knife(x, y)
-                self.knifes.add(self.knife)
-                self.knife.rect.x = x
-                self.knife.rect.y = y
-                left = True
-                right = False
-                # flag = True
-            if keys[pygame.K_q]:
-                x, y = (self.player.rect.x, self.player.rect.y)
-                self.knife.rect.x = x
-                self.knife.rect.y = y
-                left = False
-                right = True
-                # flag = True
+                if timer <= 0:
+                    x, y = (self.player.rect.x, self.player.rect.y)
+                    self.knife = Knife((x + 25), (y + 20), 'left')
+                    self.knifes.add(self.knife)
+                    timer = 50
+                    print(len(self.knifes))
 
-            #self.knifes.update(left, right)
+            if keys[pygame.K_q]:
+                if timer <= 0:
+                    x, y = (self.player.rect.x, self.player.rect.y)
+                    self.knife = Knife((x + 25), (y + 20), 'right')
+                    self.knifes.add(self.knife)
+                    timer = 50
+
+                print(len(self.knifes))
+
             self.knifes.update()
             self.knifes.draw(screen)
 
