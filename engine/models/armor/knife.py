@@ -15,9 +15,9 @@ class Knife(pygame.sprite.Sprite):
 
     def draw(self, screen):
         picture = pygame.transform.scale(
-            self.image, (self.KNIFE_WIDTH, self.KNIFE_HEIGHT))
+            self.image, (KNIFE_WIDTH, KNIFE_HEIGHT))
         rect = picture.get_rect()
-        rect = rect.move((self.KNIFE_WIDTH, self.KNIFE_HEIGHT))
+        rect = rect.move((KNIFE_WIDTH, KNIFE_HEIGHT))
         screen.blit(picture, (self.rect.x, self.rect.y))
 
     def update(self, left, right):

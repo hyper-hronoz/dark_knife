@@ -58,7 +58,6 @@ class Loop:
 
         spawn_coordinates: list = level.get_spawn_coords()
         self.add_player(spawn_coordinates[randrange(len(spawn_coordinates))])
-
         level_up_coordinates: list = level.get_level_up_coordinates()
         self.level_up_platforms = [pygame.Rect(
             x, y, self.cell_size, self.cell_size) for x, y in level_up_coordinates]
@@ -92,9 +91,9 @@ class Loop:
                 self.load_next_level()
 
     def add_knife(self, knife):
-        self.knifes = pygame.sprite.Group()
-        self.knifes.add(knife)
-        print("kk")
+        self.knife = knife
+        # self.knife = pygame.sprite.GroupSingle()
+        # self.knife.add(knife)
 
     def add_player(self, player_position):
         x, y = player_position
@@ -142,10 +141,8 @@ class Loop:
 
         backgroung = pygame.Surface((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         backgroung.fill(pygame.Color(BACKGROUND_COLOR))
-
-        #
-        # self.add_knife(knife_position)
-
+        self.knife = Knife(500, 500)
+        flag = False
         while True:
             clock.tick(75)
             for event in pygame.event.get():
@@ -156,23 +153,25 @@ class Loop:
             screen.blit(backgroung, (0, 0))
 
             keys = pygame.key.get_pressed()
-            flag = False
+
             if keys[pygame.K_e]:
                 x, y = (self.player.rect.x, self.player.rect.y)
-                self.add_knife(Knife(x, y))
+                self.knife.rect.x = x
+                self.knife.rect.y = y
                 left = True
                 right = False
                 flag = True
             if keys[pygame.K_q]:
                 x, y = (self.player.rect.x, self.player.rect.y)
-                self.add_knife(Knife(x, y))
+                self.knife.rect.x = x
+                self.knife.rect.y = y
                 left = False
                 right = True
                 flag = True
 
             if flag:
-                self.knifes.update(left, right)
-                self.knifes.draw(screen)
+                self.knife.update(left, right)
+                self.knife.draw(screen)
 
             [platform.draw(screen) for platform in self.platforms]
 
