@@ -20,6 +20,8 @@ class Loop:
 
         self.player_textures = {}
 
+        self.knifes = pygame.sprite.Group()
+
         self.load_player_textures()
         self.load_next_level()
         self.main()
@@ -63,6 +65,8 @@ class Loop:
             x, y, self.cell_size, self.cell_size) for x, y in level_up_coordinates]
 
         self.level_number += 1
+        for sprite in self.knifes:
+            sprite.kill()
 
     def get_level(self) -> dict:
         try:
@@ -90,11 +94,6 @@ class Loop:
             if level_up_platfrom.colliderect(sprite):
                 self.load_next_level()
 
-    def add_knife(self, knife):
-        self.knife = knife
-        # self.knife = pygame.sprite.GroupSingle()
-        # self.knife.add(knife)
-
     def add_player(self, player_position):
         x, y = player_position
         self.player = Player(x, y)
@@ -113,6 +112,20 @@ class Loop:
                     player.rect.right = sprite.rect.left
 
                 self.isNextLevel(sprite)
+
+    def knife_horizontal_movement_collision_listener(self):
+        knifes = self.knifes
+        for knife in knifes:
+            knife.rect.x += knife.direction.x
+
+            for sprite in self.platforms:
+                if sprite.rect.colliderect(knife.rect):
+                    if knife.direction.x < 0:
+                        knife.rect.left = sprite.rect.right
+                    elif knife.direction.x > 0:
+                        knife.rect.right = sprite.rect.left
+
+                    self.isNextLevel(sprite)
 
     def vertical_movement_collision_listener(self):
         player = self.player
@@ -142,7 +155,6 @@ class Loop:
         backgroung = pygame.Surface((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         backgroung.fill(pygame.Color(BACKGROUND_COLOR))
 
-        self.knifes = pygame.sprite.Group()
         timer = 50
         while True:
             print(timer)
@@ -176,6 +188,7 @@ class Loop:
 
             self.knifes.update()
             self.knifes.draw(screen)
+            self.knife_horizontal_movement_collision_listener()
 
             [platform.draw(screen) for platform in self.platforms]
 
