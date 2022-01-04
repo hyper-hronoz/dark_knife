@@ -27,10 +27,14 @@ class Loop:
     def load_player_textures(self):
         absolute_folder = re.sub(os.path.basename(
             __file__), "", os.path.abspath(__file__))
-        right_movement_textures_path = os.path.join(absolute_folder, "resources/images/right_movement_set/")
-        self.player_textures["right"] = [pygame.transform.scale(pygame.image.load(f"{right_movement_textures_path}right-{i}.png"), (Player.HERO_WIDTH, Player.HERO_HEIGHT))  for i in range(1, 14)]
-        left_movement_textures_path = os.path.join(absolute_folder, "resources/images/left_movement_set/")
-        self.player_textures["left"] = [pygame.transform.scale(pygame.image.load(f"{left_movement_textures_path}left-{i}.png"), (Player.HERO_WIDTH, Player.HERO_HEIGHT))  for i in range(1, 14)]
+        right_movement_textures_path = os.path.join(
+            absolute_folder, "resources/images/right_movement_set/")
+        self.player_textures["right"] = [pygame.transform.scale(pygame.image.load(
+            f"{right_movement_textures_path}right-{i}.png"), (Player.HERO_WIDTH, Player.HERO_HEIGHT)) for i in range(1, 14)]
+        left_movement_textures_path = os.path.join(
+            absolute_folder, "resources/images/left_movement_set/")
+        self.player_textures["left"] = [pygame.transform.scale(pygame.image.load(
+            f"{left_movement_textures_path}left-{i}.png"), (Player.HERO_WIDTH, Player.HERO_HEIGHT)) for i in range(1, 14)]
 
     def load_next_level(self) -> None:
         self.level_data = self.get_level()
@@ -53,11 +57,11 @@ class Loop:
         self.platforms = level.get_platforms()
 
         spawn_coordinates: list = level.get_spawn_coords()
-        print(spawn_coordinates)
         self.add_player(spawn_coordinates[randrange(len(spawn_coordinates))])
 
         level_up_coordinates: list = level.get_level_up_coordinates()
-        self.level_up_platforms = [pygame.Rect(x, y, self.cell_size, self.cell_size) for x, y in level_up_coordinates]
+        self.level_up_platforms = [pygame.Rect(
+            x, y, self.cell_size, self.cell_size) for x, y in level_up_coordinates]
 
         self.level_number += 1
 
@@ -82,8 +86,13 @@ class Loop:
     def game_id_failure_to_start(self):
         pass
 
+    def isNextLevel(self, sprite):
+        for level_up_platfrom in self.level_up_platforms:
+            if level_up_platfrom.colliderect(sprite):
+                self.load_next_level()
+
     def add_knife(self, knife_position):
-        x, y = (50, 50)
+        x, y = (knife_position)
         self.knife = pygame.sprite.GroupSingle()
         knife_sprite = Knife(x, y)
         self.knife.add(knife_sprite)
@@ -96,7 +105,7 @@ class Loop:
 
     def horizontal_movement_collision_listener(self):
         player = self.player
-        player.rect.x += player.direction.x 
+        player.rect.x += player.direction.x
 
         for sprite in self.platforms:
             if sprite.rect.colliderect(player.rect):
@@ -124,11 +133,6 @@ class Loop:
 
                 self.isNextLevel(platform)
 
-    def isNextLevel(self, sprite):
-        for level_up_platfrom in self.level_up_platforms:
-            if level_up_platfrom.colliderect(sprite):
-                self.load_next_level()
-
     def main(self):
         pygame.init()
         pygame.display.set_caption("Dark Knife")
@@ -140,8 +144,6 @@ class Loop:
         backgroung = pygame.Surface((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         backgroung.fill(pygame.Color(BACKGROUND_COLOR))
 
-        self.add_knife(0)
-
         while True:
             clock.tick(75)
 
@@ -150,6 +152,12 @@ class Loop:
                     pygame.quit()
                     sys.exit()
 
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_e]:
+                print(self.player.rect.x, self.player.rect.y)
+
+            elif keys[pygame.K_q]:
+                pass
             screen.blit(backgroung, (0, 0))
 
             [platform.draw(screen) for platform in self.platforms]
@@ -159,9 +167,6 @@ class Loop:
             self.horizontal_movement_collision_listener()
             self.vertical_movement_collision_listener()
             self.player.draw(screen)
-
-            self.knife.update()
-            self.knife.draw(screen)
 
             pygame.display.update()
 
