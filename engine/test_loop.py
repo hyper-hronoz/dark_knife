@@ -91,11 +91,10 @@ class Loop:
             if level_up_platfrom.colliderect(sprite):
                 self.load_next_level()
 
-    def add_knife(self, knife_position):
-        x, y = (knife_position)
-        self.knife = pygame.sprite.GroupSingle()
-        knife_sprite = Knife(x, y)
-        self.knife.add(knife_sprite)
+    def add_knife(self, knife):
+        self.knifes = pygame.sprite.Group()
+        self.knifes.add(knife)
+        print("kk")
 
     def add_player(self, player_position):
         x, y = player_position
@@ -144,21 +143,36 @@ class Loop:
         backgroung = pygame.Surface((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         backgroung.fill(pygame.Color(BACKGROUND_COLOR))
 
+        #
+        # self.add_knife(knife_position)
+
         while True:
             clock.tick(75)
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
 
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_e]:
-                print(self.player.rect.x, self.player.rect.y)
-
-            elif keys[pygame.K_q]:
-                pass
             screen.blit(backgroung, (0, 0))
+
+            keys = pygame.key.get_pressed()
+            flag = False
+            if keys[pygame.K_e]:
+                x, y = (self.player.rect.x, self.player.rect.y)
+                self.add_knife(Knife(x, y))
+                left = True
+                right = False
+                flag = True
+            if keys[pygame.K_q]:
+                x, y = (self.player.rect.x, self.player.rect.y)
+                self.add_knife(Knife(x, y))
+                left = False
+                right = True
+                flag = True
+
+            if flag:
+                self.knifes.update(left, right)
+                self.knifes.draw(screen)
 
             [platform.draw(screen) for platform in self.platforms]
 
