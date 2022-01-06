@@ -22,21 +22,26 @@ class Loop:
 
         self.knifes = pygame.sprite.Group()
 
+        self.absolute_folder = re.sub(os.path.basename( __file__), "", os.path.abspath(__file__))
+
         self.load_player_textures()
         self.load_next_level()
         self.main()
 
     def load_player_textures(self):
-        absolute_folder = re.sub(os.path.basename(
-            __file__), "", os.path.abspath(__file__))
-        right_movement_textures_path = os.path.join(
-            absolute_folder, "resources/images/right_movement_set/")
+        right_movement_textures_path = os.path.join(self.absolute_folder, "resources/images/right_movement_set/")
         self.player_textures["right"] = [pygame.transform.scale(pygame.image.load(
             f"{right_movement_textures_path}right-{i}.png"), (Player.HERO_WIDTH, Player.HERO_HEIGHT)) for i in range(1, 14)]
         left_movement_textures_path = os.path.join(
-            absolute_folder, "resources/images/left_movement_set/")
+            self.absolute_folder, "resources/images/left_movement_set/")
         self.player_textures["left"] = [pygame.transform.scale(pygame.image.load(
             f"{left_movement_textures_path}left-{i}.png"), (Player.HERO_WIDTH, Player.HERO_HEIGHT)) for i in range(1, 14)]
+
+    def load_knife_textures(self, knife: Knife) -> Knife:
+        knife_image_path = os.path.join(self.absolute_folder, "resources/images/knife_images/knife.png")
+        knife.image = pygame.image.load(knife_image_path)
+        return knife
+
 
     def load_next_level(self) -> None:
         self.level_data = self.get_level()
@@ -167,6 +172,7 @@ class Loop:
                 if timer <= 0:
                     x, y = (self.player.rect.x, self.player.rect.y)
                     self.knife = Knife((x + 25), (y + 20), 'left')
+                    self.knife = self.load_knife_textures(self.knife)
                     self.knifes.add(self.knife)
                     timer = 50
                     print(len(self.knifes))
@@ -175,6 +181,7 @@ class Loop:
                 if timer <= 0:
                     x, y = (self.player.rect.x, self.player.rect.y)
                     self.knife = Knife((x + 25), (y + 20), 'right')
+                    self.knife = self.load_knife_textures(self.knife)
                     self.knifes.add(self.knife)
                     timer = 50
 
