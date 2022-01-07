@@ -8,12 +8,10 @@ KNIFE_COLOR = pygame.Color("black")
 
 
 class Knife(pygame.sprite.Sprite):
-    DEFAULT_KNIFE_COLOR = pygame.Color("black")
-
     def __init__(self, x, y, marker):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((KNIFE_WIDTH, KNIFE_HEIGHT))
-        self.image.fill(self.DEFAULT_KNIFE_COLOR)
+        self.image.fill(KNIFE_COLOR)
         self.rect = pygame.Rect(x, y, KNIFE_WIDTH, KNIFE_HEIGHT)
 
         self.direction = pygame.math.Vector2(0, 0)

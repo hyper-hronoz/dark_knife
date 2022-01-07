@@ -21,6 +21,7 @@ class Loop:
         self.player_textures = {}
 
         self.knifes = pygame.sprite.Group()
+        self.mobs = pygame.sprite.Group()
 
         self.load_player_textures()
         self.load_next_level()
@@ -115,12 +116,6 @@ class Loop:
         player.rect.x += player.direction.x
         self.horizontal_movement_collision_checker(player)
 
-    def knife_horizontal_movement_collision(self):
-        knifes = self.knifes
-        for knife in knifes:
-            knife.rect.x += knife.direction.x
-            self.horizontal_movement_collision_checker(knife)
-
     def player_vertical_movement_collision(self):
         player = self.player
         player.gravity()
@@ -137,6 +132,12 @@ class Loop:
                     player.direction.y = 0
 
                 self.isNextLevel(platform)
+
+    def knife_horizontal_movement_collision(self):
+        knifes = self.knifes
+        for knife in knifes:
+            knife.rect.x += knife.direction.x
+            self.horizontal_movement_collision_checker(knife)
 
     def main(self):
         pygame.init()
