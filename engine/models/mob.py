@@ -22,7 +22,7 @@ class Mob(pygame.sprite.Sprite):
             self.image, (MOB_WIDTH, MOB_HEIGHT))
         rect = picture.get_rect()
         rect = rect.move((MOB_WIDTH, MOB_HEIGHT))
-        screen.blit(picture, (self.rect.x, self.rect.y))
+        screen.blit(picture, self.rect)
 
     def update(self):
         pass

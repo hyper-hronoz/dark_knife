@@ -39,13 +39,13 @@ class Player(pygame.sprite.Sprite):
         else:
             self.image = self.animations[self.last_direction][0]
 
-    def setPlayerAnimation(self, animations):
+    def set_player_animations(self, animations):
         self.animations = animations
         self.animate()
 
     def draw(self, screen) -> None:
         #print(self.rect.x, self.rect.y)
-        screen.blit(self.image, (self.rect.x, self.rect.y))
+        screen.blit(self.image, self.rect)
 
     def get_input(self) -> None:
         if not self.is_moves:
