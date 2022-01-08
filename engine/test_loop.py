@@ -20,6 +20,9 @@ class Loop:
 
         self.player_textures = {}
 
+        self.knifes = pygame.sprite.Group()
+        self.mobs = pygame.sprite.Group()
+
         self.load_player_textures()
         self.load_next_level()
         self.main()
@@ -58,12 +61,13 @@ class Loop:
 
         spawn_coordinates: list = level.get_spawn_coords()
         self.add_player(spawn_coordinates[randrange(len(spawn_coordinates))])
-
         level_up_coordinates: list = level.get_level_up_coordinates()
         self.level_up_platforms = [pygame.Rect(
             x, y, self.cell_size, self.cell_size) for x, y in level_up_coordinates]
 
         self.level_number += 1
+        for sprite in self.knifes:
+            sprite.kill()
 
     def get_level(self) -> dict:
         try:
@@ -91,31 +95,28 @@ class Loop:
             if level_up_platfrom.colliderect(sprite):
                 self.load_next_level()
 
-    def add_knife(self, knife):
-        self.knifes = pygame.sprite.Group()
-        self.knifes.add(knife)
-        print("kk")
-
     def add_player(self, player_position):
         x, y = player_position
         self.player = Player(x, y)
         self.player.setPlayerAnimation(self.player_textures)
         self.player.is_moves = False
 
-    def horizontal_movement_collision_listener(self):
-        player = self.player
-        player.rect.x += player.direction.x
-
+    def horizontal_movement_collision_checker(self, object):
         for sprite in self.platforms:
-            if sprite.rect.colliderect(player.rect):
-                if player.direction.x < 0:
-                    player.rect.left = sprite.rect.right
-                elif player.direction.x > 0:
-                    player.rect.right = sprite.rect.left
+            if sprite.rect.colliderect(object.rect):
+                if object.direction.x < 0:
+                    object.rect.left = sprite.rect.right
+                elif object.direction.x > 0:
+                    object.rect.right = sprite.rect.left
 
                 self.isNextLevel(sprite)
 
-    def vertical_movement_collision_listener(self):
+    def player_horizontal_movement_collision(self):
+        player = self.player
+        player.rect.x += player.direction.x
+        self.horizontal_movement_collision_checker(player)
+
+    def player_vertical_movement_collision(self):
         player = self.player
         player.gravity()
 
@@ -132,6 +133,12 @@ class Loop:
 
                 self.isNextLevel(platform)
 
+    def knife_horizontal_movement_collision(self):
+        knifes = self.knifes
+        for knife in knifes:
+            knife.rect.x += knife.direction.x
+            self.horizontal_movement_collision_checker(knife)
+
     def main(self):
         pygame.init()
         pygame.display.set_caption("Dark Knife")
@@ -143,11 +150,11 @@ class Loop:
         backgroung = pygame.Surface((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         backgroung.fill(pygame.Color(BACKGROUND_COLOR))
 
-        #
-        # self.add_knife(knife_position)
-
+        timer = 50
         while True:
+            print(timer)
             clock.tick(75)
+            timer -= 1
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -156,30 +163,34 @@ class Loop:
             screen.blit(backgroung, (0, 0))
 
             keys = pygame.key.get_pressed()
-            flag = False
-            if keys[pygame.K_e]:
-                x, y = (self.player.rect.x, self.player.rect.y)
-                self.add_knife(Knife(x, y))
-                left = True
-                right = False
-                flag = True
-            if keys[pygame.K_q]:
-                x, y = (self.player.rect.x, self.player.rect.y)
-                self.add_knife(Knife(x, y))
-                left = False
-                right = True
-                flag = True
 
-            if flag:
-                self.knifes.update(left, right)
-                self.knifes.draw(screen)
+            if keys[pygame.K_e]:
+                if timer <= 0:
+                    x, y = (self.player.rect.x, self.player.rect.y)
+                    self.knife = Knife((x + 25), (y + 20), 'left')
+                    self.knifes.add(self.knife)
+                    timer = 50
+                    print(len(self.knifes))
+
+            if keys[pygame.K_q]:
+                if timer <= 0:
+                    x, y = (self.player.rect.x, self.player.rect.y)
+                    self.knife = Knife((x - 25), (y + 20), 'right')
+                    self.knifes.add(self.knife)
+                    timer = 50
+
+                print(len(self.knifes))
+
+            self.knifes.update()
+            self.knifes.draw(screen)
+            self.knife_horizontal_movement_collision()
 
             [platform.draw(screen) for platform in self.platforms]
 
             self.player.update()
             self.player.is_moves = True
-            self.horizontal_movement_collision_listener()
-            self.vertical_movement_collision_listener()
+            self.player_horizontal_movement_collision()
+            self.player_vertical_movement_collision()
             self.player.draw(screen)
 
             pygame.display.update()
