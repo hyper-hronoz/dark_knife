@@ -9,6 +9,7 @@ from pygame import sprite
 from utils import Level
 from models import Knife, Platform, Player
 from typing import Union
+from listeners import PlayerCollistionListener
 
 BACKGROUND_COLOR = "#223759"
 
@@ -19,6 +20,8 @@ class Loop:
         self.level_number = 0
 
         self.player_textures = {}
+
+        self.player_listener = PlayerCollistionListener()
 
         self.knifes = pygame.sprite.Group()
         self.mobs = pygame.sprite.Group()
@@ -39,7 +42,7 @@ class Loop:
         self.player_textures["left"] = [pygame.transform.scale(pygame.image.load(
             f"{left_movement_textures_path}left-{i}.png"), (Player.HERO_WIDTH, Player.HERO_HEIGHT)) for i in range(1, 14)]
 
-    def load_next_level(self) -> None:
+    def load_next_level(self, *args) -> None:
         self.level_data = self.get_level()
 
         if self.level_data == "gg":
@@ -62,8 +65,9 @@ class Loop:
         spawn_coordinates: list = level.get_spawn_coords()
         self.add_player(spawn_coordinates[randrange(len(spawn_coordinates))])
         level_up_coordinates: list = level.get_level_up_coordinates()
-        self.level_up_platforms = [pygame.Rect(
-            x, y, self.cell_size, self.cell_size) for x, y in level_up_coordinates]
+        self.level_up_platforms = pygame.sprite.Group() 
+        for x, y in level_up_coordinates:
+            self.level_up_platforms.add(Platform(pygame.Rect(x, y, self.cell_size, self.cell_size)))
 
         self.level_number += 1
         for sprite in self.knifes:
@@ -90,10 +94,6 @@ class Loop:
     def game_id_failure_to_start(self):
         pass
 
-    def isNextLevel(self, sprite):
-        for level_up_platfrom in self.level_up_platforms:
-            if level_up_platfrom.colliderect(sprite):
-                self.load_next_level()
 
     def add_player(self, player_position):
         x, y = player_position
@@ -101,37 +101,33 @@ class Loop:
         self.player.setPlayerAnimation(self.player_textures)
         self.player.is_moves = False
 
-    def horizontal_movement_collision_checker(self, object):
-        for sprite in self.platforms:
-            if sprite.rect.colliderect(object.rect):
-                if object.direction.x < 0:
-                    object.rect.left = sprite.rect.right
-                elif object.direction.x > 0:
-                    object.rect.right = sprite.rect.left
+    def return_player_to_normal_vertical_position(self, platform: Platform):
+        if self.player.direction.y > 0:
+            self.player.rect.bottom = platform.rect.top
+            self.player.direction.y = 0
+            self.player.isJump = False
 
-                self.isNextLevel(sprite)
+        if self.player.direction.y < 0:
+            self.player.rect.top = platform.rect.bottom
+            self.player.direction.y = 0
 
+    def return_player_to_normal_horizontal_position(self, platform: Platform):
+        if self.player.direction.x < 0:
+            self.player.rect.left = platform.rect.right
+        if self.player.direction.x > 0:
+            self.player.rect.right = platform.rect.left
+        
     def player_horizontal_movement_collision(self):
-        player = self.player
-        player.rect.x += player.direction.x
-        self.horizontal_movement_collision_checker(player)
+        self.player.rect.x += self.player.direction.x
+        self.player_listener.on_player_platforms_collision(self.player, self.level_up_platforms, self.load_next_level)
+        self.player_listener.on_player_platforms_collision(self.player, self.platforms, self.return_player_to_normal_horizontal_position)
 
     def player_vertical_movement_collision(self):
-        player = self.player
-        player.gravity()
+        self.player.gravity()
 
-        for platform in self.platforms:
-            if platform.rect.colliderect(player.rect):
-                if player.direction.y > 0:
-                    player.rect.bottom = platform.rect.top
-                    player.direction.y = 0
-                    player.isJump = False
+        self.player_listener.on_player_platforms_collision(self.player, self.level_up_platforms, self.load_next_level)
+        self.player_listener.on_player_platforms_collision(self.player, self.platforms, self.return_player_to_normal_vertical_position)
 
-                elif player.direction.y < 0:
-                    player.rect.top = platform.rect.bottom
-                    player.direction.y = 0
-
-                self.isNextLevel(platform)
 
     def knife_horizontal_movement_collision(self):
         knifes = self.knifes
@@ -152,7 +148,7 @@ class Loop:
 
         timer = 50
         while True:
-            print(timer)
+            # print(timer)
             clock.tick(75)
             timer -= 1
             for event in pygame.event.get():
@@ -164,26 +160,26 @@ class Loop:
 
             keys = pygame.key.get_pressed()
 
-            if keys[pygame.K_e]:
-                if timer <= 0:
-                    x, y = (self.player.rect.x, self.player.rect.y)
-                    self.knife = Knife((x + 25), (y + 20), 'left')
-                    self.knifes.add(self.knife)
-                    timer = 50
-                    print(len(self.knifes))
+            # if keys[pygame.K_e]:
+            #     if timer <= 0:
+            #         x, y = (self.player.rect.x, self.player.rect.y)
+            #         self.knife = Knife((x + 25), (y + 20), 'left')
+            #         self.knifes.add(self.knife)
+            #         timer = 50
+                    # print(len(self.knifes))
 
-            if keys[pygame.K_q]:
-                if timer <= 0:
-                    x, y = (self.player.rect.x, self.player.rect.y)
-                    self.knife = Knife((x - 25), (y + 20), 'right')
-                    self.knifes.add(self.knife)
-                    timer = 50
+            # if keys[pygame.K_q]:
+            #     if timer <= 0:
+            #         x, y = (self.player.rect.x, self.player.rect.y)
+            #         self.knife = Knife((x - 25), (y + 20), 'right')
+            #         self.knifes.add(self.knife)
+            #         timer = 50
 
-                print(len(self.knifes))
+                # print(len(self.knifes))
 
-            self.knifes.update()
-            self.knifes.draw(screen)
-            self.knife_horizontal_movement_collision()
+            # self.knifes.update()
+            # self.knifes.draw(screen)
+            # self.knife_horizontal_movement_collision()
 
             [platform.draw(screen) for platform in self.platforms]
 
