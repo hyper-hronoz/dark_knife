@@ -22,7 +22,9 @@ class Loop:
 		self.player_controller = PlayerController(self)
 		self.knife_controller = KnifeController(self)
 
+		#! обязательно должен быть первым, он должен подтягивать изменения первым, чтобы уже от него другие контроллеры все подтягивали
 		self.add_observer(self)
+		
 		self.add_observer(self.player_controller)
 		self.add_observer(self.knife_controller)
 
@@ -31,13 +33,13 @@ class Loop:
 
 		self.main()
 
-	def add_observer(self, observer):
+	def add_observer(self, observer) -> None:
 		self.observers.append(observer)
 	
-	def notify_changes(self):
+	def notify_changes(self) -> None:
 		[observer.change(self) for observer in self.observers]
 
-	def change(self, заглушка_намомни_мне_это_исправить_без_нее_не_работает):
+	def change(self, заглушка_намомни_мне_это_исправить_без_нее_не_работает) -> None:
 		self.WINDOW_WIDTH, self.WINDOW_HEIGHT = self.level_controller.WINDOW_WIDTH, self.level_controller.WINDOW_HEIGHT
 		self.platforms = self.level_controller.platforms
 		self.level_up_platforms = self.level_controller.level_up_platforms
@@ -46,13 +48,12 @@ class Loop:
 		self.player: Player = self.player_controller.spawn_player((spawn_platform.rect.left, spawn_platform.rect.top))
 		self.player_controller.set_animation()
 
-	def main(self):
+	def main(self) -> None:
 		pygame.init()
 		pygame.display.set_caption("Dark Knife")
 
 		clock = pygame.time.Clock()
-		screen = pygame.display.set_mode(
-			(self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
+		screen = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
 
 		backgroung = pygame.Surface((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
 		backgroung.fill(pygame.Color(BACKGROUND_COLOR))
@@ -70,7 +71,6 @@ class Loop:
 			self.knife_controller.display(screen)
 			self.level_controller.display(screen)
 			self.player_controller.display(screen)
-
 
 			pygame.display.update()
 

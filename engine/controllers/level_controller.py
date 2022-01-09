@@ -36,9 +36,6 @@ class LevelController(AbstractController):
 
 			self._notify_changes()
 
-			# for sprite in self.knifes:
-			# 	sprite.kill()
-
 	def _get_level(self) -> dict:
 		try:
 			if not os.path.isfile(f"./levels/{self.level_number}.txt"):
@@ -53,6 +50,6 @@ class LevelController(AbstractController):
 		except Exception as e:
 			print(f"File opening error probably because of {e}")
 
-	def display(self, screen):
+	def display(self, screen) -> None:
 		[platform.draw(screen) for platform in self.platforms]
 

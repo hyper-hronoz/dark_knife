@@ -30,7 +30,7 @@ class Level:
         except Exception as e:
             print(f"Textures with {id=} not found because of {e}")
 
-    def get_spawn_platforms(self):
+    def get_spawn_platforms(self) -> list:
         spawn_platforms = [] 
 
         for y in range(len(self.textures_map)):
@@ -52,7 +52,7 @@ class Level:
 
         return spawn_platforms
 
-    def get_level_up_coordinates(self):
+    def get_level_up_coordinates(self) -> list:
         level_up_coordinates = []
         for y in range(len(self.textures_map)):
             for x in range(len(self.textures_map[y])):
@@ -63,7 +63,7 @@ class Level:
                         (x * self.cell_size, y * self.cell_size))
         return level_up_coordinates
 
-    def get_platforms(self):
+    def get_platforms(self) -> pygame.sprite.Group:
         x = y = 0
 
         for y in range(len(self.textures_map)):
