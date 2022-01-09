@@ -1,19 +1,22 @@
 import re, os, pygame
+from types import MethodType
+from sys import platform
 from listeners import CollisionListener
 from models import Player, Platform
+from utils import AbstractController
 
-class PlayerController:
+class PlayerController(AbstractController):
 	def __init__(self, main_loop) -> None:
 		self._player_textures = {}
+		self._absolute_folder: str = main_loop.absolute_folder
+		self._load_next_level: MethodType = main_loop.level_controller.load_next_level
 
 		self.player_listener = CollisionListener()
 
 	def change(self, main_loop) -> None:
 		# копии того что о нас есть в главном цикле
-		self._absolute_folder = main_loop.absolute_folder
-		self._level_up_platforms = main_loop.level_up_platforms
-		self._platforms = main_loop.platforms
-		self._load_next_level = main_loop.rebuild_level
+		self._level_up_platforms: pygame.sprite.Group = main_loop.level_up_platforms
+		self._platforms: pygame.sprite.Group = main_loop.platforms
 
 	def _load_player_textures(self) -> None:
 		right_movement_textures_path = os.path.join(
@@ -32,7 +35,8 @@ class PlayerController:
 		self.player.is_moves = False
 		return self.player
 
-	def _return_player_to_normal_vertical_position(self, platform: Platform) -> None:
+	def _return_player_to_normal_vertical_position(self, *args) -> None:
+		platform: Platform = args[0]
 		if self.player.direction.y > 0:
 			self.player.rect.bottom = platform.rect.top
 			self.player.direction.y = 0
@@ -42,7 +46,8 @@ class PlayerController:
 			self.player.rect.top = platform.rect.bottom
 			self.player.direction.y = 0
 
-	def _return_player_to_normal_horizontal_position(self, platform: Platform) -> None:
+	def _return_player_to_normal_horizontal_position(self, *args) -> None:
+		platform: Platform = args[0]
 		if self.player.direction.x < 0:
 			self.player.rect.left = platform.rect.right
 		if self.player.direction.x > 0:

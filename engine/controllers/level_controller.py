@@ -1,10 +1,11 @@
 import ast, pygame, os
 from random import randrange
 from models import Platform
-from utils import Level
+from utils import Level, AbstractController
 
-class LevelController:
+class LevelController(AbstractController):
 	def __init__(self, main_loop) -> None:
+		self._notify_changes = main_loop.notify_changes
 		self._absolute_folder = main_loop.absolute_folder
 		self.level_number = 0
 		self.spawn_coordinates = 0, 0
@@ -13,10 +14,7 @@ class LevelController:
 	def load_next_level(self, *args) -> None:
 			self.level_data = self._get_level()
 
-			if self.level_data == "gg":
-				return
-
-			if not self.level_data:
+			if self.level_number == "gg":
 				return
 
 			self.cell_size = self.level_data["cell_size"]
@@ -36,23 +34,10 @@ class LevelController:
 
 			self.level_number += 1
 
+			self._notify_changes()
+
 			# for sprite in self.knifes:
 			# 	sprite.kill()
-
-	def get_spawn_platform(self) -> tuple:
-		return self.spawn_coordinates
-
-	def get_window_size(self) -> tuple:
-		return self.WINDOW_WIDTH, self.WINDOW_HEIGHT
-
-	def get_level_up_platforms(self) -> tuple:
-		return self.level_up_platforms
-
-	def get_platforms(self) -> pygame.sprite.Group:
-		return self.platforms
-
-	def get_player_position(self) -> tuple:
-		return self.spawn_coordinates
 
 	def _get_level(self) -> dict:
 		try:
@@ -61,7 +46,6 @@ class LevelController:
 
 			if not os.path.isfile(f"./levels/{self.level_number}.txt"):
 				self.level_number = "gg"
-				return
 
 			with open(f"./levels/{self.level_number}.txt", "r") as file:
 				content = file.read()
