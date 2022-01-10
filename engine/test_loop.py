@@ -47,7 +47,7 @@ class Loop:
 		self.level_up_platforms = self.level_controller.level_up_platforms
 		self.enemy_spawn_platforms = self.level_controller.enemy_spawn_platforms
 		self.knifes = self.knife_controller.knifes
-		# self.mobs = self.mob_controller.mobs
+		self.mobs = self.mob_controller.mobs
 		for i in self.enemy_spawn_platforms:
 			print(i.rect.x, i.rect.y)
 
@@ -77,8 +77,9 @@ class Loop:
 
 			self.knife_controller.display(screen)
 			self.level_controller.display(screen)
-			self.player_controller.display(screen)
 			self.mob_controller.display(screen)
+			self.player_controller.display(screen)
+			
 
 			pygame.display.update()
 

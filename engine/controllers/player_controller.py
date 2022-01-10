@@ -54,9 +54,9 @@ class PlayerController:
 			self.player.rect.right = platform.rect.left
 
 	def _kill_player(self, *args):
-		pass
-		# player = args[1]
-		# player.kill()
+		player = args[1]
+		player.kill()
+		print('sds')
 
 	def player_horizontal_movement_collision(self) -> None:
 		self.player.rect.x += self.player.direction.x
