@@ -66,7 +66,7 @@ class Loop:
 		backgroung.fill(pygame.Color(BACKGROUND_COLOR))
 
 		while True:
-			clock.tick(60)
+			clock.tick(75)
 
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
