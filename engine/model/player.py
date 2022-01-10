@@ -3,12 +3,12 @@ import pygame
 
 class Player(pygame.sprite.Sprite):
 
-    MOVE_SPEED = 50 
+    MOVE_SPEED = 1
     HERO_WIDTH = 22
     HERO_HEIGHT = 32
     HERO_COLOR =  pygame.Color("red")
-    JUMP_POWER = 20
-    GRAVITY = 5
+    JUMP_POWER = 1 
+    GRAVITY = 1 
 
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
