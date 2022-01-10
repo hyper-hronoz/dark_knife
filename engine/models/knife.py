@@ -1,6 +1,4 @@
-import os
-import re
-import pygame
+import os, re, pygame
 
 KNIFE_WIDTH = 50
 KNIFE_HEIGHT = 20
@@ -18,11 +16,7 @@ class Knife(pygame.sprite.Sprite):
         self.marker = marker
 
     def draw(self, screen):
-        picture = pygame.transform.scale(
-            self.image, (KNIFE_WIDTH, KNIFE_HEIGHT))
-        rect = picture.get_rect()
-        rect = rect.move((KNIFE_WIDTH, KNIFE_HEIGHT))
-        screen.blit(picture, (self.rect.x, self.rect.y))
+        screen.blit(self.image, self.rect)
 
     def update(self):
         if self.marker == "left":

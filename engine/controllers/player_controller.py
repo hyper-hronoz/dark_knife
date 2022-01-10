@@ -70,6 +70,22 @@ class PlayerController:
 		self.player_listener.on_collide(self.player, self._platforms, self._return_player_to_normal_vertical_position)
 		self.player_listener.on_collide(self.player, self._mobs, self._kill_player)
 
+	def player_moves(self):
+		if not self.player.is_moves:
+			return
+		keys = pygame.key.get_pressed()
+
+		if keys[pygame.K_RIGHT]:
+			self.player.direction.x = self.player.MOVE_SPEED
+		elif keys[pygame.K_LEFT]:
+			self.player.direction.x = -self.player.MOVE_SPEED
+		else:
+			self.player.direction.x = 0
+
+		if keys[pygame.K_UP]:
+			self.player.jump()
+
+		self.player.animate()
 
 	def set_animation(self) -> None:
 		self.player.set_player_animations(self._load_player_textures())
@@ -79,5 +95,6 @@ class PlayerController:
 		self.player.is_moves = True
 		self.player_horizontal_movement_collision()
 		self.player_vertical_movement_collision()
+		self.player_moves()
 		self.player.draw(screen)
 	

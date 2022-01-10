@@ -8,7 +8,7 @@ class Player(pygame.sprite.Sprite):
     MOVE_SPEED = 3
     HERO_COLOR = pygame.Color("red")
     JUMP_HEIGHT = 10
-    GRAVITY = 0.5
+    GRAVITY_FORCE = 0.5
 
     def __init__(self, x, y) -> None:
         pygame.sprite.Sprite.__init__(self)
@@ -44,34 +44,13 @@ class Player(pygame.sprite.Sprite):
         self.animate()
 
     def draw(self, screen) -> None:
-        #print(self.rect.x, self.rect.y)
         screen.blit(self.image, self.rect)
 
-    def get_input(self) -> None:
-        if not self.is_moves:
-            return
-        keys = pygame.key.get_pressed()
-
-        if keys[pygame.K_RIGHT]:
-            self.direction.x = self.MOVE_SPEED
-        elif keys[pygame.K_LEFT]:
-            self.direction.x = -self.MOVE_SPEED
-        else:
-            self.direction.x = 0
-
-        if keys[pygame.K_UP]:
-            self.jump()
-
-        self.animate()
-
     def gravity(self) -> None:
-        self.direction.y += self.GRAVITY
+        self.direction.y += self.GRAVITY_FORCE
         self.rect.y += self.direction.y
 
     def jump(self) -> None:
         if self.direction.y == 0 and not self.isJump:
             self.direction.y -= self.JUMP_HEIGHT
             self.isJump = True
-
-    def update(self) -> None:
-        self.get_input()

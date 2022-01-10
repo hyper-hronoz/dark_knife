@@ -11,6 +11,8 @@ class MobsController:
 	def change(self, main_loop):
 		self.enemy_spawn_platforms = main_loop.enemy_spawn_platforms
 		self.knifes = main_loop.knifes
+		for mob in self.mobs:
+			mob.kill()
 		self.add_mobs()
 
 	def add_mobs(self):
