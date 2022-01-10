@@ -6,7 +6,7 @@ from random import randrange
 
 from utils import Level
 from models import Knife, Platform, Player
-from controllers import PlayerController, LevelController, KnifeController
+from controllers import PlayerController, LevelController, KnifeController, MobsController
 
 BACKGROUND_COLOR = "#223759"
 
@@ -21,20 +21,22 @@ class Loop:
 		self.level_controller = LevelController(self)
 		self.player_controller = PlayerController(self)
 		self.knife_controller = KnifeController(self)
+		self.mob_controller = MobsController(self)
 
 		#! обязательно должен быть первым, он должен подтягивать изменения первым, чтобы уже от него другие контроллеры все подтягивали
 		self.add_observer(self)
 		
 		self.add_observer(self.player_controller)
 		self.add_observer(self.knife_controller)
+		self.add_observer(self.mob_controller)
 
 		# в нем вызывается метод notify_changes, который вызывает метод change у каждого объекта, которого мы хотим оповестить о загрузке нового уровня, для того чтобы он самостоятельно подтянул изменения
 		self.level_controller.load_next_level()
 
 		self.main()
 
-	def add_observer(self, observer) -> None:
-		self.observers.append(observer)
+	def add_observer(self, model) -> None:
+		self.observers.append(model)
 	
 	def notify_changes(self) -> None:
 		[observer.change(self) for observer in self.observers]
@@ -43,6 +45,11 @@ class Loop:
 		self.WINDOW_WIDTH, self.WINDOW_HEIGHT = self.level_controller.WINDOW_WIDTH, self.level_controller.WINDOW_HEIGHT
 		self.platforms = self.level_controller.platforms
 		self.level_up_platforms = self.level_controller.level_up_platforms
+		self.enemy_spawn_platforms = self.level_controller.enemy_spawn_platforms
+		self.knifes = self.knife_controller.knifes
+		# self.mobs = self.mob_controller.mobs
+		for i in self.enemy_spawn_platforms:
+			print(i.rect.x, i.rect.y)
 
 		spawn_platform: Platform = self.level_controller.spawn_coordinates
 		self.player: Player = self.player_controller.spawn_player((spawn_platform.rect.left, spawn_platform.rect.top))
@@ -71,6 +78,7 @@ class Loop:
 			self.knife_controller.display(screen)
 			self.level_controller.display(screen)
 			self.player_controller.display(screen)
+			self.mob_controller.display(screen)
 
 			pygame.display.update()
 

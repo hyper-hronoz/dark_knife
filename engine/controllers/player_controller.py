@@ -3,9 +3,8 @@ from types import MethodType
 from sys import platform
 from listeners import CollisionListener
 from models import Player, Platform
-from utils import AbstractController
 
-class PlayerController(AbstractController):
+class PlayerController:
 	def __init__(self, main_loop) -> None:
 		self._player_textures = {}
 		self._absolute_folder: str = main_loop.absolute_folder
@@ -17,6 +16,7 @@ class PlayerController(AbstractController):
 		# копии того что о нас есть в главном цикле
 		self._level_up_platforms: pygame.sprite.Group = main_loop.level_up_platforms
 		self._platforms: pygame.sprite.Group = main_loop.platforms
+		self._mobs: pygame.sprite.Group = main_loop.mobs
 
 	def _load_player_textures(self) -> None:
 		right_movement_textures_path = os.path.join(
@@ -53,15 +53,23 @@ class PlayerController(AbstractController):
 		if self.player.direction.x > 0:
 			self.player.rect.right = platform.rect.left
 
+	def _kill_player(self, *args):
+		pass
+		# player = args[1]
+		# player.kill()
+
 	def player_horizontal_movement_collision(self) -> None:
 		self.player.rect.x += self.player.direction.x
 		self.player_listener.on_collide(self.player, self._level_up_platforms, self._load_next_level)
 		self.player_listener.on_collide(self.player, self._platforms, self._return_player_to_normal_horizontal_position)
+		self.player_listener.on_collide(self.player, self._mobs, self._kill_player)
 
 	def player_vertical_movement_collision(self) -> None:
 		self.player.gravity()
 		self.player_listener.on_collide(self.player, self._level_up_platforms, self._load_next_level)
 		self.player_listener.on_collide(self.player, self._platforms, self._return_player_to_normal_vertical_position)
+		self.player_listener.on_collide(self.player, self._mobs, self._kill_player)
+
 
 	def set_animation(self) -> None:
 		self.player.set_player_animations(self._load_player_textures())

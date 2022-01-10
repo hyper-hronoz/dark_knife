@@ -1,9 +1,9 @@
 import ast, pygame, os
 from random import randrange
 from models import Platform
-from utils import Level, AbstractController
+from utils import Level
 
-class LevelController(AbstractController):
+class LevelController:
 	def __init__(self, main_loop) -> None:
 		self._notify_changes = main_loop.notify_changes
 		self._absolute_folder = main_loop.absolute_folder
@@ -28,6 +28,7 @@ class LevelController(AbstractController):
 			self.platforms = level.get_platforms()
 			self.spawn_coordinates = spawn_coordinates[randrange(len(spawn_coordinates))]
 			self.level_up_platforms = pygame.sprite.Group()
+			self.enemy_spawn_platforms = level.get_enemy_platforms()
 
 			for x, y in level_up_coordinates:
 				self.level_up_platforms.add(Platform(pygame.Rect(x, y, self.cell_size, self.cell_size)))

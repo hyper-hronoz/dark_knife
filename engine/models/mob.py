@@ -2,20 +2,18 @@ import os
 import re
 import pygame
 
-MOB_WIDTH = 50
-MOB_HEIGHT = 20
+MOB_WIDTH = 30
+MOB_HEIGHT = 50
 MOB_COLOR = pygame.Color("black")
 
 
 class Mob(pygame.sprite.Sprite):
-    def __init__(self, x, y, marker):
+    def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((MOB_WIDTH, MOB_HEIGHT))
         self.image.fill(MOB_COLOR)
         self.rect = pygame.Rect(x, y, MOB_WIDTH, MOB_HEIGHT)
-
-        self.direction = pygame.math.Vector2(0, 0)
-        self.marker = marker
+        self.rect.bottom = y
 
     def draw(self, screen):
         picture = pygame.transform.scale(

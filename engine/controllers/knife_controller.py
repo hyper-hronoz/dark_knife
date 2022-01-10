@@ -1,11 +1,10 @@
 from re import M
 from sys import platform
 import pygame
-from utils import AbstractController
 from listeners import CollisionListener
 from models import Knife, Platform, Player
 
-class KnifeController(AbstractController):
+class KnifeController:
 
 	def __init__(self, main_loop) -> None:
 		self.knifes = pygame.sprite.Group()
@@ -18,7 +17,7 @@ class KnifeController(AbstractController):
 		for sprite in self.knifes:
 			sprite.kill()
 
-	def _return_knife_to_notmal_horizontal_position(self, *args) -> None:
+	def _return_knife_to_normal_horizontal_position(self, *args) -> None:
 		knife: Knife
 		platform: Platform
 		platform, knife  = args[0], args[1]
@@ -31,7 +30,7 @@ class KnifeController(AbstractController):
 		for knife in self.knifes:
 			knife: Knife
 			knife.rect.x += knife.direction.x
-			self.knife_collision_listener.on_collide(knife, self._platforms, self._return_knife_to_notmal_horizontal_position)
+			self.knife_collision_listener.on_collide(knife, self._platforms, self._return_knife_to_normal_horizontal_position)
 
 	def update(self) -> None:
 		keys = pygame.key.get_pressed()
@@ -44,7 +43,6 @@ class KnifeController(AbstractController):
 				self.knife = Knife((x + 25), (y + 20), 'left')
 				self.knifes.add(self.knife)
 				self.timer = 50
-				print(len(self.knifes))
 
 		if keys[pygame.K_q]:
 			if self.timer <= 0:

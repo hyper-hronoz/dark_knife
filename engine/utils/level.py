@@ -52,6 +52,29 @@ class Level:
 
         return spawn_platforms
 
+    
+    def get_enemy_platforms(self) -> list:
+        enemy_platforms = [] 
+
+        for y in range(len(self.textures_map)):
+            for x in range(len(self.textures_map[y])):
+                texture_id = self.textures_map[y][x]
+
+                if (texture_id == ""):
+                    continue
+
+                if texture_id not in self.used_textures:
+                    self.used_textures[texture_id] = self.get_texture(
+                        texture_id)
+
+                if (texture_id == "enemy"):
+                    picture = pygame.transform.scale(self.used_textures[texture_id], (self.cell_size, self.cell_size))
+                    rect = picture.get_rect()
+                    rect = rect.move((x * self.cell_size, y * self.cell_size))
+                    enemy_platforms.append(Platform(rect))
+
+        return enemy_platforms
+
     def get_level_up_coordinates(self) -> list:
         level_up_coordinates = []
         for y in range(len(self.textures_map)):
