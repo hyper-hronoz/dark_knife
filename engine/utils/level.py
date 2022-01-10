@@ -1,4 +1,5 @@
 import io
+import re
 import pygame
 import sys
 import ast
@@ -29,30 +30,52 @@ class Level:
         except Exception as e:
             print(f"Textures with {id} not found because of {e}")
 
-    def get_spawn_coords(self):
-        spawn_coordinates = []
+    def get_spawn_platforms(self) -> list:
+        spawn_platforms = [] 
 
         for y in range(len(self.textures_map)):
             for x in range(len(self.textures_map[y])):
                 texture_id = self.textures_map[y][x]
 
+                if (texture_id == ""):
+                    continue
+
+                if texture_id not in self.used_textures:
+                    self.used_textures[texture_id] = self.get_texture(
+                        texture_id)
+
                 if (texture_id == "start"):
-                    spawn_coordinates.append(
-                        (x * self.cell_size, y * self.cell_size))
+                    picture = pygame.transform.scale(self.used_textures[texture_id], (self.cell_size, self.cell_size))
+                    rect = picture.get_rect()
+                    rect = rect.move((x * self.cell_size, y * self.cell_size))
+                    spawn_platforms.append(Platform(rect))
 
-        # if not spawn_coordinates:
-        #     for y in range(len(self.textures_map) // 2):
-        #         for x in range(len(self.textures_map[y])):
-        #             texture_id_1 = self.textures_map[y][x]
-        #             texture_id_2 = self.textures_map[y + 1][x]
+        return spawn_platforms
 
-        #             if (texture_id_1 == texture_id_2 == ""):
-        #                 spawn_coordinates.append(
-        #                     (x * self.cell_size, (y + 1) * self.cell_size))
+    
+    def get_enemy_platforms(self) -> list:
+        enemy_platforms = [] 
 
-        return spawn_coordinates
+        for y in range(len(self.textures_map)):
+            for x in range(len(self.textures_map[y])):
+                texture_id = self.textures_map[y][x]
 
-    def get_level_up_coordinates(self):
+                if (texture_id == ""):
+                    continue
+
+                if texture_id not in self.used_textures:
+                    self.used_textures[texture_id] = self.get_texture(
+                        texture_id)
+
+                if (texture_id == "enemy"):
+                    picture = pygame.transform.scale(self.used_textures[texture_id], (self.cell_size, self.cell_size))
+                    rect = picture.get_rect()
+                    rect = rect.move((x * self.cell_size, y * self.cell_size))
+                    enemy_platforms.append(Platform(rect))
+
+        return enemy_platforms
+
+    def get_level_up_coordinates(self) -> list:
         level_up_coordinates = []
         for y in range(len(self.textures_map)):
             for x in range(len(self.textures_map[y])):
@@ -63,7 +86,7 @@ class Level:
                         (x * self.cell_size, y * self.cell_size))
         return level_up_coordinates
 
-    def get_platforms(self):
+    def get_platforms(self) -> pygame.sprite.Group:
         x = y = 0
 
         for y in range(len(self.textures_map)):

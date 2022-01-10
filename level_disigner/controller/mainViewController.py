@@ -18,9 +18,11 @@ class MainViewController():
 
 		start = TextureModel(textures.textures["start"], "start")
 		finish = TextureModel(textures.textures["finish"], "finish")
+		enemy = TextureModel(textures.textures["enemy"], "enemy")
 
 		self.texturesModel.addTexture(start, "start")
 		self.texturesModel.addTexture(finish, "finish")
+		self.texturesModel.addTexture(enemy, "enemy")
 
 		self._canvasSize = {"height": None, "width": None}
 		self._createCanvas()
