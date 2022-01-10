@@ -27,7 +27,7 @@ class Level:
             output = io.BytesIO(base64.b64decode(self.level["textures"][id]))
             return pygame.image.load(output)
         except Exception as e:
-            print(f"Textures with {id=} not found because of {e}")
+            print(f"Textures with {id} not found because of {e}")
 
     def get_spawn_coords(self):
         spawn_coordinates = []
