@@ -2,6 +2,7 @@ import io
 import re
 import pygame
 import sys
+import os
 import ast
 import base64
 from models import Platform
