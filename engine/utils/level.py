@@ -31,7 +31,7 @@ class Level:
             print(f"Textures with {id} not found because of {e}")
 
     def get_spawn_platforms(self) -> list:
-        spawn_platforms = [] 
+        spawn_platforms = []
 
         for y in range(len(self.textures_map)):
             for x in range(len(self.textures_map[y])):
@@ -45,16 +45,16 @@ class Level:
                         texture_id)
 
                 if (texture_id == "start"):
-                    picture = pygame.transform.scale(self.used_textures[texture_id], (self.cell_size, self.cell_size))
+                    picture = pygame.transform.scale(
+                        self.used_textures[texture_id], (self.cell_size, self.cell_size))
                     rect = picture.get_rect()
                     rect = rect.move((x * self.cell_size, y * self.cell_size))
                     spawn_platforms.append(Platform(rect))
 
         return spawn_platforms
 
-    
     def get_enemy_platforms(self) -> list:
-        enemy_platforms = [] 
+        enemy_platforms = []
 
         for y in range(len(self.textures_map)):
             for x in range(len(self.textures_map[y])):
@@ -68,7 +68,8 @@ class Level:
                         texture_id)
 
                 if (texture_id == "enemy"):
-                    picture = pygame.transform.scale(self.used_textures[texture_id], (self.cell_size, self.cell_size))
+                    picture = pygame.transform.scale(
+                        self.used_textures[texture_id], (self.cell_size, self.cell_size))
                     rect = picture.get_rect()
                     rect = rect.move((x * self.cell_size, y * self.cell_size))
                     enemy_platforms.append(Platform(rect))
