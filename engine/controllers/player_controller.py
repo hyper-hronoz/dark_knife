@@ -17,6 +17,7 @@ class PlayerController:
 		self._level_up_platforms: pygame.sprite.Group = main_loop.level_up_platforms
 		self._platforms: pygame.sprite.Group = main_loop.platforms
 		self._mobs: pygame.sprite.Group = main_loop.mobs
+		self._call_death = main_loop.menu_controller.show_death
 
 	def _load_player_textures(self) -> None:
 		right_movement_textures_path = os.path.join(
@@ -55,8 +56,7 @@ class PlayerController:
 
 	def _kill_player(self, *args):
 		player = args[1]
-		player.kill()
-		print('sds')
+		self._call_death()
 
 	def player_horizontal_movement_collision(self) -> None:
 		self.player.rect.x += self.player.direction.x

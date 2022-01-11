@@ -6,7 +6,7 @@ from random import randrange
 
 from utils import Level
 from models import Knife, Platform, Player
-from controllers import PlayerController, LevelController, KnifeController, MobsController
+from controllers import PlayerController, LevelController, KnifeController, MobsController, MenuController
 
 BACKGROUND_COLOR = "#223759"
 
@@ -22,6 +22,7 @@ class Loop:
 		self.player_controller = PlayerController(self)
 		self.knife_controller = KnifeController(self)
 		self.mob_controller = MobsController(self)
+		self.menu_controller = MenuController(self)
 
 		#! обязательно должен быть первым, он должен подтягивать изменения первым, чтобы уже от него другие контроллеры все подтягивали
 		self.add_observer(self)
@@ -29,6 +30,8 @@ class Loop:
 		self.add_observer(self.player_controller)
 		self.add_observer(self.knife_controller)
 		self.add_observer(self.mob_controller)
+		self.add_observer(self.menu_controller)
+		self.add_observer(self.level_controller)
 
 		# в нем вызывается метод notify_changes, который вызывает метод change у каждого объекта, которого мы хотим оповестить о загрузке нового уровня, для того чтобы он самостоятельно подтянул изменения
 		self.level_controller.load_next_level()
@@ -41,15 +44,14 @@ class Loop:
 	def notify_changes(self) -> None:
 		[observer.change(self) for observer in self.observers]
 
-	def change(self, заглушка_намомни_мне_это_исправить_без_нее_не_работает) -> None:
+	def change(self, *заглушка_намомни_мне_это_исправить_без_нее_не_работает) -> None:
 		self.WINDOW_WIDTH, self.WINDOW_HEIGHT = self.level_controller.WINDOW_WIDTH, self.level_controller.WINDOW_HEIGHT
 		self.platforms = self.level_controller.platforms
 		self.level_up_platforms = self.level_controller.level_up_platforms
 		self.enemy_spawn_platforms = self.level_controller.enemy_spawn_platforms
 		self.knifes = self.knife_controller.knifes
 		self.mobs = self.mob_controller.mobs
-		for i in self.enemy_spawn_platforms:
-			print(i.rect.x, i.rect.y)
+		self.screen = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
 
 		spawn_platform: Platform = self.level_controller.spawn_coordinates
 		self.player: Player = self.player_controller.spawn_player((spawn_platform.rect.left, spawn_platform.rect.top))
@@ -60,7 +62,6 @@ class Loop:
 		pygame.display.set_caption("Dark Knife")
 
 		clock = pygame.time.Clock()
-		screen = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
 
 		backgroung = pygame.Surface((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
 		backgroung.fill(pygame.Color(BACKGROUND_COLOR))
@@ -73,12 +74,13 @@ class Loop:
 					pygame.quit()
 					sys.exit()
 
-			screen.blit(backgroung, (0, 0))
+			self.screen.blit(backgroung, (0, 0))
 
-			self.knife_controller.display(screen)
-			self.level_controller.display(screen)
-			self.mob_controller.display(screen)
-			self.player_controller.display(screen)
+			self.menu_controller.display(self.screen)
+			self.knife_controller.display(self.screen)
+			self.level_controller.display(self.screen)
+			self.mob_controller.display(self.screen)
+			self.player_controller.display(self.screen)
 			
 
 			pygame.display.update()
