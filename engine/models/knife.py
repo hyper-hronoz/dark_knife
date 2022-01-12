@@ -3,15 +3,15 @@ import re
 import pygame
 
 KNIFE_WIDTH = 50
-KNIFE_HEIGHT = 20
+KNIFE_HEIGHT = 15
+KNIFE_SCALE = (KNIFE_WIDTH, KNIFE_HEIGHT)
 KNIFE_COLOR = pygame.Color("black")
 
 
 class Knife(pygame.sprite.Sprite):
-    def __init__(self, x, y, marker):
+    def __init__(self, x, y, marker, image):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((KNIFE_WIDTH, KNIFE_HEIGHT))
-        self.image.fill(KNIFE_COLOR)
+        self.image = pygame.transform.scale(image, KNIFE_SCALE)
         self.rect = pygame.Rect(x, y, KNIFE_WIDTH, KNIFE_HEIGHT)
 
         self.direction = pygame.math.Vector2(0, 0)

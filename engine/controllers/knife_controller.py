@@ -3,6 +3,7 @@ from sys import platform
 import pygame
 from listeners import CollisionListener
 from models import Knife, Platform, Player
+from utils import Helper
 
 class KnifeController:
 
@@ -10,6 +11,7 @@ class KnifeController:
 		self.knifes = pygame.sprite.Group()
 		self.knife_collision_listener = CollisionListener()
 		self.timer = 50
+		self.helper = Helper()
 
 	def change(self, main_loop) -> None:
 		self._platforms: pygame.sprite.Group = main_loop.platforms
@@ -40,14 +42,16 @@ class KnifeController:
 		if keys[pygame.K_e]:
 			if self.timer <= 0:
 				x, y = (self._player.rect.x, self._player.rect.y)
-				self.knife = Knife((x + 25), (y + 20), 'left')
+				image = self.helper.create_picture("knife", "knife_right")
+				self.knife = Knife((x + 25), (y + 20), 'left', image)
 				self.knifes.add(self.knife)
 				self.timer = 50
 
 		if keys[pygame.K_q]:
 			if self.timer <= 0:
 				x, y = (self._player.rect.x, self._player.rect.y)
-				self.knife = Knife((x - 25), (y + 20), 'right')
+				image = self.helper.create_picture("knife", "knife_left")
+				self.knife = Knife((x - 25), (y + 20), 'right', image)
 				self.knifes.add(self.knife)
 				self.timer = 50
 
