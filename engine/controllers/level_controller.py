@@ -10,11 +10,15 @@ class LevelController:
 		self.level_number = 0
 		self.spawn_coordinates = 0, 0
 
+	def change(self, main_loop) -> None:
+		self._call_win = main_loop.menu_controller.show_win
+		self._call_death = main_loop.menu_controller.show_death
 
 	def load_next_level(self, *args) -> None:
 			self.level_data = self._get_level()
 
 			if self.level_number == "gg":
+				self._call_win()
 				return
 
 			self.cell_size = self.level_data["cell_size"]
@@ -44,6 +48,7 @@ class LevelController:
 
 			if not os.path.isfile(f"./levels/{self.level_number}.txt"):
 				self.level_number = "gg"
+				return
 
 			with open(f"./levels/{self.level_number}.txt", "r") as file:
 				content = file.read()
