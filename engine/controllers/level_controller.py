@@ -12,7 +12,6 @@ class LevelController:
 		self._absolute_folder = main_loop.absolute_folder
 		self.level_number = 0 
 		self.spawn_coordinates = 0, 0
-		self.used_textures = {}
 
 	def change(self, main_loop) -> None:
 		self._call_win = main_loop.menu_controller.show_win
@@ -59,28 +58,11 @@ class LevelController:
 			for x, y, texture_id in coordinates:
 				x = x * self.TEXTURES_VERTICAL_SCALE + self.TEXTURES_HORIZONTAL_MARGIN
 				y = y * self.TEXTURES_VERTICAL_SCALE
-				self._get_picture(texture_id)
-				picture = pygame.transform.scale(self.used_textures[texture_id], (cell_size, cell_size))
+				picture = pygame.transform.scale(self.level.get_picture(texture_id), (cell_size, cell_size))
 				rect = picture.get_rect()
 				rect = rect.move((x * cell_size, y * cell_size))
 				sprites.add(Platform(pygame.Rect(x, y, cell_size, cell_size), picture))
 		return sprites
-
-	
-	def _get_texture(self, id) -> pygame.image:
-		try:
-			output = io.BytesIO(base64.b64decode(self.level_data["textures"][id]))
-			return pygame.image.load(output)
-			
-		except Exception as e:
-			print(f"Textures with {id} not found because of {e}")
-
-	def _get_picture(self, texture_id):
-		if texture_id not in self.used_textures:
-			self.used_textures[texture_id] = self._get_texture(
-				texture_id)
-
-		return pygame.transform.scale(self.used_textures[texture_id], (self.cell_size, self.cell_size))
 
 	def get_platforms_sprites(self):
 		self.platforms = self._parse_coordinates_to_sprites(self.platforms_coordinates)
