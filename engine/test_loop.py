@@ -55,6 +55,7 @@ class Loop:
 
 		spawn_platform: Platform = self.level_controller.spawn_coordinates
 		self.player: Player = self.player_controller.spawn_player((spawn_platform.rect.left, spawn_platform.rect.top))
+		self.set_level_number = self.level_controller.set_level_number
 		self.player_controller.set_animation()
 
 	def main(self) -> None:

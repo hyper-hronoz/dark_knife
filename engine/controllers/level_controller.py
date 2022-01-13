@@ -7,12 +7,16 @@ class LevelController:
 	def __init__(self, main_loop) -> None:
 		self._notify_changes = main_loop.notify_changes
 		self._absolute_folder = main_loop.absolute_folder
-		self.level_number = 0
+		self.level_number = 0 
 		self.spawn_coordinates = 0, 0
 
 	def change(self, main_loop) -> None:
 		self._call_win = main_loop.menu_controller.show_win
 		self._call_death = main_loop.menu_controller.show_death
+
+	def set_level_number(self, number: int):
+		self.level_number = number
+		self.load_next_level()
 
 	def load_next_level(self, *args) -> None:
 			self.level_data = self._get_level()
