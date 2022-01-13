@@ -63,7 +63,7 @@ class Loop:
 		self.LEVEL_HEIGHT = self.level_controller.LEVEL_HEIGHT
 
 		# resolution_controller
-		self.resolution_controller.change(self).calculate_horizontal_scale().calculate_vertical_scale().apply_vertical_scale()
+		self.resolution_controller.change(self).apply_vertical_scale()
 
 		# level_controller getting sprites
 		self.level_controller.get_platforms_sprites()

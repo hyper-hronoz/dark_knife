@@ -13,20 +13,18 @@ class ResolutionController:
 
 		self._WINDOW_WIDTH = main_loop.WINDOW_WIDTH
 		self._WINDOW_HEIGHT = main_loop.WINDOW_HEIGHT
-		return self
 
-	def calculate_vertical_scale(self):
-		self.vertical_scale = self._WINDOW_HEIGHT / self._LEVEL_WIDTH
-		return self
-
-	def calculate_horizontal_scale(self):
 		self.horizontal_scale = self._WINDOW_WIDTH / self._LEVEL_HEIGHT
+		self.vertical_scale = self._WINDOW_HEIGHT / self._LEVEL_WIDTH
+
+		self.horizontal_margin = (self._WINDOW_WIDTH - self._LEVEL_WIDTH * self.vertical_scale) / 2
 		return self
 
 	def apply_vertical_scale(self):
 		try:
 			Player.JUMP_POWER = self.vertical_scale
 			LevelController.TEXTURES_VERTICAL_SCALE = self.vertical_scale
+			LevelController.TEXTURES_HORIZONTAL_MARGIN = self.horizontal_margin
 		except Exception as e:		
 			print(e)
 		return self

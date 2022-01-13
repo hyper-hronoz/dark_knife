@@ -5,6 +5,7 @@ from utils import Level
 
 class LevelController:
 	TEXTURES_VERTICAL_SCALE = 1
+	TEXTURES_HORIZONTAL_MARGIN = 0
 
 	def __init__(self, main_loop) -> None:
 		self._notify_changes = main_loop.notify_changes
@@ -51,12 +52,12 @@ class LevelController:
 			return sprites 
 		if len(coordinates[0]) == 2:
 			for x, y in coordinates:
-				x = x * self.TEXTURES_VERTICAL_SCALE
+				x = x * self.TEXTURES_VERTICAL_SCALE + self.TEXTURES_HORIZONTAL_MARGIN
 				y = y * self.TEXTURES_VERTICAL_SCALE
 				sprites.add(Platform(pygame.Rect(x, y, cell_size, cell_size)))
 		if len(coordinates[0]) == 3:
 			for x, y, texture_id in coordinates:
-				x = x * self.TEXTURES_VERTICAL_SCALE
+				x = x * self.TEXTURES_VERTICAL_SCALE + self.TEXTURES_HORIZONTAL_MARGIN
 				y = y * self.TEXTURES_VERTICAL_SCALE
 				self._get_picture(texture_id)
 				picture = pygame.transform.scale(self.used_textures[texture_id], (cell_size, cell_size))
