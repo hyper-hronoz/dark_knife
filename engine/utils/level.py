@@ -28,6 +28,7 @@ class Level:
         try:
             output = io.BytesIO(base64.b64decode(self.level["textures"][id]))
             return pygame.image.load(output)
+            
         except Exception as e:
             print(f"Textures with {id} not found because of {e}")
 
