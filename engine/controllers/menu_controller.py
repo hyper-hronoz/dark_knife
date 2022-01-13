@@ -53,7 +53,7 @@ class MenuController:
 			self._menu.disable()
 		self._callable = self.show_win
 
-		self._menu = pygame_menu.Menu("your still alive congratulations!!!", self._MENU_WIDTH, self._MENU_HEIGHT, theme=self._MENU_THEME)
+		self._menu = pygame_menu.Menu("you still alive congratulations!!!", self._MENU_WIDTH, self._MENU_HEIGHT, theme=self._MENU_THEME)
 
 		self._menu.add.button('Play again', self.show_do_nothing)
 		self._menu.add.button('Main menu', self.show_main_menu)

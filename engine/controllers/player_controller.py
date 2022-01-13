@@ -22,7 +22,8 @@ class PlayerController:
 		self._platforms: pygame.sprite.Group = main_loop.platforms
 		self._mobs: pygame.sprite.Group = main_loop.mobs
 		self._call_death = main_loop.menu_controller.show_death
-
+		self._window_width = main_loop.WINDOW_WIDTH
+		self._window_height = main_loop.WINDOW_HEIGHT
 
 	def _load_player_textures(self) -> None:
 		right_movement_textures_path = os.path.join(
@@ -60,7 +61,6 @@ class PlayerController:
 			self.player.rect.right = platform.rect.left
 
 	def _kill_player(self, *args):
-		player = args[1]
 		self._call_death()
 
 	def player_horizontal_movement_collision(self) -> None:
@@ -98,6 +98,14 @@ class PlayerController:
 
 		self.player.animate()
 
+	def fall_listener(self):
+		if self.player.rect.top > self._window_height:
+			self._kill_player()
+		if self.player.rect.left > self._window_width:
+			self._kill_player()
+		if self.player.rect.right < 0:
+			self._kill_player()
+
 	def set_animation(self) -> None:
 		self.player.set_player_animations(self._load_player_textures())
 
@@ -107,4 +115,5 @@ class PlayerController:
 		self.player_horizontal_movement_collision()
 		self.player_vertical_movement_collision()
 		self.player_moves()
+		self.fall_listener()
 		self.player.draw(screen)
