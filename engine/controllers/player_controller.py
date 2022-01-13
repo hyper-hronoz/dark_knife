@@ -1,8 +1,11 @@
-import re, os, pygame
+import re
+import os
+import pygame
 from types import MethodType
 from sys import platform
 from listeners import CollisionListener
 from models import Player, Platform
+
 
 class PlayerController:
 	def __init__(self, main_loop) -> None:
@@ -12,12 +15,14 @@ class PlayerController:
 
 		self.player_listener = CollisionListener()
 
+
 	def change(self, main_loop) -> None:
 		# копии того что о нас есть в главном цикле
 		self._level_up_platforms: pygame.sprite.Group = main_loop.level_up_platforms
 		self._platforms: pygame.sprite.Group = main_loop.platforms
 		self._mobs: pygame.sprite.Group = main_loop.mobs
 		self._call_death = main_loop.menu_controller.show_death
+
 
 	def _load_player_textures(self) -> None:
 		right_movement_textures_path = os.path.join(
@@ -58,17 +63,24 @@ class PlayerController:
 		player = args[1]
 		self._call_death()
 
+
 	def player_horizontal_movement_collision(self) -> None:
 		self.player.rect.x += self.player.direction.x
-		self.player_listener.on_collide(self.player, self._level_up_platforms, self._load_next_level)
-		self.player_listener.on_collide(self.player, self._platforms, self._return_player_to_normal_horizontal_position)
-		self.player_listener.on_collide(self.player, self._mobs, self._kill_player)
+		self.player_listener.on_collide(
+			self.player, self._level_up_platforms, self._load_next_level)
+		self.player_listener.on_collide(
+			self.player, self._platforms, self._return_player_to_normal_horizontal_position)
+		self.player_listener.on_collide(
+			self.player, self._mobs, self._kill_player)
 
 	def player_vertical_movement_collision(self) -> None:
 		self.player.gravity()
-		self.player_listener.on_collide(self.player, self._level_up_platforms, self._load_next_level)
-		self.player_listener.on_collide(self.player, self._platforms, self._return_player_to_normal_vertical_position)
-		self.player_listener.on_collide(self.player, self._mobs, self._kill_player)
+		self.player_listener.on_collide(
+			self.player, self._level_up_platforms, self._load_next_level)
+		self.player_listener.on_collide(
+			self.player, self._platforms, self._return_player_to_normal_vertical_position)
+		self.player_listener.on_collide(
+			self.player, self._mobs, self._kill_player)
 
 	def player_moves(self):
 		if not self.player.is_moves:
@@ -97,4 +109,3 @@ class PlayerController:
 		self.player_vertical_movement_collision()
 		self.player_moves()
 		self.player.draw(screen)
-	

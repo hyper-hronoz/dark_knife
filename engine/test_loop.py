@@ -4,7 +4,7 @@ import os
 import re
 from random import randrange
 
-from utils import Level
+from utils import Level, Helper
 from models import Knife, Platform, Player
 from controllers import PlayerController, LevelController, KnifeController, MobsController, MenuController
 
@@ -14,7 +14,11 @@ BACKGROUND_COLOR = "#223759"
 class Loop:
 
 	def __init__(self) -> None:
-		self.absolute_folder = re.sub(os.path.basename(__file__), "", os.path.abspath(__file__))
+		self.absolute_folder = re.sub(os.path.basename(
+			__file__), "", os.path.abspath(__file__))
+
+		self.helper = Helper()
+
 
 		self.observers = []
 
@@ -38,14 +42,12 @@ class Loop:
 
 		self.main()
 
-	def add_observer(self, model) -> None:
-		self.observers.append(model)
-	
-	def notify_changes(self) -> None:
-		[observer.change(self) for observer in self.observers]
+	def add_observer(self, observer):
+		self.observers.append(observer)
 
-	def change(self, *заглушка_намомни_мне_это_исправить_без_нее_не_работает) -> None:
+	def change(self, *заглушка_намомни_мне_это_исправить_без_нее_не_работает) -> None:		
 		self.WINDOW_WIDTH, self.WINDOW_HEIGHT = self.level_controller.WINDOW_WIDTH, self.level_controller.WINDOW_HEIGHT
+		self.WINDOW_SCALE = (self.WINDOW_WIDTH, self.WINDOW_HEIGHT)
 		self.platforms = self.level_controller.platforms
 		self.level_up_platforms = self.level_controller.level_up_platforms
 		self.enemy_spawn_platforms = self.level_controller.enemy_spawn_platforms
@@ -58,14 +60,19 @@ class Loop:
 		self.set_level_number = self.level_controller.set_level_number
 		self.player_controller.set_animation()
 
+
+	def notify_changes(self) -> None:
+		[observer.change(self) for observer in self.observers]
+
 	def main(self) -> None:
 		pygame.init()
 		pygame.display.set_caption("Dark Knife")
 
 		clock = pygame.time.Clock()
+		screen = pygame.display.set_mode(self.WINDOW_SCALE)
 
-		backgroung = pygame.Surface((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
-		backgroung.fill(pygame.Color(BACKGROUND_COLOR))
+		picture = self.helper.create_picture("background", "desert")
+		backgroung = pygame.transform.scale(picture, self.WINDOW_SCALE)
 
 		while True:
 			clock.tick(75)
@@ -75,14 +82,14 @@ class Loop:
 					pygame.quit()
 					sys.exit()
 
-			self.screen.blit(backgroung, (0, 0))
+			screen.blit(backgroung, (0, 0))
 
+			self.screen.blit(backgroung, (0, 0))
 			self.menu_controller.display(self.screen)
 			self.knife_controller.display(self.screen)
 			self.level_controller.display(self.screen)
 			self.mob_controller.display(self.screen)
-			self.player_controller.display(self.screen)
-			
+			self.player_controller.display(self.screen)		
 
 			pygame.display.update()
 
