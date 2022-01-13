@@ -7,6 +7,7 @@ class Player(pygame.sprite.Sprite):
     HERO_HEIGHT = 50
     MOVE_SPEED = 3
     HERO_COLOR = pygame.Color("red")
+    JUMP_POWER = 1
     JUMP_HEIGHT = 10
     GRAVITY_FORCE = 0.5
 
@@ -52,5 +53,5 @@ class Player(pygame.sprite.Sprite):
 
     def jump(self) -> None:
         if self.direction.y == 0 and not self.isJump:
-            self.direction.y -= self.JUMP_HEIGHT
+            self.direction.y -= self.JUMP_HEIGHT * self.JUMP_POWER
             self.isJump = True

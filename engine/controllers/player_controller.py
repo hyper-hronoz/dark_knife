@@ -63,7 +63,6 @@ class PlayerController:
 		player = args[1]
 		self._call_death()
 
-
 	def player_horizontal_movement_collision(self) -> None:
 		self.player.rect.x += self.player.direction.x
 		self.player_listener.on_collide(

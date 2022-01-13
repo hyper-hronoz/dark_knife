@@ -64,5 +64,12 @@ class MenuController:
 
 		self._menu.mainloop(self._screen)
 
+	def on_key_pressed(self):
+		keys = pygame.key.get_pressed()
+
+		if keys[pygame.K_ESCAPE]:
+			self.show_main_menu()
+
 	def display(self, screen) -> None:
 		self._callable()
+		self.on_key_pressed()

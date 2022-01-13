@@ -3,10 +3,11 @@ import sys
 import os
 import re
 from random import randrange
+from screeninfo import get_monitors
 
 from utils import Level, Helper
 from models import Knife, Platform, Player
-from controllers import PlayerController, LevelController, KnifeController, MobsController, MenuController
+from controllers import PlayerController, LevelController, KnifeController, MobsController, MenuController, ResolutionController
 
 BACKGROUND_COLOR = "#223759"
 
@@ -27,6 +28,7 @@ class Loop:
 		self.knife_controller = KnifeController(self)
 		self.mob_controller = MobsController(self)
 		self.menu_controller = MenuController(self)
+		self.resolution_controller = ResolutionController(self)
 
 		#! обязательно должен быть первым, он должен подтягивать изменения первым, чтобы уже от него другие контроллеры все подтягивали
 		self.add_observer(self)
@@ -46,18 +48,39 @@ class Loop:
 		self.observers.append(observer)
 
 	def change(self, *заглушка_намомни_мне_это_исправить_без_нее_не_работает) -> None:		
-		self.WINDOW_WIDTH, self.WINDOW_HEIGHT = self.level_controller.WINDOW_WIDTH, self.level_controller.WINDOW_HEIGHT
+		# main_loop
+		self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+		self.WINDOW_WIDTH, self.WINDOW_HEIGHT = pygame.display.Info().current_w, pygame.display.Info().current_h 
 		self.WINDOW_SCALE = (self.WINDOW_WIDTH, self.WINDOW_HEIGHT)
-		self.platforms = self.level_controller.platforms
-		self.level_up_platforms = self.level_controller.level_up_platforms
-		self.enemy_spawn_platforms = self.level_controller.enemy_spawn_platforms
-		self.knifes = self.knife_controller.knifes
-		self.mobs = self.mob_controller.mobs
-		self.screen = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
 
-		spawn_platform: Platform = self.level_controller.spawn_coordinates
-		self.player: Player = self.player_controller.spawn_player((spawn_platform.rect.left, spawn_platform.rect.top))
+		# level_controller
+		self.cell_size = self.level_controller.cell_size
+		self.platforms_coordinates = self.level_controller.platforms_coordinates
+		self.spawn_coordinates: Platform = self.level_controller.spawn_coordinates
 		self.set_level_number = self.level_controller.set_level_number
+
+		self.LEVEL_WIDTH = self.level_controller.LEVEL_WIDTH
+		self.LEVEL_HEIGHT = self.level_controller.LEVEL_HEIGHT
+
+		# resolution_controller
+		self.resolution_controller.change(self).calculate_horizontal_scale().calculate_vertical_scale().apply_vertical_scale()
+
+		# level_controller getting sprites
+		self.level_controller.get_platforms_sprites()
+		self.enemy_spawn_platforms = self.level_controller.enemy_spawn_platforms
+		self.level_up_platforms = self.level_controller.level_up_platforms
+		self.platforms = self.level_controller.platforms
+		self.player_spawn_platforms: Platform = self.level_controller.player_spawn_platforms
+
+		# knifes_controller
+		self.knifes = self.knife_controller.knifes
+
+		# mobs_controller
+		self.mobs = self.mob_controller.mobs
+
+		# player_controller
+		self.spawn_coordinate = self.player_spawn_platforms.sprites()[randrange(len(self.spawn_coordinates))]
+		self.player: Player = self.player_controller.spawn_player((self.spawn_coordinate.rect.left, self.spawn_coordinate.rect.top))
 		self.player_controller.set_animation()
 
 
@@ -69,10 +92,10 @@ class Loop:
 		pygame.display.set_caption("Dark Knife")
 
 		clock = pygame.time.Clock()
-		screen = pygame.display.set_mode(self.WINDOW_SCALE)
 
 		picture = self.helper.create_picture("background", "desert")
-		backgroung = pygame.transform.scale(picture, self.WINDOW_SCALE)
+		backgroung = pygame.transform.scale(picture, (self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
+
 
 		while True:
 			clock.tick(75)
@@ -81,8 +104,6 @@ class Loop:
 				if event.type == pygame.QUIT:
 					pygame.quit()
 					sys.exit()
-
-			screen.blit(backgroung, (0, 0))
 
 			self.screen.blit(backgroung, (0, 0))
 			self.menu_controller.display(self.screen)
