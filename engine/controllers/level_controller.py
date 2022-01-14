@@ -45,7 +45,6 @@ class LevelController:
 			self._notify_changes()
 
 	def _parse_coordinates_to_sprites(self, coordinates) -> pygame.sprite.Group:
-		print(coordinates)
 		sprites = pygame.sprite.Group()
 		cell_size = self.cell_size * self.TEXTURES_VERTICAL_SCALE
 		if not coordinates:
