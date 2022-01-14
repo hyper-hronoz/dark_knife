@@ -94,6 +94,7 @@ class MenuController:
 
 		self._menu = pygame_menu.Menu("your still alive congratulations!!!", self._MENU_WIDTH, self._MENU_HEIGHT, theme=self._MENU_THEME)
 
+		self._menu.add.label("Your score: " + self.get_spent_time(), align=pygame_menu.locals.ALIGN_CENTER)
 		self._menu.add.button("Play again", self.show_do_nothing)
 		self._menu.add.button("Main menu", self.show_main_menu)
 
