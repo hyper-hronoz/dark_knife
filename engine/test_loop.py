@@ -7,7 +7,7 @@ from screeninfo import get_monitors
 
 from utils import Level, Helper
 from models import Knife, Platform, Player
-from controllers import PlayerController, LevelController, KnifeController, MobsController, MenuController, ResolutionController
+from controllers import PlayerController, LevelController, KnifeController, MobsController, MenuController, ResolutionController, ScoreController
 
 BACKGROUND_COLOR = "#223759"
 
@@ -15,6 +15,7 @@ BACKGROUND_COLOR = "#223759"
 class Loop:
 
 	def __init__(self) -> None:
+		self.FREQUENCY = 75
 		self.absolute_folder = re.sub(os.path.basename(
 			__file__), "", os.path.abspath(__file__))
 
@@ -29,6 +30,7 @@ class Loop:
 		self.mob_controller = MobsController(self)
 		self.menu_controller = MenuController(self)
 		self.resolution_controller = ResolutionController(self)
+		self.score_controller = ScoreController(self)
 
 		#! обязательно должен быть первым, он должен подтягивать изменения первым, чтобы уже от него другие контроллеры все подтягивали
 		self.add_observer(self)
@@ -47,9 +49,10 @@ class Loop:
 	def add_observer(self, observer):
 		self.observers.append(observer)
 
-	def change(self, *заглушка_намомни_мне_это_исправить_без_нее_не_работает) -> None:		
+	def change(self, *args) -> None:		
+
 		# main_loop
-		self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+		self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 		self.WINDOW_WIDTH, self.WINDOW_HEIGHT = pygame.display.Info().current_w, pygame.display.Info().current_h 
 		self.WINDOW_SCALE = (self.WINDOW_WIDTH, self.WINDOW_HEIGHT)
 
@@ -83,6 +86,9 @@ class Loop:
 		self.player: Player = self.player_controller.spawn_player((self.spawn_coordinate.rect.left, self.spawn_coordinate.rect.top))
 		self.player_controller.set_animation()
 
+		# score controller
+		self.get_spent_time = self.score_controller.get_spent_time
+		self.clear_time = self.score_controller.clear
 
 	def notify_changes(self) -> None:
 		[observer.change(self) for observer in self.observers]
@@ -98,7 +104,7 @@ class Loop:
 
 
 		while True:
-			clock.tick(75)
+			clock.tick(self.FREQUENCY)
 
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -111,6 +117,7 @@ class Loop:
 			self.level_controller.display(self.screen)
 			self.mob_controller.display(self.screen)
 			self.player_controller.display(self.screen)		
+			self.score_controller.display(self.screen)
 
 			pygame.display.update()
 
