@@ -1,4 +1,5 @@
 import ast, pygame, os, base64, io
+from utils import Helper
 from random import randrange
 from models import Platform
 from utils import Level
@@ -16,6 +17,7 @@ class LevelController:
 	def change(self, main_loop) -> None:
 		self._call_win = main_loop.menu_controller.show_win
 		self._call_death = main_loop.menu_controller.show_death
+		self.WINDOW_WIDTH, self.WINDOW_HEIGHT = pygame.display.Info().current_w, pygame.display.Info().current_h 
 
 	def set_level_number(self, number: int) -> None:
 		self.level_number = number

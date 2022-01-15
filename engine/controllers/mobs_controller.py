@@ -1,3 +1,4 @@
+from json.tool import main
 import pygame
 from pygame.sprite import Sprite
 from models import Mob
@@ -14,6 +15,7 @@ class MobsController:
     def change(self, main_loop):
         self.enemy_spawn_platforms = main_loop.enemy_spawn_platforms
         self.knifes = main_loop.knifes
+        self.update_time = main_loop.update_time
         for mob in self.mobs:
             mob.kill()
         self.add_mobs()
@@ -38,3 +40,4 @@ class MobsController:
         enemy, knife = args[0], args[1]
         enemy.kill()
         knife.kill()
+        self.update_time()

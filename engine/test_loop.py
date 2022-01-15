@@ -95,6 +95,7 @@ class Loop:
 		# score controller
 		self.get_spent_time = self.score_controller.get_spent_time
 		self.clear_time = self.score_controller.clear
+		self.update_time = self.score_controller.update_time
 
 	def notify_changes(self) -> None:
 		[observer.change(self) for observer in self.observers]
@@ -104,9 +105,6 @@ class Loop:
 		pygame.display.set_caption("Dark Knife")
 
 		clock = pygame.time.Clock()
-
-
-		print(self.background)
 
 		while True:
 			clock.tick(self.FREQUENCY)
