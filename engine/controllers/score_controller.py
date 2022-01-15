@@ -30,4 +30,5 @@ class ScoreController:
 		pygame.font.init() 
 		myfont = pygame.font.SysFont('Comic Sans MS', 30)
 		textsurface = myfont.render(self.get_spent_time(), False, (0, 0, 0))
-		screen.blit(textsurface,(10,10))
+		pygame.draw.rect(screen, (255, 255, 255), (10, 10, 120, 40))
+		screen.blit(textsurface,(12,10))
