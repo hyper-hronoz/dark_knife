@@ -47,6 +47,8 @@ class Painter(QWidget, MetaObserver, metaclass=FinalMetaQWidget):
 		self.marging_vertical = int(
 			(height - (Cell.side * self._size["height"])) / 2)
 
+		self.draw_background()
+
 		if (len(self._mapModel.textures_map) == 0):
 			for y in range((self._size["height"])):
 				self._mapModel.textures_map.append([])
@@ -56,6 +58,15 @@ class Painter(QWidget, MetaObserver, metaclass=FinalMetaQWidget):
 		self.drawGrid(self._mapModel.textures_map)
 
 		self.painter.end()
+
+	def draw_background(self):
+		if self._mapModel.background:
+			pixmap = QtGui.QPixmap()
+			pixmap.loadFromData(base64.b64decode(self._mapModel.background))
+			self.painter.drawPixmap(self.rect(), pixmap) 
+
+	def set_background(self, image):
+		self._mapModel.background = image
 
 	def setIsSpacePressed(self, value):
 		Painter.isSpacePressed = value

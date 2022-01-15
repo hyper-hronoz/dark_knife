@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\79533\Documents\dark_knife\level_disigner\res\src\templates\designer.ui'
+# Form implementation generated from reading ui file 'c:\Users\79533\dark_knife\level_disigner\res\src\templates\designer.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -114,7 +114,7 @@ class Ui_MainWindow(object):
         self.textures_scroll_area.setWidgetResizable(True)
         self.textures_scroll_area.setObjectName("textures_scroll_area")
         self.textures_frame_layout = QtWidgets.QWidget()
-        self.textures_frame_layout.setGeometry(QtCore.QRect(0, 0, 201, 684))
+        self.textures_frame_layout.setGeometry(QtCore.QRect(0, 0, 170, 684))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -209,6 +209,13 @@ class Ui_MainWindow(object):
         self.line_edit_cell.setStyleSheet("color: #fff;")
         self.line_edit_cell.setObjectName("line_edit_cell")
         self.horizontalLayout_6.addWidget(self.line_edit_cell)
+        self.set_background = QtWidgets.QPushButton(self.setting_bar)
+        self.set_background.setStyleSheet("color: #fff;\n"
+"border: 1px solid #fff;\n"
+"padding: 6.5px;\n"
+"")
+        self.set_background.setObjectName("set_background")
+        self.horizontalLayout_6.addWidget(self.set_background)
         self.verticalLayout_5.addWidget(self.setting_bar, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
         self.grid_frame = QtWidgets.QFrame(self.right_bar)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
@@ -259,9 +266,10 @@ class Ui_MainWindow(object):
         self.lable_widht.setText(_translate("MainWindow", "width:"))
         self.lable_height.setText(_translate("MainWindow", "height:"))
         self.label.setText(_translate("MainWindow", "cell:"))
+        self.set_background.setText(_translate("MainWindow", "set background"))
         self.menufile.setTitle(_translate("MainWindow", "file"))
         self.actionopen.setText(_translate("MainWindow", "open"))
         self.actionsave.setText(_translate("MainWindow", "save"))
         self.actionsave_as.setText(_translate("MainWindow", "save as"))
 
-from ..img import res   
+from ..img import res

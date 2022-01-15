@@ -68,6 +68,7 @@ class LevelController:
 		self.enemy_spawn_platforms = self._parse_coordinates_to_sprites(self.enemy_spawn_coordinates)
 		self.player_spawn_platforms = self._parse_coordinates_to_sprites(self.spawn_coordinates)
 		self.level_up_platforms = self._parse_coordinates_to_sprites(self.level_up_coordinates)
+		self.background = self.level.get_background()
 
 	def _get_level(self) -> dict:
 		try:
