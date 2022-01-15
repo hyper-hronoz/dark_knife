@@ -11,6 +11,7 @@ import base64
 
 
 class MainViewController():
+	background = None
 	def __init__(self):
 		self.texturesModel = TexturesModel()
 
@@ -28,6 +29,15 @@ class MainViewController():
 		self._createCanvas()
 
 		self.mView.show()
+
+	def set_background(self):
+		fname = QFileDialog.getOpenFileName(self.mView, 'Выбрать картинку ', '', "(*.jpg *.png *.jpeg, *.JPEG *.JPG, *.PNG)")[0]
+		if not fname:
+			return
+
+		with open(fname, "rb") as image2string:
+			converted_string = base64.b64encode(image2string.read())
+			self.painterModel.background = converted_string
 
 	def onWidthChanged(self, text: str):
 		if text.isdigit() and int(text) >= 0:
@@ -56,7 +66,8 @@ class MainViewController():
 		for texture in self.texturesModel.__dict__["textures"]:
 			textures[texture] = self.texturesModel.__dict__["textures"][texture].__dict__["texture"]
 
-		content = LevelModel(Cell.side, textures, self.painterModel.textures_map)
+		print(self.painterModel.background)
+		content = LevelModel(Cell.side, textures, self.painterModel.textures_map, self.painterModel.background)
 
 		options = QFileDialog.Options()
 		fileName, _ = QFileDialog.getSaveFileName(self.mView,"QFileDialog.getSaveFileName()","txt","All Files (*);;Text Files (*.txt)", options=options)
@@ -79,6 +90,8 @@ class MainViewController():
 			self.onCellChanged(str(file["cell_size"]))
 			self._canvasSize = {"height": len(file["textures_map"]), "width": len(file["textures_map"][0])}
 			self._createCanvas(file["textures_map"])
+			if "background" in file:
+				self.painterModel.background = file["background"]
 
 	def setPainterBrash(self, obj, event):
 		if isinstance(obj, QFrame) and event.type() == QtCore.QEvent.MouseButtonPress:

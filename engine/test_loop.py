@@ -1,3 +1,4 @@
+from turtle import back
 import pygame
 import sys
 import os
@@ -74,6 +75,11 @@ class Loop:
 		self.level_up_platforms = self.level_controller.level_up_platforms
 		self.platforms = self.level_controller.platforms
 		self.player_spawn_platforms: Platform = self.level_controller.player_spawn_platforms
+		self.background = self.level_controller.background
+		if not self.background:
+			self.background = pygame.transform.scale(self.helper.create_picture("background", "desert"), (self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
+		else:
+			self.background = pygame.transform.scale(self.background, (self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
 
 		# knifes_controller
 		self.knifes = self.knife_controller.knifes
@@ -89,6 +95,7 @@ class Loop:
 		# score controller
 		self.get_spent_time = self.score_controller.get_spent_time
 		self.clear_time = self.score_controller.clear
+		self.update_time = self.score_controller.update_time
 
 	def notify_changes(self) -> None:
 		[observer.change(self) for observer in self.observers]
@@ -99,10 +106,6 @@ class Loop:
 
 		clock = pygame.time.Clock()
 
-		picture = self.helper.create_picture("background", "desert")
-		backgroung = pygame.transform.scale(picture, (self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
-
-
 		while True:
 			clock.tick(self.FREQUENCY)
 
@@ -111,7 +114,7 @@ class Loop:
 					pygame.quit()
 					sys.exit()
 
-			self.screen.blit(backgroung, (0, 0))
+			self.screen.blit(self.background, (0, 0))
 			self.menu_controller.display(self.screen)
 			self.knife_controller.display(self.screen)
 			self.level_controller.display(self.screen)

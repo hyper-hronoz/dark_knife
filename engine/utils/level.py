@@ -22,7 +22,12 @@ class Level:
 
 		self.used_textures = {}
 
-	def _get_texture(self, id) -> pygame.image:
+	def get_background(self) -> str:
+		if "background" in self.level and self.level["background"]:
+			output = io.BytesIO(base64.b64decode(self.level["background"]))
+			return pygame.image.load(output)
+
+	def get_texture(self, id) -> pygame.image:
 		try:
 			output = io.BytesIO(base64.b64decode(self.level["textures"][id]))
 			return pygame.image.load(output)
@@ -31,9 +36,8 @@ class Level:
 			print(f"Textures with {id} not found because of {e}")
 
 	def get_picture(self, texture_id):
-		print(texture_id)
 		if texture_id not in self.used_textures:
-			self.used_textures[texture_id] = self._get_texture(
+			self.used_textures[texture_id] = self.get_texture(
 				texture_id)
 
 		return pygame.transform.scale(self.used_textures[texture_id], (self.cell_size, self.cell_size))

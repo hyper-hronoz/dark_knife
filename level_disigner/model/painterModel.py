@@ -1,6 +1,7 @@
 class PainterModel:
 	def __init__(self, textures_map=[]) -> None:
 		self.textures_map = textures_map
+		self.background = None
 
 		self.observers = []
 
