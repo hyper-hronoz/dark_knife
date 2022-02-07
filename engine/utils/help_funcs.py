@@ -1,10 +1,6 @@
-import io
-import re
-import pygame
-import sys
 import os
-import ast
-import base64
+
+import pygame
 
 
 class Helper:

@@ -1,5 +1,3 @@
-import os
-import re
 import pygame
 
 KNIFE_WIDTH = 50

@@ -1,8 +1,6 @@
-import os
-import re
-import pygame
 import random
 
+import pygame
 
 MOB_WIDTH = 40
 MOB_HEIGHT = 60

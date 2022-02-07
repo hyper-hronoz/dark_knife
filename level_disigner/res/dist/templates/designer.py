@@ -82,10 +82,10 @@ class Ui_MainWindow(object):
         self.header_add_button = QtWidgets.QPushButton(self.header_button_frame)
         self.header_add_button.setAutoFillBackground(False)
         self.header_add_button.setStyleSheet("border: none;\n"
-"border-color: none;\n"
-"outline: none;\n"
-"color: #07CAF2;\n"
-"")
+                                             "border-color: none;\n"
+                                             "outline: none;\n"
+                                             "color: #07CAF2;\n"
+                                             "")
         self.header_add_button.setText("")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icons/add-icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -102,7 +102,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.line_2.sizePolicy().hasHeightForWidth())
         self.line_2.setSizePolicy(sizePolicy)
         self.line_2.setStyleSheet("color: #07CAF2;\n"
-"background-color: #07CAF2;")
+                                  "background-color: #07CAF2;")
         self.line_2.setLineWidth(2)
         self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
         self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
@@ -145,7 +145,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.line = QtWidgets.QFrame(self.line_frame)
         self.line.setStyleSheet("color: #07CAF2;\n"
-"background-color: #07CAF2;")
+                                "background-color: #07CAF2;")
         self.line.setFrameShape(QtWidgets.QFrame.VLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
@@ -211,12 +211,12 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.addWidget(self.line_edit_cell)
         self.set_background = QtWidgets.QPushButton(self.setting_bar)
         self.set_background.setStyleSheet("color: #fff;\n"
-"border: 1px solid #fff;\n"
-"padding: 6.5px;\n"
-"")
+                                          "border: 1px solid #fff;\n"
+                                          "padding: 6.5px;\n"
+                                          "")
         self.set_background.setObjectName("set_background")
         self.horizontalLayout_6.addWidget(self.set_background)
-        self.verticalLayout_5.addWidget(self.setting_bar, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
+        self.verticalLayout_5.addWidget(self.setting_bar, 0, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
         self.grid_frame = QtWidgets.QFrame(self.right_bar)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -236,13 +236,13 @@ class Ui_MainWindow(object):
         self.menufile = QtWidgets.QMenu(self.menuBar)
         self.menufile.setContextMenuPolicy(QtCore.Qt.PreventContextMenu)
         self.menufile.setStyleSheet("QAction {\n"
-"    color: #fff; \n"
-"}\n"
-"\n"
-"QAction:selected {\n"
-"    background-color: #fff;\n"
-"}\n"
-"")
+                                    "    color: #fff; \n"
+                                    "}\n"
+                                    "\n"
+                                    "QAction:selected {\n"
+                                    "    background-color: #fff;\n"
+                                    "}\n"
+                                    "")
         self.menufile.setObjectName("menufile")
         MainWindow.setMenuBar(self.menuBar)
         self.actionopen = QtWidgets.QAction(MainWindow)
@@ -271,5 +271,3 @@ class Ui_MainWindow(object):
         self.actionopen.setText(_translate("MainWindow", "open"))
         self.actionsave.setText(_translate("MainWindow", "save"))
         self.actionsave_as.setText(_translate("MainWindow", "save as"))
-
-from ..img import res
